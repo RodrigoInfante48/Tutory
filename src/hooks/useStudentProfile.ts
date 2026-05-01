@@ -65,36 +65,40 @@ export function useStudentProfile(studentId: string | null, planId: string | nul
         setLoading(true)
         setError(null)
 
-        const queries: Promise<unknown>[] = [
-          supabase
+        const toPromise = <T,>(q: PromiseLike<T>): Promise<T> =>
+          new Promise((res, rej) => q.then(res, rej))
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const queries: Promise<any>[] = [
+          toPromise(supabase
             .from('tasks')
             .select('id, title, description, due_date, status, created_at')
             .eq('student_id', studentId)
-            .order('created_at', { ascending: false }),
-          supabase
+            .order('created_at', { ascending: false })),
+          toPromise(supabase
             .from('class_sessions')
             .select('id, scheduled_date, status, notes')
             .eq('student_id', studentId)
-            .order('scheduled_date', { ascending: false }),
-          supabase
+            .order('scheduled_date', { ascending: false })),
+          toPromise(supabase
             .from('resources')
             .select('id, title, url, type, created_at')
             .or(`student_id.eq.${studentId},student_id.is.null`)
-            .order('created_at', { ascending: false }),
-          supabase
+            .order('created_at', { ascending: false })),
+          toPromise(supabase
             .from('quiz_results')
             .select('id, score, taken_at, quizzes(id, title, date)')
             .eq('student_id', studentId)
-            .order('taken_at', { ascending: false }),
+            .order('taken_at', { ascending: false })),
         ]
 
         if (planId) {
           queries.push(
-            supabase
+            toPromise(supabase
               .from('units')
               .select('id, title, order')
               .eq('plan_id', planId)
-              .order('order', { ascending: true })
+              .order('order', { ascending: true }))
           )
         }
 

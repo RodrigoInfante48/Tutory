@@ -3,6 +3,7 @@ import AuthGuard from '../components/AuthGuard'
 import LoginPage from '../features/auth/LoginPage'
 import TeacherDashboard from '../features/teachers/TeacherDashboard'
 import StudentDashboard from '../features/students/StudentDashboard'
+import TopicReader from '../features/study-plans/TopicReader'
 import AdminDashboard from '../features/admin/AdminDashboard'
 import RoleRedirect from './RoleRedirect'
 
@@ -34,6 +35,14 @@ export default function AppRouter() {
         element={
           <AuthGuard allowedRole="student">
             <StudentDashboard />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path="/student/topic/:topicId"
+        element={
+          <AuthGuard allowedRole="student">
+            <TopicReader />
           </AuthGuard>
         }
       />
