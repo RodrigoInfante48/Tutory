@@ -1,9 +1,14 @@
 -- ============================================================
 -- Migration 001: users table + basic RLS
 -- Run this in the Supabase SQL editor AFTER enabling Auth
+-- Safe to re-run (idempotent)
 -- ============================================================
 
-create type user_role as enum ('admin', 'teacher', 'student');
+-- Create enum only if it doesn't exist
+do $$ begin
+  create type user_role as enum ('admin', 'teacher', 'student');
+exception when duplicate_object then null;
+end $$;
 
 create table if not exists public.users (
   id          uuid primary key references auth.users(id) on delete cascade,
@@ -40,12 +45,16 @@ create trigger on_auth_user_created
 
 alter table public.users enable row level security;
 
--- Each user can read their own row
+-- Drop policies before recreating to allow re-runs
+drop policy if exists "users: self read"      on public.users;
+drop policy if exists "users: admin read all" on public.users;
+drop policy if exists "users: self update"    on public.users;
+drop policy if exists "users: admin update all" on public.users;
+
 create policy "users: self read"
   on public.users for select
   using (auth.uid() = id);
 
--- Admin can read all rows
 create policy "users: admin read all"
   on public.users for select
   using (
@@ -55,13 +64,11 @@ create policy "users: admin read all"
     )
   );
 
--- Each user can update their own non-role fields
 create policy "users: self update"
   on public.users for update
   using (auth.uid() = id)
   with check (auth.uid() = id);
 
--- Admin can update anyone
 create policy "users: admin update all"
   on public.users for update
   using (
