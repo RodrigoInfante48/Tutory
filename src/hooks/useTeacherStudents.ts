@@ -12,6 +12,7 @@ export interface StudentSummary {
   plan: { id: string; name: string } | null
   nextClass: { id: string; scheduled_date: string } | null
   pendingTasksCount: number
+  submittedTasksCount: number
 }
 
 export function useTeacherStudents() {
@@ -45,7 +46,7 @@ export function useTeacherStudents() {
 
         const now = new Date().toISOString()
 
-        const [sessionsResult, tasksResult] = await Promise.all([
+        const [sessionsResult, tasksResult, submittedTasksResult] = await Promise.all([
           supabase
             .from('class_sessions')
             .select('id, student_id, scheduled_date')
@@ -58,6 +59,11 @@ export function useTeacherStudents() {
             .select('student_id')
             .in('student_id', studentIds)
             .eq('status', 'pending'),
+          supabase
+            .from('tasks')
+            .select('student_id')
+            .in('student_id', studentIds)
+            .eq('status', 'submitted'),
         ])
 
         const nextClassByStudent: Record<string, { id: string; scheduled_date: string }> = {}
@@ -77,6 +83,13 @@ export function useTeacherStudents() {
           }
         }
 
+        const submittedCountByStudent: Record<string, number> = {}
+        for (const task of submittedTasksResult.data ?? []) {
+          if (task.student_id) {
+            submittedCountByStudent[task.student_id] = (submittedCountByStudent[task.student_id] ?? 0) + 1
+          }
+        }
+
         const combined: StudentSummary[] = (studentsData ?? []).map(s => {
           const user = s.users as unknown as { name: string; email: string; avatar_url: string | null }
           const plan = s.study_plans as unknown as { id: string; name: string } | null
@@ -90,6 +103,7 @@ export function useTeacherStudents() {
             plan: plan ? { id: plan.id, name: plan.name } : null,
             nextClass: nextClassByStudent[s.id] ?? null,
             pendingTasksCount: pendingCountByStudent[s.id] ?? 0,
+            submittedTasksCount: submittedCountByStudent[s.id] ?? 0,
           }
         })
 
