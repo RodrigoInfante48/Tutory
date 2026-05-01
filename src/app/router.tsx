@@ -5,6 +5,7 @@ import TeacherDashboard from '../features/teachers/TeacherDashboard'
 import StudentDashboard from '../features/students/StudentDashboard'
 import TopicReader from '../features/study-plans/TopicReader'
 import AdminDashboard from '../features/admin/AdminDashboard'
+import ClassesPage from '../features/classes/ClassesPage'
 import RoleRedirect from './RoleRedirect'
 
 export default function AppRouter() {
@@ -43,6 +44,14 @@ export default function AppRouter() {
         element={
           <AuthGuard allowedRole="student">
             <TopicReader />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path="/teacher/classes"
+        element={
+          <AuthGuard allowedRole="teacher">
+            <ClassesPage />
           </AuthGuard>
         }
       />

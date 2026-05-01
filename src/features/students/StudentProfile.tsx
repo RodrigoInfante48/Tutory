@@ -4,7 +4,9 @@ import { useStudentProfile } from '../../hooks/useStudentProfile'
 import { useAllPlans, assignPlanToStudent } from '../../hooks/useAssignPlan'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
 import { useTeacherTasksForStudent, createTask, saveFeedback } from '../../hooks/useTeacherTasks'
+import { useStudentClassSessions, updateSessionStatus, createSession, type SessionStatus } from '../../hooks/useClassSessions'
 import { useAuth } from '../auth/AuthContext'
+import CycleStatus from '../classes/CycleStatus'
 
 interface StudentProfileProps {
   student: StudentSummary
@@ -184,7 +186,7 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
                 <QuizzesTab results={data.quizResults} />
               )}
               {activeTab === 'clases' && (
-                <ClasesTab sessions={data.classSessions} />
+                <ClasesTab studentId={student.id} teacherId={appUser?.id ?? ''} />
               )}
               {activeTab === 'mensajes' && (
                 <MensajesTab />
@@ -627,26 +629,219 @@ function QuizzesTab({ results }: { results: { id: string; score: number | null; 
   )
 }
 
-function ClasesTab({ sessions }: { sessions: { id: string; scheduled_date: string; status: string; notes: string | null }[] }) {
-  if (sessions.length === 0) {
-    return <EmptyState message="No hay clases registradas." />
+const SESSION_STATUS_OPTIONS: { value: SessionStatus; label: string }[] = [
+  { value: 'scheduled',   label: 'Programada' },
+  { value: 'taken',       label: 'Tomada' },
+  { value: 'no_show',     label: 'No show' },
+  { value: 'cancelled',   label: 'Cancelada' },
+  { value: 'rescheduled', label: 'Reagendada' },
+  { value: 'holiday',     label: 'Festivo' },
+]
+
+function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: string }) {
+  const { sessions, loading, reload } = useStudentClassSessions(studentId)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editStatus, setEditStatus] = useState<SessionStatus>('scheduled')
+  const [editNotes, setEditNotes] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+
+  // New session form
+  const [showNew, setShowNew] = useState(false)
+  const [newDate, setNewDate] = useState('')
+  const [newTime, setNewTime] = useState('09:00')
+  const [newNotes, setNewNotes] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+
+  function startEdit(s: { id: string; status: string; notes: string | null }) {
+    setEditingId(s.id)
+    setEditStatus(s.status as SessionStatus)
+    setEditNotes(s.notes ?? '')
+    setSaveError(null)
   }
+
+  async function handleSave(sessionId: string) {
+    setSaving(true)
+    setSaveError(null)
+    try {
+      await updateSessionStatus(sessionId, editStatus, editNotes || undefined)
+      setEditingId(null)
+      await reload()
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Error al guardar')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleCreate() {
+    if (!newDate) return
+    setCreating(true)
+    setCreateError(null)
+    try {
+      await createSession({
+        teacherId,
+        studentId,
+        scheduledDate: `${newDate}T${newTime}:00`,
+        notes: newNotes || undefined,
+      })
+      setNewDate('')
+      setNewTime('09:00')
+      setNewNotes('')
+      setShowNew(false)
+      await reload()
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'Error al crear sesión')
+    } finally {
+      setCreating(false)
+    }
+  }
+
   return (
-    <ul className="space-y-3">
-      {sessions.map(s => (
-        <li key={s.id} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              {formatDate(s.scheduled_date, true)}
-            </p>
-            <StatusBadge status={s.status} />
+    <div className="space-y-4">
+      {/* Cycle progress */}
+      <CycleStatus studentId={studentId} />
+
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          {sessions.length} sesión{sessions.length !== 1 ? 'es' : ''}
+        </p>
+        <button
+          onClick={() => setShowNew(s => !s)}
+          className="text-xs font-medium text-primary border border-primary/30 rounded-lg px-3 py-1.5 hover:bg-primary/5 transition-colors"
+        >
+          {showNew ? 'Cancelar' : '+ Nueva sesión'}
+        </button>
+      </div>
+
+      {/* New session form */}
+      {showNew && (
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 space-y-3">
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="text-xs text-gray-400 block mb-1">Fecha</label>
+              <input
+                type="date"
+                value={newDate}
+                onChange={e => setNewDate(e.target.value)}
+                className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
+            <div className="w-24">
+              <label className="text-xs text-gray-400 block mb-1">Hora</label>
+              <input
+                type="time"
+                value={newTime}
+                onChange={e => setNewTime(e.target.value)}
+                className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
           </div>
-          {s.notes && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{s.notes}</p>
-          )}
-        </li>
-      ))}
-    </ul>
+          <input
+            type="text"
+            placeholder="Notas (opcional)"
+            value={newNotes}
+            onChange={e => setNewNotes(e.target.value)}
+            className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          {createError && <p className="text-xs text-red-500">{createError}</p>}
+          <button
+            onClick={handleCreate}
+            disabled={creating || !newDate}
+            className="w-full text-sm font-semibold bg-primary text-gray-900 rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {creating ? 'Creando…' : 'Crear sesión'}
+          </button>
+        </div>
+      )}
+
+      {/* Sessions list */}
+      {loading ? (
+        <div className="flex justify-center py-8">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : sessions.length === 0 ? (
+        <EmptyState message="No hay clases registradas. Crea la primera." />
+      ) : (
+        <ul className="space-y-3">
+          {sessions.map(s => (
+            <li key={s.id} className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="flex items-center justify-between gap-2 p-3 bg-gray-50 dark:bg-gray-800">
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {formatDate(s.scheduled_date, true)}
+                </p>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={s.status} />
+                  <button
+                    onClick={() => editingId === s.id ? setEditingId(null) : startEdit(s)}
+                    className="text-xs text-gray-400 hover:text-primary transition-colors"
+                    aria-label="Editar"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828A2 2 0 019 17H7v-2a2 2 0 01.586-1.414L9 13z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {s.notes && editingId !== s.id && (
+                <p className="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700/50">
+                  {s.notes}
+                </p>
+              )}
+
+              {editingId === s.id && (
+                <div className="p-3 border-t border-gray-100 dark:border-gray-700/50 space-y-3">
+                  <div>
+                    <label className="text-xs text-gray-400 block mb-1.5">Estado</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {SESSION_STATUS_OPTIONS.map(opt => (
+                        <button
+                          key={opt.value}
+                          onClick={() => setEditStatus(opt.value)}
+                          className={`text-xs px-2 py-1 rounded-lg border transition-colors ${
+                            editStatus === opt.value
+                              ? 'border-primary bg-primary/10 text-primary dark:text-green-400'
+                              : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <textarea
+                    value={editNotes}
+                    onChange={e => setEditNotes(e.target.value)}
+                    placeholder="Notas de la clase…"
+                    rows={2}
+                    className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                  />
+                  {saveError && <p className="text-xs text-red-500">{saveError}</p>}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleSave(s.id)}
+                      disabled={saving}
+                      className="text-xs font-semibold bg-primary text-gray-900 px-3 py-1.5 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+                    >
+                      {saving ? 'Guardando…' : 'Guardar'}
+                    </button>
+                    <button
+                      onClick={() => setEditingId(null)}
+                      className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 px-3 py-1.5"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 
