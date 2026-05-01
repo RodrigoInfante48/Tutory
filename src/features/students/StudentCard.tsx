@@ -52,9 +52,9 @@ export default function StudentCard({ student, onClick }: StudentCardProps) {
             <p className="font-semibold text-gray-900 dark:text-white truncate">
               {student.name}
             </p>
-            {student.pendingTasksCount > 0 && (
-              <span className="flex-shrink-0 text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 rounded-full px-2 py-0.5">
-                {student.pendingTasksCount} tarea{student.pendingTasksCount > 1 ? 's' : ''}
+            {student.submittedTasksCount > 0 && (
+              <span className="flex-shrink-0 text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 rounded-full px-2 py-0.5">
+                {student.submittedTasksCount} por revisar
               </span>
             )}
           </div>
