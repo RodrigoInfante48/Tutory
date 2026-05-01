@@ -5,6 +5,9 @@ import { useStudyPlan } from '../../hooks/useStudyPlan'
 import StudyPlanView from '../study-plans/StudyPlanView'
 import { supabase } from '../../lib/supabase'
 import { useStudentTasks, submitTask, markFeedbackRead, type StudentTask } from '../../hooks/useStudentTasks'
+import { useStudentQuiz } from '../../hooks/useStudentQuiz'
+import QuizPlayer from '../quizzes/QuizPlayer'
+import QuizHistory from '../quizzes/QuizHistory'
 
 function useStudentPlanId(userId: string | undefined) {
   const [planId, setPlanId] = useState<string | null>(null)
@@ -85,7 +88,6 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
 
   return (
     <li className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-      {/* Header row */}
       <button
         onClick={() => {
           setExpanded(e => !e)
@@ -109,14 +111,12 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
         <StatusBadge status={task.status} />
       </button>
 
-      {/* Expanded content */}
       {expanded && (
         <div className="p-3 border-t border-gray-100 dark:border-gray-700/50 space-y-3">
           {task.description && (
             <p className="text-sm text-gray-600 dark:text-gray-400">{task.description}</p>
           )}
 
-          {/* Already submitted */}
           {task.submission ? (
             <div className="space-y-2">
               <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 p-2.5">
@@ -136,7 +136,6 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
               )}
             </div>
           ) : (
-            /* Submission form */
             <div className="space-y-2">
               <textarea
                 value={body}
@@ -180,14 +179,11 @@ function TasksSection({ studentId }: { studentId: string }) {
   }
 
   if (error) {
-    return (
-      <p className="text-sm text-red-500 py-4">{error}</p>
-    )
+    return <p className="text-sm text-red-500 py-4">{error}</p>
   }
 
   return (
     <div className="space-y-3">
-      {/* Section header */}
       <div className="flex items-center gap-2">
         <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">
           Mis Tareas
@@ -234,6 +230,87 @@ function TasksSection({ studentId }: { studentId: string }) {
   )
 }
 
+function QuizSection({ studentId }: { studentId: string }) {
+  const { todayQuiz, alreadyTaken, myScore, history, loading, reload } = useStudentQuiz(studentId)
+  const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null)
+  const [showHistory, setShowHistory] = useState(false)
+
+  function handleQuizDone(score: number, correct: number, total: number) {
+    setResult({ score, correct, total })
+    reload()
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-6">
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">
+          Quiz del día
+        </h2>
+        {history.length > 0 && (
+          <button
+            onClick={() => setShowHistory(h => !h)}
+            className="text-xs text-primary hover:underline font-medium"
+          >
+            {showHistory ? 'Ocultar historial' : 'Ver historial'}
+          </button>
+        )}
+      </div>
+
+      {showHistory ? (
+        <QuizHistory history={history} />
+      ) : result ? (
+        /* Score card after submission */
+        <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 text-center space-y-2">
+          <p className="text-3xl font-heading font-bold text-gray-900 dark:text-white">
+            {Math.round(result.score)}%
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            {result.correct} de {result.total} correctas
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            {result.score >= 80
+              ? '¡Excelente trabajo!'
+              : result.score >= 60
+              ? '¡Bien! Sigue practicando.'
+              : 'Sigue adelante, puedes mejorar.'}
+          </p>
+        </div>
+      ) : todayQuiz && !alreadyTaken ? (
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <QuizPlayer
+            quiz={todayQuiz}
+            studentId={studentId}
+            onDone={handleQuizDone}
+          />
+        </div>
+      ) : todayQuiz && alreadyTaken ? (
+        <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 text-center space-y-1">
+          <p className="text-3xl font-heading font-bold text-gray-900 dark:text-white">
+            {Math.round(myScore ?? 0)}%
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Ya completaste el quiz de hoy: <span className="font-medium">{todayQuiz.title}</span>
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 p-6 text-center">
+          <p className="text-sm text-gray-400 dark:text-gray-500">
+            No hay quiz programado para hoy.
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function StudentDashboard() {
   const { appUser } = useAuth()
   const { planId, loaded } = useStudentPlanId(appUser?.id)
@@ -251,6 +328,11 @@ export default function StudentDashboard() {
             Aquí está tu portal de aprendizaje.
           </p>
         </div>
+
+        {/* Quiz del día */}
+        {appUser?.id && (
+          <QuizSection studentId={appUser.id} />
+        )}
 
         {/* Tasks */}
         {appUser?.id && (
