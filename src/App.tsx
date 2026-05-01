@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { AuthProvider } from './features/auth/AuthContext'
 import AppRouter from './app/router'
 
 export default function App() {
@@ -11,5 +12,9 @@ export default function App() {
     }
   }, [])
 
-  return <AppRouter />
+  return (
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
+  )
 }
