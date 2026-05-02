@@ -50,8 +50,8 @@ export function useConversations() {
       for (const msg of data ?? []) {
         const isSender = msg.sender_id === appUser.id
         const partner = isSender
-          ? (msg.receiver as { id: string; name: string; avatar_url: string | null })
-          : (msg.sender as { id: string; name: string; avatar_url: string | null })
+          ? (msg.receiver as unknown as { id: string; name: string; avatar_url: string | null })
+          : (msg.sender as unknown as { id: string; name: string; avatar_url: string | null })
 
         if (!convMap.has(partner.id)) {
           convMap.set(partner.id, {
