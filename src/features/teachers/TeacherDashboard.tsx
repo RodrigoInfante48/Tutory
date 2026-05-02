@@ -1,16 +1,19 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import AppLayout from '../../app/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import { useTeacherStudents, type StudentSummary } from '../../hooks/useTeacherStudents'
 import StudentCard from '../students/StudentCard'
 import StudentProfile from '../students/StudentProfile'
 import QuizList from '../quizzes/QuizList'
+import { useTeacherCycleAlerts } from '../../hooks/useCycles'
 
 type Tab = 'students' | 'quizzes'
 
 export default function TeacherDashboard() {
   const { appUser } = useAuth()
   const { students, loading, error } = useTeacherStudents()
+  const { atRiskCount } = useTeacherCycleAlerts(appUser?.id ?? null)
   const [selectedStudent, setSelectedStudent] = useState<StudentSummary | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>('students')
 
@@ -29,6 +32,24 @@ export default function TeacherDashboard() {
               ? 'Cargando…'
               : `${students.length} estudiante${students.length !== 1 ? 's' : ''} activo${students.length !== 1 ? 's' : ''}`}
           </p>
+        </div>
+
+        {/* Quick actions */}
+        <div className="flex flex-wrap gap-3 mb-6">
+          <Link
+            to="/teacher/classes"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary/40 transition-colors shadow-sm"
+          >
+            <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Calendario de clases</span>
+            {atRiskCount > 0 && (
+              <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-red-500 text-white">
+                {atRiskCount}
+              </span>
+            )}
+          </Link>
         </div>
 
         {/* Tabs */}
