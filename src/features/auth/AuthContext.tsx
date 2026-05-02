@@ -34,12 +34,20 @@ async function fetchAppUser(userId: string): Promise<AppUser | null> {
         .eq('id', userId)
         .single(),
       new Promise<{ data: null; error: Error }>((resolve) =>
-        setTimeout(() => resolve({ data: null, error: new Error('timeout') }), 8000)
+        setTimeout(() => resolve({ data: null, error: new Error('timeout after 8s') }), 8000)
       ),
     ])
-    if (error || !data) return null
+    if (error) {
+      console.error('[fetchAppUser] Supabase error:', error)
+      return null
+    }
+    if (!data) {
+      console.error('[fetchAppUser] No row found for userId:', userId)
+      return null
+    }
     return data as AppUser
-  } catch {
+  } catch (err) {
+    console.error('[fetchAppUser] Exception:', err)
     return null
   }
 }
@@ -70,8 +78,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       mounted = false
       subscription.unsubscribe()
     }
-
-    return () => subscription.unsubscribe()
   }, [])
 
   const signIn = async (email: string, password: string) => {
