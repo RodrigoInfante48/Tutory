@@ -53,21 +53,26 @@ async function fetchAppUser(userId: string): Promise<AppUser | null> {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({
-    session: null,
-    appUser: null,
-    loading: true,
-  })
+  const [session, setSession] = useState<Session | null>(null)
+  const [appUser, setAppUser] = useState<AppUser | null>(null)
+  const [loading, setLoading] = useState(true)
 
+  // Effect 1: subscribe to auth state — ONLY update session state here.
+  // Never call supabase.from() or getSession() inside this callback:
+  // the auth client holds the token lock during the callback and any
+  // concurrent Supabase query will trigger "lock stolen" errors.
   useEffect(() => {
     let mounted = true
 
-    // Set loading:true before every fetchAppUser so consumers (e.g. LoginPage)
-    // can distinguish "fetch in progress" from "fetch finished with no profile".
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (mounted) setState(prev => ({ ...prev, loading: true }))
-      const appUser = session ? await fetchAppUser(session.user.id) : null
-      if (mounted) setState({ session, appUser, loading: false })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      if (!mounted) return
+      setSession(newSession)
+      if (!newSession) {
+        setAppUser(null)
+        setLoading(false)
+      } else {
+        setLoading(true)
+      }
     })
 
     return () => {
@@ -75,6 +80,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       subscription.unsubscribe()
     }
   }, [])
+
+  // Effect 2: fetch the app-level user profile whenever the session changes.
+  // This runs in a separate React render cycle (after the auth lock is released),
+  // so the supabase.from() query can acquire the token lock without contention.
+  useEffect(() => {
+    if (!session) return
+    let mounted = true
+
+    fetchAppUser(session.user.id).then((user) => {
+      if (mounted) {
+        setAppUser(user)
+        setLoading(false)
+      }
+    })
+
+    return () => { mounted = false }
+  }, [session])
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -87,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, appUser, loading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )
