@@ -1,8 +1,22 @@
-import { useState, type FormEvent } from 'react'
-import { useAuth } from './AuthContext'
+import { useState, useEffect, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth, type UserRole } from './AuthContext'
+
+const ROLE_HOME: Record<UserRole, string> = {
+  admin: '/admin',
+  teacher: '/teacher',
+  student: '/student',
+}
 
 export default function LoginPage() {
-  const { signIn } = useAuth()
+  const { signIn, appUser } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (appUser) {
+      navigate(ROLE_HOME[appUser.role], { replace: true })
+    }
+  }, [appUser, navigate])
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
