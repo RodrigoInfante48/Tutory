@@ -62,9 +62,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true
 
-    // onAuthStateChange fires INITIAL_SESSION immediately — no need for getSession()
-    // Calling both in parallel causes lock contention on the Supabase auth token
+    // Set loading:true before every fetchAppUser so consumers (e.g. LoginPage)
+    // can distinguish "fetch in progress" from "fetch finished with no profile".
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (mounted) setState(prev => ({ ...prev, loading: true }))
       const appUser = session ? await fetchAppUser(session.user.id) : null
       if (mounted) setState({ session, appUser, loading: false })
     })
