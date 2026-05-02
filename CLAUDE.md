@@ -17,19 +17,6 @@ Valentina es profesora de inglés. La meta es que ella (y otros docentes) puedan
 
 ---
 
-## Plantilla de referencia
-
-Los archivos `login.html` y `portal.html` son capturas del sistema de "Inglés con Sebas":
-- Backend: `https://app.inglesconsebas.com` (PHP)
-- API: `/api/api.php?endpoint=<nombre>` (GET/POST)
-- Auth: `/api/auth.php` (POST con `{username, pin}`)
-- Calendario: `/calendar.php`
-
-**Endpoints observados:**
-`students`, `teachers`, `quizzes`, `results`, `tasks`, `task_bank`, `summaries`, `resources`, `study_plans`, `movements`, `topics`, `alerts`, `groups`, `todos`, `messages`
-
-**NO** conectarse a ese backend en producción. Son solo referencia de estructura de datos y UI.
-
 ---
 
 ## Stack decidido para Tutory
