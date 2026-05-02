@@ -299,13 +299,14 @@ on conflict (id) do nothing;
 -- Resources
 -- ============================================================
 
-insert into public.resources (id, teacher_id, student_id, title, url, type) values
+insert into public.resources (id, teacher_id, student_id, title, url, description, type) values
   (
     '44444444-0000-0000-0000-000000000001',
     '00000000-0000-0000-0000-000000000002',
     null,
     'BBC Learning English — 6 Minute English',
     'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english',
+    'Podcast de 6 minutos con vocabulario cotidiano. Recurso global para todos los estudiantes.',
     'link'
   ),
   (
@@ -314,7 +315,26 @@ insert into public.resources (id, teacher_id, student_id, title, url, type) valu
     '00000000-0000-0000-0000-000000000004',
     'Unit 1 Vocabulary PDF',
     'https://example.com/unit1-vocab.pdf',
+    'Vocabulario de la Unidad 1: saludos, presentaciones y números.',
     'pdf'
+  ),
+  (
+    '44444444-0000-0000-0000-000000000003',
+    '00000000-0000-0000-0000-000000000002',
+    null,
+    'English Grammar in Use — Cambridge',
+    'https://www.cambridge.org/us/cambridgeenglish/catalog/grammar-vocabulary-and-pronunciation/english-grammar-use',
+    'Referencia de gramática intermedia. Disponible para todos.',
+    'link'
+  ),
+  (
+    '44444444-0000-0000-0000-000000000004',
+    '00000000-0000-0000-0000-000000000002',
+    '00000000-0000-0000-0000-000000000006',
+    'Reported Speech Video Lesson',
+    'https://www.youtube.com/watch?v=reported-speech-example',
+    'Video explicativo de estilo indirecto para María.',
+    'video'
   )
 on conflict (id) do nothing;
 
@@ -322,20 +342,46 @@ on conflict (id) do nothing;
 -- Messages
 -- ============================================================
 
-insert into public.messages (id, sender_id, receiver_id, body, sent_at) values
+insert into public.messages (id, sender_id, receiver_id, body, sent_at, read_at) values
   (
     '55555555-0000-0000-0000-000000000001',
     '00000000-0000-0000-0000-000000000002',
     '00000000-0000-0000-0000-000000000004',
     '¡Hola Ana! No olvides tu tarea para el jueves.',
-    now() - interval '1 day'
+    now() - interval '2 days',
+    now() - interval '1 day 23 hours'
   ),
   (
     '55555555-0000-0000-0000-000000000002',
     '00000000-0000-0000-0000-000000000004',
     '00000000-0000-0000-0000-000000000002',
     '¡Claro, Valentina! Ya empecé a escribirla.',
+    now() - interval '1 day 22 hours',
+    now() - interval '1 day 21 hours'
+  ),
+  (
+    '55555555-0000-0000-0000-000000000003',
+    '00000000-0000-0000-0000-000000000002',
+    '00000000-0000-0000-0000-000000000004',
+    'Perfecto, recuerda revisar el PDF de vocabulario que te mandé.',
+    now() - interval '1 day',
     now() - interval '23 hours'
+  ),
+  (
+    '55555555-0000-0000-0000-000000000004',
+    '00000000-0000-0000-0000-000000000004',
+    '00000000-0000-0000-0000-000000000002',
+    'Sí, ya lo vi. Tengo una pregunta sobre la sección de verbos irregulares.',
+    now() - interval '3 hours',
+    null
+  ),
+  (
+    '55555555-0000-0000-0000-000000000005',
+    '00000000-0000-0000-0000-000000000002',
+    '00000000-0000-0000-0000-000000000006',
+    '¡Hola María! ¿Pudiste ver el video de reported speech?',
+    now() - interval '5 hours',
+    null
   )
 on conflict (id) do nothing;
 

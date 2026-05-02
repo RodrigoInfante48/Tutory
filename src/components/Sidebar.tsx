@@ -1,24 +1,20 @@
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '../lib/utils'
-
-interface NavItem {
-  label: string
-  href: string
-  emoji: string
-}
-
-const navItems: NavItem[] = [
-  { label: 'Dashboard', href: '/teacher', emoji: '🏠' },
-  { label: 'Estudiantes', href: '/teacher/students', emoji: '👥' },
-  { label: 'Clases', href: '/teacher/classes', emoji: '📅' },
-  { label: 'Tareas', href: '/teacher/tasks', emoji: '📝' },
-  { label: 'Quizzes', href: '/teacher/quizzes', emoji: '🧠' },
-  { label: 'Recursos', href: '/teacher/resources', emoji: '📚' },
-  { label: 'Mensajes', href: '/teacher/messages', emoji: '💬' },
-]
+import { useUnreadCount } from '../hooks/useMessages'
 
 export default function Sidebar() {
   const location = useLocation()
+  const unreadCount = useUnreadCount()
+
+  const navItems = [
+    { label: 'Dashboard', href: '/teacher', emoji: '🏠' },
+    { label: 'Estudiantes', href: '/teacher/students', emoji: '👥' },
+    { label: 'Clases', href: '/teacher/classes', emoji: '📅' },
+    { label: 'Tareas', href: '/teacher/tasks', emoji: '📝' },
+    { label: 'Quizzes', href: '/teacher/quizzes', emoji: '🧠' },
+    { label: 'Recursos', href: '/teacher/resources', emoji: '📚' },
+    { label: 'Mensajes', href: '/teacher/messages', emoji: '💬', badge: unreadCount },
+  ]
 
   return (
     <aside className="hidden md:flex flex-col w-64 min-h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
@@ -45,7 +41,12 @@ export default function Sidebar() {
               )}
             >
               <span className="text-lg leading-none">{item.emoji}</span>
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
+              {item.badge ? (
+                <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold">
+                  {item.badge > 99 ? '99+' : item.badge}
+                </span>
+              ) : null}
             </Link>
           )
         })}

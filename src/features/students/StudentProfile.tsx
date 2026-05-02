@@ -7,6 +7,8 @@ import { useTeacherTasksForStudent, createTask, saveFeedback } from '../../hooks
 import { useStudentClassSessions, updateSessionStatus, createSession, type SessionStatus } from '../../hooks/useClassSessions'
 import { useAuth } from '../auth/AuthContext'
 import CycleStatus from '../classes/CycleStatus'
+import { useTeacherResources, createResource, deleteResource, type ResourceType } from '../../hooks/useResources'
+import ChatWindow from '../messages/ChatWindow'
 
 interface StudentProfileProps {
   student: StudentSummary
@@ -174,7 +176,7 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
                 />
               )}
               {activeTab === 'recursos' && (
-                <RecursosTab resources={data.resources} />
+                <RecursosTab studentId={student.id} />
               )}
               {activeTab === 'tareas' && (
                 <TareasTab
@@ -189,7 +191,11 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
                 <ClasesTab studentId={student.id} teacherId={appUser?.id ?? ''} />
               )}
               {activeTab === 'mensajes' && (
-                <MensajesTab />
+                <MensajesTab
+                  partnerId={student.id}
+                  partnerName={student.name}
+                  partnerAvatar={student.avatar_url}
+                />
               )}
             </>
           )}
@@ -357,36 +363,164 @@ function PlanTab({
   )
 }
 
-function RecursosTab({ resources }: { resources: { id: string; title: string; url: string; type: string; created_at: string }[] }) {
-  if (resources.length === 0) {
-    return <EmptyState message="No hay recursos asignados." />
+const RESOURCE_TYPE_OPTIONS: { value: ResourceType; label: string; emoji: string }[] = [
+  { value: 'link', label: 'Enlace', emoji: '🔗' },
+  { value: 'pdf', label: 'PDF', emoji: '📄' },
+  { value: 'video', label: 'Video', emoji: '🎬' },
+  { value: 'audio', label: 'Audio', emoji: '🎵' },
+  { value: 'other', label: 'Otro', emoji: '📎' },
+]
+
+function RecursosTab({ studentId }: { studentId: string }) {
+  const { appUser } = useAuth()
+  const { resources, loading, reload } = useTeacherResources()
+  const [showForm, setShowForm] = useState(false)
+  const [form, setForm] = useState({ title: '', url: '', description: '', type: 'link' as ResourceType })
+  const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  // Filter to this student's resources or global ones
+  const studentResources = resources.filter(
+    (r) => r.student_id === studentId || r.student_id === null
+  )
+
+  async function handleCreate(e: React.FormEvent) {
+    e.preventDefault()
+    if (!appUser) return
+    if (!form.title.trim() || !form.url.trim()) {
+      setFormError('Título y URL son obligatorios.')
+      return
+    }
+    try {
+      setSaving(true)
+      setFormError(null)
+      await createResource(appUser.id, { ...form, student_id: studentId })
+      setShowForm(false)
+      setForm({ title: '', url: '', description: '', type: 'link' })
+      reload()
+    } catch (e) {
+      setFormError(e instanceof Error ? e.message : 'Error al guardar')
+    } finally {
+      setSaving(false)
+    }
   }
-  const iconByType: Record<string, string> = {
-    link: '🔗',
-    pdf: '📄',
-    video: '🎬',
-    audio: '🎵',
-    other: '📎',
+
+  async function handleDelete(id: string) {
+    if (!confirm('¿Eliminar este recurso?')) return
+    setDeletingId(id)
+    try {
+      await deleteResource(id)
+      reload()
+    } finally {
+      setDeletingId(null)
+    }
   }
+
   return (
-    <ul className="space-y-2">
-      {resources.map(r => (
-        <li key={r.id} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-          <span className="text-lg flex-shrink-0">{iconByType[r.type] ?? '📎'}</span>
-          <div className="flex-1 min-w-0">
-            <a
-              href={r.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-primary hover:underline truncate block"
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {studentResources.length} recurso{studentResources.length !== 1 ? 's' : ''}
+        </p>
+        <button
+          onClick={() => setShowForm((v) => !v)}
+          className="text-xs px-3 py-1.5 rounded-lg bg-primary/10 text-primary-dark dark:text-primary hover:bg-primary/20 transition-colors font-medium"
+        >
+          {showForm ? 'Cancelar' : '+ Agregar'}
+        </button>
+      </div>
+
+      {showForm && (
+        <form onSubmit={handleCreate} className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 space-y-3">
+          {formError && <p className="text-xs text-red-500">{formError}</p>}
+          <input
+            type="text"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            placeholder="Título *"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          <input
+            type="url"
+            value={form.url}
+            onChange={(e) => setForm({ ...form, url: e.target.value })}
+            placeholder="URL *"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          <div className="flex gap-2">
+            <select
+              value={form.type}
+              onChange={(e) => setForm({ ...form, type: e.target.value as ResourceType })}
+              className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
-              {r.title}
-            </a>
-            <p className="text-xs text-gray-400 mt-0.5">{formatDate(r.created_at)}</p>
+              {RESOURCE_TYPE_OPTIONS.map((t) => (
+                <option key={t.value} value={t.value}>{t.emoji} {t.label}</option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors disabled:opacity-60"
+            >
+              {saving ? '...' : 'Guardar'}
+            </button>
           </div>
-        </li>
-      ))}
-    </ul>
+        </form>
+      )}
+
+      {loading ? (
+        <div className="flex justify-center py-6">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : studentResources.length === 0 ? (
+        <EmptyState message="No hay recursos asignados a este estudiante." />
+      ) : (
+        <ul className="space-y-2">
+          {studentResources.map((r) => {
+            const typeOpt = RESOURCE_TYPE_OPTIONS.find((t) => t.value === r.type)
+            return (
+              <li key={r.id} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 group">
+                <span className="text-lg flex-shrink-0">{typeOpt?.emoji ?? '📎'}</span>
+                <div className="flex-1 min-w-0">
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-primary hover:underline truncate block"
+                  >
+                    {r.title}
+                  </a>
+                  {r.description && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{r.description}</p>
+                  )}
+                  <div className="flex items-center gap-2 mt-1">
+                    <p className="text-xs text-gray-400">{formatDate(r.created_at)}</p>
+                    {r.student_id === null && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">Global</span>
+                    )}
+                  </div>
+                </div>
+                {r.student_id === studentId && (
+                  <button
+                    onClick={() => handleDelete(r.id)}
+                    disabled={deletingId === r.id}
+                    className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-all flex-shrink-0"
+                    title="Eliminar"
+                  >
+                    {deletingId === r.id ? '...' : (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </button>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
   )
 }
 
@@ -845,17 +979,22 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
   )
 }
 
-function MensajesTab() {
+function MensajesTab({
+  partnerId,
+  partnerName,
+  partnerAvatar,
+}: {
+  partnerId: string
+  partnerName: string
+  partnerAvatar: string | null
+}) {
   return (
-    <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
-      <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-        <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-        </svg>
-      </div>
-      <p className="text-sm text-gray-500 dark:text-gray-400">
-        El chat en tiempo real estará disponible próximamente.
-      </p>
+    <div className="h-[500px] -mx-6 -mb-6">
+      <ChatWindow
+        partnerId={partnerId}
+        partnerName={partnerName}
+        partnerAvatar={partnerAvatar}
+      />
     </div>
   )
 }
