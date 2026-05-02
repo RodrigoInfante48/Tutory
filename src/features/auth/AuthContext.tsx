@@ -26,14 +26,22 @@ interface AuthContextValue extends AuthState {
 const AuthContext = createContext<AuthContextValue | null>(null)
 
 async function fetchAppUser(userId: string): Promise<AppUser | null> {
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, email, role, name, avatar_url')
-    .eq('id', userId)
-    .single()
-
-  if (error || !data) return null
-  return data as AppUser
+  try {
+    const { data, error } = await Promise.race([
+      supabase
+        .from('users')
+        .select('id, email, role, name, avatar_url')
+        .eq('id', userId)
+        .single(),
+      new Promise<{ data: null; error: Error }>((resolve) =>
+        setTimeout(() => resolve({ data: null, error: new Error('timeout') }), 8000)
+      ),
+    ])
+    if (error || !data) return null
+    return data as AppUser
+  } catch {
+    return null
+  }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -44,15 +52,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   })
 
   useEffect(() => {
+    let mounted = true
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       const appUser = session ? await fetchAppUser(session.user.id) : null
-      setState({ session, appUser, loading: false })
+      if (mounted) setState({ session, appUser, loading: false })
+    }).catch(() => {
+      if (mounted) setState({ session: null, appUser: null, loading: false })
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const appUser = session ? await fetchAppUser(session.user.id) : null
-      setState({ session, appUser, loading: false })
+      if (mounted) setState({ session, appUser, loading: false })
     })
+
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
 
     return () => subscription.unsubscribe()
   }, [])
