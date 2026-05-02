@@ -47,25 +47,28 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
         .lte('scheduled_date', end)
         .order('scheduled_date', { ascending: true })
       if (err) throw err
-      const mapped = (data ?? []).map((row: {
-        id: string
-        student_id: string
-        teacher_id: string
-        scheduled_date: string
-        status: SessionStatus
-        notes: string | null
-        rescheduled_from: string | null
-        users: { id: string; name: string; avatar_url: string | null } | null
-      }) => ({
-        id: row.id,
-        student_id: row.student_id,
-        teacher_id: row.teacher_id,
-        scheduled_date: row.scheduled_date,
-        status: row.status,
-        notes: row.notes,
-        rescheduled_from: row.rescheduled_from,
-        student: row.users,
-      }))
+      const mapped = (data ?? []).map((row: unknown) => {
+        const r = row as {
+          id: string
+          student_id: string
+          teacher_id: string
+          scheduled_date: string
+          status: SessionStatus
+          notes: string | null
+          rescheduled_from: string | null
+          users: { id: string; name: string; avatar_url: string | null } | null
+        }
+        return ({
+          id: r.id,
+          student_id: r.student_id,
+          teacher_id: r.teacher_id,
+          scheduled_date: r.scheduled_date,
+          status: r.status,
+          notes: r.notes,
+          rescheduled_from: r.rescheduled_from,
+          student: r.users,
+        })
+      })
       setSessions(mapped)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar clases')
@@ -114,7 +117,7 @@ export async function createSession(params: {
     `)
     .single()
   if (error) throw error
-  const row = data as {
+  const row = data as unknown as {
     id: string
     student_id: string
     teacher_id: string
