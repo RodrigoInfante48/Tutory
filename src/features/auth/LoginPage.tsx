@@ -9,25 +9,36 @@ const ROLE_HOME: Record<UserRole, string> = {
 }
 
 export default function LoginPage() {
-  const { signIn, appUser } = useAuth()
+  const { signIn, appUser, session, loading: authLoading } = useAuth()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (appUser) {
-      navigate(ROLE_HOME[appUser.role], { replace: true })
-    }
-  }, [appUser, navigate])
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [shake, setShake] = useState(false)
+  // Tracks that the user just submitted credentials successfully,
+  // so we can detect when AuthContext finishes without a profile.
+  const [submitted, setSubmitted] = useState(false)
 
   const triggerShake = () => {
     setShake(true)
     setTimeout(() => setShake(false), 400)
   }
+
+  useEffect(() => {
+    if (appUser) {
+      navigate(ROLE_HOME[appUser.role], { replace: true })
+      return
+    }
+    // Auth succeeded (session exists) but profile didn't load — surface the error.
+    if (submitted && !authLoading && session && !appUser) {
+      setLoading(false)
+      setSubmitted(false)
+      setError('No se encontró el perfil de usuario. Contacta al administrador.')
+      triggerShake()
+    }
+  }, [appUser, session, authLoading, submitted, navigate])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -37,15 +48,16 @@ export default function LoginPage() {
 
     const { error: signInError } = await signIn(email.trim(), password)
 
-    setLoading(false)
-
     if (signInError) {
+      setLoading(false)
       setError('Correo o contraseña incorrectos')
       triggerShake()
       return
     }
 
-    // AuthGuard / router will redirect based on role after session updates
+    // Keep spinner on — AuthContext is now running fetchAppUser.
+    // The useEffect above will navigate on success or show an error on failure.
+    setSubmitted(true)
   }
 
   return (

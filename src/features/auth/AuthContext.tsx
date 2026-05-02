@@ -34,11 +34,11 @@ async function fetchAppUser(userId: string): Promise<AppUser | null> {
         .eq('id', userId)
         .single(),
       new Promise<{ data: null; error: Error }>((resolve) =>
-        setTimeout(() => resolve({ data: null, error: new Error('timeout after 8s') }), 8000)
+        setTimeout(() => resolve({ data: null, error: new Error('timeout after 20s') }), 20000)
       ),
     ])
     if (error) {
-      console.error('[fetchAppUser] Supabase error:', error)
+      console.error('[fetchAppUser] Supabase error:', JSON.stringify(error))
       return null
     }
     if (!data) {
@@ -62,14 +62,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const appUser = session ? await fetchAppUser(session.user.id) : null
-      if (mounted) setState({ session, appUser, loading: false })
-    }).catch(() => {
-      if (mounted) setState({ session: null, appUser: null, loading: false })
-    })
-
+    // Set loading:true before every fetchAppUser so consumers (e.g. LoginPage)
+    // can distinguish "fetch in progress" from "fetch finished with no profile".
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (mounted) setState(prev => ({ ...prev, loading: true }))
       const appUser = session ? await fetchAppUser(session.user.id) : null
       if (mounted) setState({ session, appUser, loading: false })
     })
