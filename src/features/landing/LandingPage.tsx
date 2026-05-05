@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, RefObject } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useMotionValue, animate } from 'framer-motion'
 
 // ─── Animation variants ────────────────────────────────────────────────────
 
@@ -979,6 +979,481 @@ function SectionParaQuien() {
   )
 }
 
+// ─── Section: Testimonios ────────────────────────────────────────────────────
+
+const TESTIMONIALS = [
+  {
+    name: 'Carolina Ramírez',
+    role: 'Profesora de inglés, Bogotá',
+    initials: 'CR',
+    text: 'Antes tenía WhatsApp, Sheets y Notion abiertos al mismo tiempo. Ahora entro a Tutory y en 30 segundos sé qué le toca a cada estudiante. Cambió mi día a día.',
+  },
+  {
+    name: 'Sebastián Morales',
+    role: 'Tutor independiente, Medellín',
+    initials: 'SM',
+    text: 'Lo que más me cambió fue el seguimiento de clases. Sé exactamente cuántas tomó cada estudiante y qué le falta en el ciclo. Sin Excel, sin notas en el cuaderno.',
+  },
+  {
+    name: 'Valentina Ospina',
+    role: 'Docente particular, Cali',
+    initials: 'VO',
+    text: 'Mis estudiantes entregan tareas desde el portal y yo les doy feedback ahí mismo. Se acabó el "te mando el audio por WhatsApp" y el caos de los chats.',
+  },
+  {
+    name: 'Andrés Felipe Ruiz',
+    role: 'Profesor de inglés, Bucaramanga',
+    initials: 'AF',
+    text: 'Los quizzes automáticos me ahorran horas cada semana. Los creo una vez y el sistema se los muestra a cada estudiante. Los resultados llegan al instante.',
+  },
+]
+
+function SectionTestimonios() {
+  return (
+    <section id="testimonios" className="relative py-32 bg-[#0d0d0d] overflow-hidden">
+      <style>{`
+        @keyframes marquee-scroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .marquee-track {
+          display: flex;
+          gap: 1.5rem;
+          width: max-content;
+          animation: marquee-scroll 40s linear infinite;
+        }
+        .marquee-root:hover .marquee-track {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <div className="max-w-7xl mx-auto px-6 mb-16">
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+        >
+          Testimonios
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+          className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+        >
+          Profesores que ya dejaron<br />el caos atrás
+        </motion.h2>
+      </div>
+
+      {/* Marquee */}
+      <div
+        className="marquee-root overflow-hidden cursor-grab"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+        }}
+      >
+        <div className="marquee-track">
+          {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 w-80 rounded-xl border border-white/[0.08] bg-white/[0.03] p-6"
+              style={{ boxShadow: '0 4px 24px rgba(134,239,134,0.08)' }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#86ef86]/30 to-[#166534]/40 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs font-bold text-[#86ef86]">{t.initials}</span>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">{t.name}</p>
+                  <p className="text-xs text-white/40">{t.role}</p>
+                </div>
+              </div>
+              <p className="text-sm text-white/65 leading-relaxed">"{t.text}"</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: Métricas ───────────────────────────────────────────────────────
+
+function AnimatedCounter({ target, suffix }: { target: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref as RefObject<Element>, { once: true, margin: '-80px' })
+  const motionVal = useMotionValue(0)
+  const [display, setDisplay] = useState('0')
+
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(motionVal, target, {
+      duration: 2,
+      ease: 'easeOut',
+      onUpdate: (v) => setDisplay(Math.round(v).toLocaleString('es-CO')),
+    })
+    return controls.stop
+  }, [inView, target, motionVal])
+
+  return <span ref={ref}>{display}{suffix}</span>
+}
+
+const METRICS = [
+  { target: 200,  suffix: '+', label: 'profesores activos' },
+  { target: 1400, suffix: '+', label: 'estudiantes gestionados' },
+  { target: 98,   suffix: '%', label: 'satisfacción docente' },
+]
+
+function SectionMetricas() {
+  return (
+    <section className="relative py-24 overflow-hidden">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 90% 80% at 50% 50%, rgba(22,101,52,0.45) 0%, #0a0a0a 70%)' }}
+      />
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.08]">
+          {METRICS.map((m) => (
+            <div key={m.label} className="flex flex-col items-center text-center py-10 md:py-4 px-8">
+              <span className="font-heading text-6xl md:text-7xl xl:text-8xl font-black text-white tracking-tighter mb-2">
+                <AnimatedCounter target={m.target} suffix={m.suffix} />
+              </span>
+              <span className="text-sm text-white/45">{m.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: Precios ────────────────────────────────────────────────────────
+
+const FREE_FEATURES = [
+  'Hasta 5 estudiantes activos',
+  'Plan de estudios básico',
+  'Tareas y entregas',
+  'Historial de clases',
+  'Chat interno con estudiantes',
+  'Acceso desde cualquier dispositivo',
+]
+
+const PRO_FEATURES = [
+  'Estudiantes ilimitados',
+  'Quizzes automáticos ilimitados',
+  'Recursos por estudiante',
+  'Reportes de progreso avanzados',
+  'Grupos y clases grupales',
+  'Soporte prioritario',
+]
+
+function CheckIcon() {
+  return (
+    <span className="w-4 h-4 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 flex items-center justify-center flex-shrink-0">
+      <span className="text-[8px] text-[#86ef86] font-bold">✓</span>
+    </span>
+  )
+}
+
+function SectionPrecios() {
+  return (
+    <section id="precios" className="relative py-32 bg-[#0d0d0d]">
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            Precios
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+          >
+            Empieza gratis.<br />Escala cuando quieras.
+          </motion.h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {/* Free card */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 flex flex-col"
+          >
+            <div className="mb-8">
+              <h3 className="font-heading text-xl font-bold text-white mb-3">Gratis</h3>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="font-heading text-5xl font-black text-white">$0</span>
+                <span className="text-white/40 text-sm">/ siempre</span>
+              </div>
+              <p className="text-sm text-white/50">Todo lo esencial para empezar a organizar tu enseñanza.</p>
+            </div>
+            <ul className="flex flex-col gap-3 mb-8 flex-1">
+              {FREE_FEATURES.map((f) => (
+                <li key={f} className="flex items-center gap-3">
+                  <CheckIcon />
+                  <span className="text-sm text-white/65">{f}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/login"
+              className="block text-center px-6 py-3 rounded-lg border border-white/20 text-white/80 hover:text-white hover:border-white/40 text-sm font-medium transition-all duration-200 hover:scale-[1.02]"
+            >
+              Crear cuenta gratis
+            </Link>
+          </motion.div>
+
+          {/* Pro card */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="group relative rounded-2xl border border-[#86ef86]/30 bg-[#86ef86]/[0.03] p-8 flex flex-col transition-all duration-300 hover:border-[#86ef86]/50 hover:shadow-[0_0_40px_rgba(134,239,134,0.12)]"
+          >
+            <div className="absolute top-4 right-4">
+              <span className="text-[11px] px-2.5 py-1 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 text-[#86ef86] font-medium">
+                Próximamente
+              </span>
+            </div>
+            <div className="mb-8">
+              <h3 className="font-heading text-xl font-bold text-white mb-3">Pro</h3>
+              <div className="flex items-baseline gap-2 mb-4">
+                <span className="font-heading text-2xl font-black text-[#86ef86]">Precio especial</span>
+              </div>
+              <p className="text-sm text-white/50">Para early adopters. Regístrate y te avisamos primero.</p>
+            </div>
+            <ul className="flex flex-col gap-3 mb-8 flex-1">
+              {PRO_FEATURES.map((f) => (
+                <li key={f} className="flex items-center gap-3">
+                  <CheckIcon />
+                  <span className="text-sm text-white/65">{f}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/login"
+              className="block text-center px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+            >
+              Unirme a la lista de espera
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: CTA Final ──────────────────────────────────────────────────────
+
+function SectionCTAFinal() {
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref as RefObject<Element>, { once: true, margin: '-80px' })
+  const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [showToast, setShowToast] = useState(false)
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError('Por favor ingresa un email válido')
+      return
+    }
+    setEmailError('')
+    setShowToast(true)
+    setEmail('')
+    const t = setTimeout(() => setShowToast(false), 4000)
+    return () => clearTimeout(t)
+  }
+
+  return (
+    <section ref={ref as RefObject<HTMLElement>} className="relative py-32 overflow-hidden bg-[#0a0a0a]">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(134,239,134,0.18) 0%, transparent 70%)' }}
+      />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 max-w-3xl mx-auto px-6 text-center"
+      >
+        <h2 className="font-heading text-4xl md:text-6xl font-bold tracking-tighter text-white leading-tight mb-6">
+          Tu próxima clase merece<br />una mejor herramienta
+        </h2>
+        <p className="text-base md:text-lg text-white/50 leading-relaxed mb-12 max-w-xl mx-auto">
+          Únete a los profesores que ya organizaron su enseñanza con Tutory.
+        </p>
+
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <div className="flex-1">
+            <input
+              type="email"
+              value={email}
+              onChange={e => { setEmail(e.target.value); setEmailError('') }}
+              placeholder="tu@email.com"
+              className="w-full px-4 py-3 rounded-lg bg-white/[0.06] border border-white/[0.12] text-white placeholder:text-white/30 text-sm outline-none focus:border-[#86ef86]/50 focus:bg-white/[0.08] transition-all duration-200"
+            />
+            {emailError && (
+              <p className="text-xs text-red-400 mt-1.5 text-left">{emailError}</p>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
+          >
+            Comenzar ahora
+          </button>
+        </form>
+
+        <p className="text-xs text-white/25 mt-4">Sin tarjeta de crédito · Sin compromisos</p>
+      </motion.div>
+
+      {/* Toast */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.97 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl bg-[#0f1a0f] border border-[#86ef86]/30 shadow-2xl"
+          >
+            <span className="w-5 h-5 rounded-full bg-[#86ef86]/20 border border-[#86ef86]/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-[9px] text-[#86ef86] font-bold">✓</span>
+            </span>
+            <p className="text-sm text-white font-medium">¡Te avisaremos pronto!</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  )
+}
+
+// ─── Footer ─────────────────────────────────────────────────────────────────
+
+function Footer() {
+  const platformLinks = [
+    { label: 'Funcionalidades', href: '#funcionalidades' },
+    { label: 'Cómo funciona', href: '#como-funciona' },
+    { label: 'Precios', href: '#precios' },
+    { label: 'Iniciar sesión', href: '/login' },
+  ]
+
+  function handleAnchorClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+    e.preventDefault()
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  return (
+    <footer className="relative bg-[#0a0a0a]">
+      {/* Top separator: transparent → green → transparent */}
+      <div
+        className="w-full h-px"
+        style={{ background: 'linear-gradient(to right, transparent, rgba(134,239,134,0.3), transparent)' }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-12 md:gap-16 items-start">
+          {/* Brand + social */}
+          <div>
+            <Link to="/" className="flex items-center gap-1.5 mb-3">
+              <span className="font-heading text-xl font-bold tracking-tight text-white">
+                Tu<span className="text-[#86ef86]">tory</span>
+              </span>
+            </Link>
+            <p className="text-sm text-white/40 max-w-xs leading-relaxed">
+              La plataforma para profesores de inglés que se toman en serio su oficio.
+            </p>
+
+            {/* Social icons — SVG inline */}
+            <div className="flex items-center gap-3 mt-5">
+              {/* Instagram */}
+              <a href="#" aria-label="Instagram" className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 transition-all duration-200">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+                </svg>
+              </a>
+
+              {/* X / Twitter */}
+              <a href="#" aria-label="X (Twitter)" className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 transition-all duration-200">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+
+              {/* LinkedIn */}
+              <a href="#" aria-label="LinkedIn" className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 transition-all duration-200">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Platform links */}
+          <div>
+            <p className="text-xs font-semibold text-white/30 tracking-widest uppercase mb-5">Plataforma</p>
+            <ul className="flex flex-col gap-3">
+              {platformLinks.map(link => (
+                <li key={link.href}>
+                  {link.href.startsWith('#') ? (
+                    <a
+                      href={link.href}
+                      onClick={e => handleAnchorClick(e, link.href)}
+                      className="text-sm text-white/50 hover:text-white transition-colors duration-150"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link to={link.href} className="text-sm text-white/50 hover:text-white transition-colors duration-150">
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <p className="text-xs font-semibold text-white/30 tracking-widest uppercase mb-5">Legal</p>
+            <ul className="flex flex-col gap-3">
+              <li><a href="#" className="text-sm text-white/50 hover:text-white transition-colors duration-150">Términos de uso</a></li>
+              <li><a href="#" className="text-sm text-white/50 hover:text-white transition-colors duration-150">Privacidad</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-12 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-white/25">© 2026 Tutory. Todos los derechos reservados.</p>
+          <p className="text-xs text-white/20">Hecho con ♥ para profesores de inglés</p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
 // ─── LandingPage root ───────────────────────────────────────────────────────
 
 export default function LandingPage() {
@@ -990,6 +1465,11 @@ export default function LandingPage() {
       <SectionComoFunciona />
       <SectionFuncionalidades />
       <SectionParaQuien />
+      <SectionTestimonios />
+      <SectionMetricas />
+      <SectionPrecios />
+      <SectionCTAFinal />
+      <Footer />
     </div>
   )
 }
