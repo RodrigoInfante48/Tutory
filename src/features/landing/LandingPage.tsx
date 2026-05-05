@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, RefObject } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 
 // ─── Animation variants ────────────────────────────────────────────────────
 
@@ -41,7 +41,7 @@ function Navbar() {
     { label: 'Precios', href: '#precios' },
   ]
 
-  function smoothScroll(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  function smoothScroll(e: { preventDefault(): void }, href: string) {
     e.preventDefault()
     setMenuOpen(false)
     const el = document.querySelector(href)
@@ -100,7 +100,7 @@ function Navbar() {
           {/* Mobile hamburger */}
           <button
             className="md:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px]"
-            onClick={() => setMenuOpen(v => !v)}
+            onClick={() => setMenuOpen((v: boolean) => !v)}
             aria-label="Menú"
           >
             <motion.span
@@ -386,6 +386,599 @@ function Hero() {
   )
 }
 
+// ─── Shared hook ────────────────────────────────────────────────────────────
+
+function useSectionRef() {
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-100px' })
+  return { ref, inView }
+}
+
+// ─── Section: El Problema ───────────────────────────────────────────────────
+
+const PAIN_ITEMS = [
+  { emoji: '📱', text: 'WhatsApp para tareas y mensajes' },
+  { emoji: '📊', text: 'Google Sheets para el seguimiento' },
+  { emoji: '📝', text: 'Notion para el plan de estudios' },
+  { emoji: '📅', text: 'Google Calendar para clases' },
+  { emoji: '📧', text: 'Email para materiales' },
+]
+
+function SectionProblema() {
+  const { ref, inView } = useSectionRef()
+
+  const listContainer = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.15, delayChildren: 0.1 } },
+  }
+
+  const listItem = {
+    hidden: { opacity: 0, x: -24 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  }
+
+  const conclusionVariant = {
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  }
+
+  const underlineVariant = {
+    hidden: { scaleX: 0 },
+    visible: { scaleX: 1, transition: { duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  }
+
+  return (
+    <section
+      id="problema"
+      ref={ref as RefObject<HTMLElement>}
+      className="relative py-32 bg-[#0d0d0d]"
+    >
+      {/* Subtle top fade from hero */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-2xl">
+          {/* Eyebrow */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            El problema
+          </motion.p>
+
+          {/* Headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight mb-12"
+          >
+            ¿Cuántas apps usas<br />para enseñar?
+          </motion.h2>
+
+          {/* Animated list */}
+          <motion.ul
+            variants={listContainer}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className="flex flex-col gap-4 mb-14"
+          >
+            {PAIN_ITEMS.map((item) => (
+              <motion.li
+                key={item.text}
+                variants={listItem}
+                className="flex items-center gap-4 group"
+              >
+                <span className="text-2xl select-none">{item.emoji}</span>
+                <span className="text-lg md:text-xl text-white/70 group-hover:text-white/90 transition-colors duration-200">
+                  {item.text}
+                </span>
+              </motion.li>
+            ))}
+          </motion.ul>
+
+          {/* Conclusion line */}
+          <motion.div
+            variants={conclusionVariant}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            transition={{ delay: PAIN_ITEMS.length * 0.15 + 0.2 }}
+            className="flex items-baseline gap-3 flex-wrap"
+          >
+            <span className="text-white/40 text-xl md:text-2xl font-medium">Todo eso</span>
+            <span className="text-white/40 text-xl md:text-2xl">→</span>
+            <span className="relative text-xl md:text-2xl font-bold text-white">
+              un solo lugar.
+              <motion.span
+                variants={underlineVariant}
+                initial="hidden"
+                animate={inView ? 'visible' : 'hidden'}
+                className="absolute left-0 bottom-[-3px] h-[2px] w-full bg-[#86ef86] origin-left rounded-full"
+                style={{ display: 'block' }}
+              />
+            </span>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: Cómo funciona — mini mockups ──────────────────────────────────
+
+function MockupStudentCard() {
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden w-full max-w-xs">
+      <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#86ef86]/30 to-[#166534]/40 flex items-center justify-center flex-shrink-0">
+          <span className="text-[11px] font-semibold text-[#86ef86]">CT</span>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-white">Camila Torres</p>
+          <p className="text-[10px] text-white/40">B2 Upper-Intermediate</p>
+        </div>
+        <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-[#86ef86]/15 text-[#86ef86] font-medium">Activa</span>
+      </div>
+      <div className="px-4 py-3 flex items-center justify-between">
+        <div>
+          <p className="text-[10px] text-white/40 mb-0.5">Próxima clase</p>
+          <p className="text-xs text-white font-medium">Hoy · 3:00 PM</p>
+        </div>
+        <div className="text-right">
+          <p className="text-[10px] text-white/40 mb-0.5">Progreso</p>
+          <p className="text-xs text-[#86ef86] font-semibold">68%</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MockupTaskList() {
+  const tasks = [
+    { title: 'Essay: Daily Routine', due: 'Hoy', done: true },
+    { title: 'Listening Practice', due: 'Mañana', done: false },
+    { title: 'Grammar Quiz', due: 'Jue', done: false },
+  ]
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden w-full max-w-xs">
+      <div className="px-4 py-2.5 border-b border-white/[0.06]">
+        <p className="text-[11px] font-semibold text-white/70 tracking-wide">Tareas pendientes</p>
+      </div>
+      <ul className="divide-y divide-white/[0.05]">
+        {tasks.map((t) => (
+          <li key={t.title} className="px-4 py-2.5 flex items-center gap-3">
+            <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 border ${t.done ? 'bg-[#86ef86]/20 border-[#86ef86]/40' : 'border-white/20'}`}>
+              {t.done && <span className="text-[8px] text-[#86ef86] font-bold">✓</span>}
+            </div>
+            <span className={`flex-1 text-xs ${t.done ? 'line-through text-white/30' : 'text-white/80'}`}>{t.title}</span>
+            <span className="text-[10px] text-white/30">{t.due}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function MockupProgress() {
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden w-full max-w-xs">
+      <div className="px-4 pt-4 pb-3">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-[11px] font-semibold text-white/70">Progreso del plan</p>
+          <span className="text-xs font-bold text-[#86ef86]">68%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: '68%' }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="h-full rounded-full bg-[#86ef86]"
+          />
+        </div>
+      </div>
+      <div className="px-4 pb-4 border-t border-white/[0.05] pt-3 grid grid-cols-2 gap-2">
+        <div className="rounded-lg bg-white/[0.04] px-3 py-2">
+          <p className="text-[10px] text-white/40 mb-0.5">Último quiz</p>
+          <p className="text-sm font-bold text-white">9<span className="text-white/40 text-xs font-normal">/10</span></p>
+        </div>
+        <div className="rounded-lg bg-white/[0.04] px-3 py-2">
+          <p className="text-[10px] text-white/40 mb-0.5">Clases tomadas</p>
+          <p className="text-sm font-bold text-white">12<span className="text-white/40 text-xs font-normal"> este mes</span></p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const HOW_STEPS = [
+  {
+    number: '01',
+    title: 'Agrega tus estudiantes',
+    description: 'Crea el perfil de cada estudiante, asígnales su plan de estudios y ten toda su info en un solo lugar desde el primer día.',
+    Mockup: MockupStudentCard,
+  },
+  {
+    number: '02',
+    title: 'Gestiona clases y tareas',
+    description: 'Programa sesiones, asigna tareas con fecha límite y recibe las entregas directamente en la plataforma. Sin WhatsApp.',
+    Mockup: MockupTaskList,
+  },
+  {
+    number: '03',
+    title: 'Sigue el progreso en tiempo real',
+    description: 'Visualiza el avance de cada estudiante, sus scores en quizzes y el porcentaje del plan completado en un vistazo.',
+    Mockup: MockupProgress,
+  },
+]
+
+function SectionComoFunciona() {
+  const { ref, inView: _inView } = useSectionRef()
+
+  return (
+    <section
+      id="como-funciona"
+      ref={ref as RefObject<HTMLElement>}
+      className="relative py-32 bg-[#0a0a0a]"
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="max-w-xl mb-20">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            Cómo funciona
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+          >
+            Tres pasos para tener<br />todo bajo control
+          </motion.h2>
+        </div>
+
+        {/* Zig-zag steps */}
+        <div className="flex flex-col gap-24">
+          {HOW_STEPS.map((step, i) => {
+            const isEven = i % 2 === 0
+            return (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, x: isEven ? -40 : 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center ${!isEven ? 'lg:[&>*:first-child]:order-2' : ''}`}
+              >
+                {/* Text side */}
+                <div className="flex flex-col gap-5">
+                  <span
+                    className="font-heading font-black text-[6rem] leading-none select-none text-[#86ef86]"
+                    style={{ opacity: 0.08 }}
+                  >
+                    {step.number}
+                  </span>
+                  <div className="-mt-8">
+                    <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-base text-white/50 leading-relaxed max-w-md">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mockup side */}
+                <div className={`flex ${isEven ? 'lg:justify-end' : 'lg:justify-start'}`}>
+                  <step.Mockup />
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: Funcionalidades ────────────────────────────────────────────────
+
+const FEATURE_CARDS_SECONDARY = [
+  {
+    icon: '🧠',
+    title: 'Quizzes automáticos',
+    description: 'Crea y asigna quizzes de opción múltiple. Los estudiantes responden desde su portal, tú ves los scores al instante.',
+  },
+  {
+    icon: '💬',
+    title: 'Chat integrado',
+    description: 'Mensajes directos con cada estudiante. Sin salir de Tutory. Sin WhatsApp.',
+  },
+]
+
+const FEATURE_CARDS_SMALL = [
+  {
+    icon: '📅',
+    title: 'Gestión de clases',
+    description: 'Calendario de sesiones, estados (tomada, no-show, reagendada) y control de ciclos.',
+  },
+  {
+    icon: '📚',
+    title: 'Plan de estudios estructurado',
+    description: 'Unidades, topics con contenido HTML y preguntas de comprensión por estudiante.',
+  },
+  {
+    icon: '🗂️',
+    title: 'Recursos y materiales',
+    description: 'Sube links, PDFs y videos globales o asignados a un estudiante específico.',
+  },
+]
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+  delay = 0,
+}: {
+  icon: string
+  title: string
+  description: string
+  delay?: number
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 hover:border-[#86ef86]/30 transition-all duration-300 hover:bg-[#86ef86]/[0.02]"
+    >
+      <span className="text-2xl mb-4 block">{icon}</span>
+      <h4 className="font-heading text-base font-semibold text-white mb-2">{title}</h4>
+      <p className="text-sm text-white/50 leading-relaxed">{description}</p>
+    </motion.div>
+  )
+}
+
+function SectionFuncionalidades() {
+  return (
+    <section
+      id="funcionalidades"
+      className="relative py-32 bg-[#0d0d0d]"
+    >
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="max-w-xl mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            Funcionalidades
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+          >
+            Todo lo que necesitas,<br />nada que no necesitas
+          </motion.h2>
+        </div>
+
+        {/* First row: asymmetric 60/40 */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+          {/* Big feature card (3/5) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-3 group relative rounded-xl border border-white/[0.08] bg-white/[0.03] p-8 hover:border-[#86ef86]/30 transition-all duration-300 hover:bg-[#86ef86]/[0.02]"
+          >
+            <span className="text-3xl mb-5 block">👤</span>
+            <h4 className="font-heading text-xl font-bold text-white mb-3">
+              Seguimiento completo por estudiante
+            </h4>
+            <p className="text-sm text-white/50 leading-relaxed max-w-md">
+              Plan de estudios, tareas, quizzes, historial de clases y materiales — todo en un solo perfil.
+              Sabes exactamente dónde está cada estudiante en su proceso de aprendizaje.
+            </p>
+            {/* Mini preview */}
+            <div className="mt-6 flex flex-wrap gap-2">
+              {['Plan de estudios', 'Historial de clases', 'Quizzes', 'Tareas', 'Mensajes', 'Materiales'].map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[11px] px-2.5 py-1 rounded-full border border-white/10 text-white/40 bg-white/[0.03]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Two stacked small cards (2/5) */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            {FEATURE_CARDS_SECONDARY.map((card, i) => (
+              <FeatureCard key={card.title} {...card} delay={i * 0.1} />
+            ))}
+          </div>
+        </div>
+
+        {/* Second row: 3 equal small cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {FEATURE_CARDS_SMALL.map((card, i) => (
+            <FeatureCard key={card.title} {...card} delay={i * 0.08} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: Para quién es ──────────────────────────────────────────────────
+
+const TEACHER_BENEFITS = [
+  'Un solo lugar para todos tus estudiantes',
+  'Crea y asigna tareas en segundos',
+  'Quizzes automáticos con resultados al instante',
+  'Historial completo de cada clase',
+  'Materiales organizados por estudiante',
+  'Chat directo sin salir de la plataforma',
+]
+
+const STUDENT_BENEFITS = [
+  'Tu plan de estudios siempre visible',
+  'Recibe tareas con fechas claras',
+  'Haz quizzes cuando tu profe los asigne',
+  'Accede a todos los materiales en un clic',
+  'Ve tu progreso en tiempo real',
+  'Comunícate con tu profe sin WhatsApp',
+]
+
+function BenefitItem({ text, delay = 0 }: { text: string; delay?: number }) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, x: -16 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="flex items-start gap-3"
+    >
+      <span className="mt-1 w-4 h-4 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 flex items-center justify-center flex-shrink-0">
+        <span className="text-[8px] text-[#86ef86] font-bold">✓</span>
+      </span>
+      <span className="text-sm text-white/65 leading-relaxed">{text}</span>
+    </motion.li>
+  )
+}
+
+function SectionParaQuien() {
+  return (
+    <section
+      id="para-quien"
+      className="relative py-32 bg-[#0a0a0a]"
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-20">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            Para quién es
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+          >
+            Construido para los<br />dos lados de la clase
+          </motion.h2>
+        </div>
+
+        {/* Two columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1px_1fr] gap-0 items-start">
+          {/* Profesores */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="pr-0 lg:pr-16 pb-12 lg:pb-0"
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-lg bg-[#86ef86]/10 border border-[#86ef86]/20 flex items-center justify-center">
+                <span className="text-lg">🎓</span>
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold text-white">Para profesores</h3>
+                <p className="text-sm text-white/40">Control total del proceso</p>
+              </div>
+            </div>
+            <ul className="flex flex-col gap-4">
+              {TEACHER_BENEFITS.map((text, i) => (
+                <BenefitItem key={text} text={text} delay={i * 0.07} />
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Vertical divider — visible only on lg+ */}
+          <div className="hidden lg:block">
+            <div
+              className="h-full w-px"
+              style={{
+                background: 'linear-gradient(to bottom, transparent, rgba(134,239,134,0.25) 20%, rgba(134,239,134,0.25) 80%, transparent)',
+                minHeight: '320px',
+              }}
+            />
+          </div>
+
+          {/* Estudiantes */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="pl-0 lg:pl-16 pt-12 lg:pt-0 border-t border-white/[0.06] lg:border-0"
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-lg bg-[#86ef86]/10 border border-[#86ef86]/20 flex items-center justify-center">
+                <span className="text-lg">📖</span>
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold text-white">Para estudiantes</h3>
+                <p className="text-sm text-white/40">Todo claro, todo en un lugar</p>
+              </div>
+            </div>
+            <ul className="flex flex-col gap-4">
+              {STUDENT_BENEFITS.map((text, i) => (
+                <BenefitItem key={text} text={text} delay={i * 0.07} />
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+
+        {/* CTA at the bottom */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-20 text-center"
+        >
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+          >
+            Empieza gratis hoy
+          </Link>
+          <p className="text-xs text-white/30 mt-3">Sin tarjeta de crédito · Sin compromisos</p>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 // ─── LandingPage root ───────────────────────────────────────────────────────
 
 export default function LandingPage() {
@@ -393,6 +986,10 @@ export default function LandingPage() {
     <div className="min-h-[100dvh] bg-[#0a0a0a] text-white">
       <Navbar />
       <Hero />
+      <SectionProblema />
+      <SectionComoFunciona />
+      <SectionFuncionalidades />
+      <SectionParaQuien />
     </div>
   )
 }
