@@ -6,14 +6,37 @@ Este archivo es la memoria de arquitectura del proyecto. Léelo al inicio de cad
 
 ## Contexto del negocio
 
-**Tutory** es un portal web para gestión de clases de inglés.  
-Valentina es profesora de inglés. La meta es que ella (y otros docentes) puedan operar su propio negocio sin depender de plataformas de terceros.
+**Tutory** es una plataforma SaaS de enseñanza de inglés que conecta estudiantes con sus profesores personales. No es una app de ejercicios genérica — es el espacio de trabajo donde el profe gestiona todo el aprendizaje de sus estudiantes.
+
+**Modelo de negocio:** Freemium. Acceso básico gratuito, plan Pro próximamente.
+
+**URL en producción:** https://tutory.vercel.app
 
 **Flujo operativo:**
 1. Los docentes inician sesión en el portal web
 2. Ven sus estudiantes asignados, su plan de estudios y materiales
 3. Las tutorías son por Zoom — el portal es el CRM/LMS que rodea la clase
 4. Los estudiantes también acceden al portal para ver tareas, quizzes y su progreso
+
+---
+
+## Estado actual de la app (mayo 2026)
+
+La app funciona en producción. Rutas implementadas:
+
+| Ruta | Rol requerido | Descripción |
+|------|--------------|-------------|
+| `/login` | Público | Login con email + password |
+| `/` | Autenticado | Redirige según rol |
+| `/admin` | admin | Panel de administración |
+| `/teacher` | teacher | Dashboard del profe |
+| `/teacher/classes` | teacher | Gestión de clases |
+| `/teacher/resources` | teacher | Recursos para estudiantes |
+| `/teacher/messages` | teacher | Chat con estudiantes |
+| `/student` | student | Dashboard del estudiante |
+| `/student/topic/:id` | student | Lector de temas/unidades |
+
+**Lo que NO existe aún:** landing page pública. Sin sesión, `/` redirige directamente a `/login`. La landing page es la próxima pieza a construir.
 
 ---
 
@@ -31,8 +54,20 @@ CI/CD:     GitHub Actions
 **Decisiones de diseño:**
 - Design tokens del template (verde `#86ef86`, dark/light mode) se conservan como referencia visual
 - Fuentes: Sora (headings) + DM Sans (body) — igual que la plantilla
-- Auth: Supabase Auth con email/password (se puede agregar magic link después)
+- Auth: Supabase Auth con email/password (Google OAuth por implementar)
 - La app es una SPA con React Router
+
+**Tokens de diseño:**
+```
+Color primario:   #86ef86  (verde claro)
+Color secundario: #166534  (verde oscuro)
+Fondo dark:       #0a0a0a
+Fondo light:      #ffffff
+Texto dark mode:  #f0fdf4
+Font headings:    Sora
+Font body:        DM Sans
+Border radius:    8px (cards), 4px (badges)
+```
 
 ---
 
