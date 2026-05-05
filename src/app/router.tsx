@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthGuard from '../components/AuthGuard'
 import LoginPage from '../features/auth/LoginPage'
+import LandingPage from '../features/landing/LandingPage'
 import TeacherDashboard from '../features/teachers/TeacherDashboard'
 import StudentDashboard from '../features/students/StudentDashboard'
 import TopicReader from '../features/study-plans/TopicReader'
@@ -9,21 +10,49 @@ import ClassesPage from '../features/classes/ClassesPage'
 import ResourcesPage from '../features/resources/ResourcesPage'
 import MessagesPage from '../features/messages/MessagesPage'
 import RoleRedirect from './RoleRedirect'
+import { useAuth } from '../features/auth/AuthContext'
+
+function RootRoute() {
+  const { session, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100dvh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#0a0a0a',
+      }}>
+        <div style={{
+          width: 36,
+          height: 36,
+          border: '3px solid rgba(255,255,255,0.08)',
+          borderTop: '3px solid #86ef86',
+          borderRadius: '50%',
+          animation: 'spin 0.7s linear infinite',
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    )
+  }
+
+  if (!session) return <LandingPage />
+
+  return (
+    <AuthGuard>
+      <RoleRedirect />
+    </AuthGuard>
+  )
+}
 
 export default function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Root: redirect based on authenticated user's role */}
-      <Route
-        path="/"
-        element={
-          <AuthGuard>
-            <RoleRedirect />
-          </AuthGuard>
-        }
-      />
+      {/* Root: landing page for guests, role redirect for authenticated users */}
+      <Route path="/" element={<RootRoute />} />
 
       <Route
         path="/teacher"
