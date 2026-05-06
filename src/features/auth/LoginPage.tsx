@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth, type UserRole } from './AuthContext'
 
 const ROLE_HOME: Record<UserRole, string> = {
@@ -11,6 +11,8 @@ const ROLE_HOME: Record<UserRole, string> = {
 export default function LoginPage() {
   const { signIn, appUser, session, loading: authLoading } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const passwordResetSuccess = (location.state as { passwordReset?: boolean } | null)?.passwordReset === true
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -80,6 +82,21 @@ export default function LoginPage() {
           <Link to="/" className="login-back">← Volver al inicio</Link>
         </div>
 
+        {passwordResetSuccess && (
+          <div style={{
+            margin: '0 26px',
+            padding: '9px 12px',
+            borderRadius: '10px',
+            background: 'rgba(134,239,134,0.1)',
+            border: '1px solid rgba(134,239,134,0.25)',
+            fontSize: '13px',
+            color: '#86ef86',
+            textAlign: 'center',
+          }}>
+            Contraseña actualizada. Ya puedes ingresar.
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="login-body" noValidate>
           <div className="login-field">
             <label className="login-label" htmlFor="email">Correo electrónico</label>
@@ -124,6 +141,23 @@ export default function LoginPage() {
               'Ingresar'
             )}
           </button>
+
+          <div style={{ textAlign: 'center', marginTop: '14px' }}>
+            <Link
+              to="/forgot-password"
+              style={{
+                fontSize: '12px',
+                color: '#86ef86',
+                textDecoration: 'none',
+                opacity: 0.8,
+                transition: 'opacity 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
         </form>
       </div>
 
