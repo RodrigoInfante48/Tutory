@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthGuard from '../components/AuthGuard'
 import LoginPage from '../features/auth/LoginPage'
+import LandingPage from '../features/landing/LandingPage'
 import TeacherDashboard from '../features/teachers/TeacherDashboard'
 import StudentDashboard from '../features/students/StudentDashboard'
 import TopicReader from '../features/study-plans/TopicReader'
@@ -9,21 +10,27 @@ import ClassesPage from '../features/classes/ClassesPage'
 import ResourcesPage from '../features/resources/ResourcesPage'
 import MessagesPage from '../features/messages/MessagesPage'
 import RoleRedirect from './RoleRedirect'
+import { useAuth } from '../features/auth/AuthContext'
+
+function RootRoute() {
+  const { session, appUser, loading } = useAuth()
+
+  if (loading) return null
+
+  // Authenticated: go to role dashboard
+  if (session && appUser) return <RoleRedirect />
+
+  // Public: show landing page
+  return <LandingPage />
+}
 
 export default function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Root: redirect based on authenticated user's role */}
-      <Route
-        path="/"
-        element={
-          <AuthGuard>
-            <RoleRedirect />
-          </AuthGuard>
-        }
-      />
+      {/* Root: landing for guests, role dashboard for authenticated users */}
+      <Route path="/" element={<RootRoute />} />
 
       <Route
         path="/teacher"
