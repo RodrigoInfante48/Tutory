@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import AppLayout from '../../app/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import { useAdminMetrics } from '../../hooks/useAdminMetrics'
 import { useAdminUsers, type AdminTeacher, type AdminStudent, type AdminAlert } from '../../hooks/useAdminUsers'
 import MetricCard from '../../components/MetricCard'
+import { supabase } from '../../lib/supabase'
 
-type Tab = 'teachers' | 'students' | 'alerts'
+type Tab = 'teachers' | 'students' | 'alerts' | 'invite'
 
 function Avatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
   if (avatarUrl) {
@@ -225,6 +226,147 @@ function AlertsPanel({ alerts, loading }: { alerts: AdminAlert[]; loading: boole
   )
 }
 
+type InviteRole = 'teacher' | 'student'
+type InviteStatus = 'idle' | 'loading' | 'success' | 'error'
+
+function InvitePanel() {
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [role, setRole] = useState<InviteRole>('student')
+  const [status, setStatus] = useState<InviteStatus>('idle')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!email.trim() || !name.trim()) return
+    setStatus('loading')
+    setErrorMsg(null)
+
+    const { data: sessionData } = await supabase.auth.getSession()
+    const token = sessionData.session?.access_token
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email: email.trim(), name: name.trim(), role }),
+      })
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error ?? `Error ${res.status}`)
+      }
+
+      setStatus('success')
+      setEmail('')
+      setName('')
+      setRole('student')
+    } catch (err) {
+      setStatus('error')
+      setErrorMsg(err instanceof Error ? err.message : 'Error inesperado')
+    }
+  }
+
+  return (
+    <div className="max-w-md">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
+        El usuario recibirá un email con un enlace para activar su cuenta y crear su contraseña.
+      </p>
+
+      {status === 'success' && (
+        <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm">
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          Invitación enviada correctamente.
+        </div>
+      )}
+
+      {status === 'error' && errorMsg && (
+        <div className="p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
+          {errorMsg}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5">
+            Nombre completo
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Ej: María González"
+            required
+            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5">
+            Email
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="usuario@ejemplo.com"
+            required
+            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5">
+            Rol
+          </label>
+          <div className="flex gap-3">
+            {(['student', 'teacher'] as const).map(r => (
+              <label
+                key={r}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer text-sm font-medium transition-colors ${
+                  role === r
+                    ? 'bg-primary/10 border-primary/40 text-primary-dark dark:text-primary'
+                    : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="role"
+                  value={r}
+                  checked={role === r}
+                  onChange={() => setRole(r)}
+                  className="sr-only"
+                />
+                {r === 'student' ? 'Estudiante' : 'Docente'}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={status === 'loading' || !email.trim() || !name.trim()}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {status === 'loading' ? (
+            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          )}
+          Enviar invitación
+        </button>
+      </form>
+    </div>
+  )
+}
+
 export default function AdminDashboard() {
   const { appUser } = useAuth()
   const { metrics, loading: metricsLoading } = useAdminMetrics()
@@ -239,6 +381,7 @@ export default function AdminDashboard() {
     { key: 'teachers', label: 'Docentes', count: teachers.length },
     { key: 'students', label: 'Estudiantes', count: students.filter(s => s.active).length },
     { key: 'alerts', label: 'Alertas', count: alerts.filter(a => !a.resolved).length },
+    { key: 'invite', label: 'Invitar usuario' },
   ]
 
   return (
@@ -352,6 +495,7 @@ export default function AdminDashboard() {
             {activeTab === 'alerts' && (
               <AlertsPanel alerts={alerts} loading={usersLoading} />
             )}
+            {activeTab === 'invite' && <InvitePanel />}
           </div>
         </div>
 

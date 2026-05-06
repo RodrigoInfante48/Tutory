@@ -8,25 +8,32 @@ import { supabase } from '../../lib/supabase'
 // Without this, Supabase will reject the redirectTo URL and the reset email won't work.
 
 type PageState = 'loading' | 'ready' | 'no-session' | 'success' | 'error'
+type FlowType = 'recovery' | 'invite'
+
+function getFlowType(): FlowType {
+  const hash = window.location.hash.slice(1)
+  const params = new URLSearchParams(hash)
+  return params.get('type') === 'invite' ? 'invite' : 'recovery'
+}
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate()
   const [pageState, setPageState] = useState<PageState>('loading')
+  const [flowType] = useState<FlowType>(getFlowType)
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Supabase exchanges the hash tokens (#access_token=...&type=recovery) automatically
-    // via onAuthStateChange. We listen for the PASSWORD_RECOVERY event.
+    // For invite links, Supabase fires SIGNED_IN; for recovery it fires PASSWORD_RECOVERY.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
+      if (event === 'PASSWORD_RECOVERY' || (event === 'SIGNED_IN' && flowType === 'invite')) {
         setPageState('ready')
       }
     })
 
-    // If the user lands here without a recovery token (e.g., navigates directly),
+    // If the user lands here without a valid token (e.g., navigates directly),
     // give Supabase a moment to fire the event before showing the error state.
     const timeout = setTimeout(() => {
       setPageState(prev => prev === 'loading' ? 'no-session' : prev)
@@ -36,7 +43,7 @@ export default function ResetPasswordPage() {
       subscription.unsubscribe()
       clearTimeout(timeout)
     }
-  }, [])
+  }, [flowType])
 
   const validate = (): string | null => {
     if (password.length < 8) return 'La contraseña debe tener al menos 8 caracteres.'
@@ -112,13 +119,22 @@ export default function ResetPasswordPage() {
       <div className="rp-box">
         <div className="rp-header">
           <Logo />
-          <p className="rp-subtitle">Nueva contraseña</p>
+          <p className="rp-subtitle">
+            {flowType === 'invite' ? 'Bienvenido a Tutory' : 'Nueva contraseña'}
+          </p>
         </div>
 
         <div className="rp-body">
+          {flowType === 'invite' && (
+            <p className="rp-desc">
+              Crea tu contraseña para activar tu cuenta y empezar.
+            </p>
+          )}
           <form onSubmit={handleSubmit} noValidate>
             <div className="rp-field">
-              <label className="rp-label" htmlFor="password">Nueva contraseña</label>
+              <label className="rp-label" htmlFor="password">
+                {flowType === 'invite' ? 'Crea tu contraseña' : 'Nueva contraseña'}
+              </label>
               <input
                 id="password"
                 type="password"
@@ -152,7 +168,10 @@ export default function ResetPasswordPage() {
               className="rp-btn"
               disabled={submitting || !password || !confirm}
             >
-              {submitting ? <span className="rp-spinner" /> : 'Guardar contraseña'}
+              {submitting
+                ? <span className="rp-spinner" />
+                : flowType === 'invite' ? 'Activar cuenta' : 'Guardar contraseña'
+              }
             </button>
 
             <div className="rp-footer">
