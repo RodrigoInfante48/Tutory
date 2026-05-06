@@ -90,7 +90,7 @@ function Navbar() {
               Iniciar sesión
             </Link>
             <Link
-              to="/login"
+              to="/signup"
               className="text-sm px-4 py-2 rounded-md bg-[#86ef86] text-[#0a0a0a] font-medium hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
             >
               Empieza gratis
@@ -165,7 +165,7 @@ function Navbar() {
                   Iniciar sesión
                 </Link>
                 <Link
-                  to="/login"
+                  to="/signup"
                   onClick={() => setMenuOpen(false)}
                   className="text-center text-sm px-4 py-2.5 rounded-md bg-[#86ef86] text-[#0a0a0a] font-medium hover:bg-[#9ef89e] transition-all duration-200"
                 >
@@ -360,7 +360,7 @@ function Hero() {
             className="flex flex-wrap items-center gap-3 pt-2"
           >
             <Link
-              to="/login"
+              to="/signup"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
             >
               Crear cuenta gratis
@@ -967,12 +967,18 @@ function SectionParaQuien() {
           className="mt-20 text-center"
         >
           <Link
-            to="/login"
+            to="/signup"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
           >
             Empieza gratis hoy
           </Link>
           <p className="text-xs text-white/30 mt-3">Sin tarjeta de crédito · Sin compromisos</p>
+          <p className="text-xs text-white/30 mt-1">
+            ¿Ya tienes cuenta?{' '}
+            <Link to="/login" className="text-[#86ef86]/60 hover:text-[#86ef86] transition-colors duration-150 underline underline-offset-2">
+              Inicia sesión
+            </Link>
+          </p>
         </motion.div>
       </div>
     </section>
@@ -1212,7 +1218,7 @@ function SectionPrecios() {
               ))}
             </ul>
             <Link
-              to="/login"
+              to="/signup"
               className="block text-center px-6 py-3 rounded-lg border border-white/20 text-white/80 hover:text-white hover:border-white/40 text-sm font-medium transition-all duration-200 hover:scale-[1.02]"
             >
               Crear cuenta gratis

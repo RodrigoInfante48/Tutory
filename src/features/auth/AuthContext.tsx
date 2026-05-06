@@ -21,6 +21,8 @@ interface AuthState {
 interface AuthContextValue extends AuthState {
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
+  /** True when a session exists but no matching row was found in the users table. */
+  profileMissing: boolean
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -108,8 +110,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
+  const profileMissing = !loading && session !== null && appUser === null
+
   return (
-    <AuthContext.Provider value={{ session, appUser, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, appUser, loading, profileMissing, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )
