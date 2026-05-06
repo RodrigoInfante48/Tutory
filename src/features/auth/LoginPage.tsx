@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth, type UserRole } from './AuthContext'
 
 const ROLE_HOME: Record<UserRole, string> = {
@@ -69,14 +69,15 @@ export default function LoginPage() {
       <div className={`login-box${shake ? ' login-shake' : ''}`}>
         {/* Logo */}
         <div className="login-header">
-          <div className="login-logo">
+          <Link to="/" className="login-logo">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
               <rect width="32" height="32" rx="10" fill="#86ef86" fillOpacity="0.15" />
               <path d="M8 10h16M8 16h10M8 22h13" stroke="#86ef86" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
             <span className="login-logo-text">Tutory</span>
-          </div>
+          </Link>
           <p className="login-subtitle">Portal de gestión de clases</p>
+          <Link to="/" className="login-back">← Volver al inicio</Link>
         </div>
 
         <form onSubmit={handleSubmit} className="login-body" noValidate>
@@ -186,7 +187,20 @@ export default function LoginPage() {
           align-items: center;
           gap: 10px;
           margin-bottom: 6px;
+          text-decoration: none;
+          transition: opacity 0.15s;
         }
+        .login-logo:hover { opacity: 0.8; }
+        .login-back {
+          display: inline-block;
+          margin-top: 10px;
+          font-size: 11px;
+          color: #7a8ba8;
+          text-decoration: none;
+          transition: color 0.15s;
+          letter-spacing: 0.02em;
+        }
+        .login-back:hover { color: #86ef86; }
         .login-logo-text {
           font-family: 'Sora', sans-serif;
           font-size: 22px;
