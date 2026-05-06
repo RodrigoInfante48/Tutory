@@ -9,7 +9,7 @@ const ROLE_HOME: Record<UserRole, string> = {
 }
 
 export default function LoginPage() {
-  const { signIn, appUser, session, loading: authLoading } = useAuth()
+  const { signIn, appUser, profileMissing } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const passwordResetSuccess = (location.state as { passwordReset?: boolean } | null)?.passwordReset === true
@@ -34,13 +34,13 @@ export default function LoginPage() {
       return
     }
     // Auth succeeded (session exists) but profile didn't load — surface the error.
-    if (submitted && !authLoading && session && !appUser) {
+    if (submitted && profileMissing) {
       setLoading(false)
       setSubmitted(false)
-      setError('No se encontró el perfil de usuario. Contacta al administrador.')
+      setError('Cuenta en configuración, contacta a tu profe')
       triggerShake()
     }
-  }, [appUser, session, authLoading, submitted, navigate])
+  }, [appUser, profileMissing, submitted, navigate])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -142,7 +142,7 @@ export default function LoginPage() {
             )}
           </button>
 
-          <div style={{ textAlign: 'center', marginTop: '14px' }}>
+          <div style={{ textAlign: 'center', marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <Link
               to="/forgot-password"
               style={{
@@ -156,6 +156,19 @@ export default function LoginPage() {
               onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
             >
               ¿Olvidaste tu contraseña?
+            </Link>
+            <Link
+              to="/signup"
+              style={{
+                fontSize: '12px',
+                color: '#7a8ba8',
+                textDecoration: 'none',
+                transition: 'color 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#86ef86')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#7a8ba8')}
+            >
+              ¿Eres nuevo? Créate una cuenta
             </Link>
           </div>
         </form>
