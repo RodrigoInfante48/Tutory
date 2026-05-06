@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthGuard from '../components/AuthGuard'
 import LoginPage from '../features/auth/LoginPage'
+import ForgotPasswordPage from '../features/auth/ForgotPasswordPage'
+import ResetPasswordPage from '../features/auth/ResetPasswordPage'
 import LandingPage from '../features/landing/LandingPage'
 import TeacherDashboard from '../features/teachers/TeacherDashboard'
 import StudentDashboard from '../features/students/StudentDashboard'
@@ -50,6 +52,8 @@ export default function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       {/* Root: landing page for guests, role redirect for authenticated users */}
       <Route path="/" element={<RootRoute />} />
