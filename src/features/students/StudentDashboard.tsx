@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   ResponsiveContainer,
@@ -16,6 +16,7 @@ import QuizHistory from '../quizzes/QuizHistory'
 import { useStudentGlossary, toggleMastered } from '../../hooks/useStudentGlossary'
 import { useStudentCoins } from '../../hooks/useStudentCoins'
 import { useSkillScores, SKILLS } from '../../hooks/useSkillScores'
+import { useStudentBadges, BADGE_META, ALL_BADGE_TYPES } from '../../hooks/useStudentBadges'
 
 function useStudentPlanId(userId: string | undefined) {
   const [planId, setPlanId] = useState<string | null>(null)
@@ -600,6 +601,109 @@ function SkillsRadar({ studentId }: { studentId: string }) {
   )
 }
 
+function BadgesSection({ studentId }: { studentId: string }) {
+  const { badges, loading, markAllSeen } = useStudentBadges(studentId)
+  const earnedMap = new Map(badges.map(b => [b.badge_type, b]))
+  const newBadges = badges.filter(b => !b.seen)
+
+  useEffect(() => {
+    if (newBadges.length === 0) return
+    const t = setTimeout(() => markAllSeen(), 3500)
+    return () => clearTimeout(t)
+  }, [badges.length])
+
+  if (loading) return null
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">
+          Mis Logros
+        </h2>
+        <AnimatePresence>
+          {newBadges.length > 0 && (
+            <motion.span
+              key="new-badge-count"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              className="text-xs font-bold bg-primary text-gray-900 rounded-full px-2 py-0.5"
+            >
+              {newBadges.length} nuevo{newBadges.length !== 1 ? 's' : ''}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {ALL_BADGE_TYPES.map(type => {
+          const meta = BADGE_META[type]
+          const earned = earnedMap.get(type)
+          const isNew = earned != null && !earned.seen
+
+          return (
+            <motion.div
+              key={type}
+              initial={isNew ? { scale: 0.7, opacity: 0 } : false}
+              animate={isNew ? { scale: 1, opacity: 1 } : {}}
+              transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+            >
+              {earned ? (
+                <div
+                  className={`relative rounded-2xl p-4 text-center bg-gradient-to-br ${meta.gradient} shadow-lg ${meta.glow} overflow-hidden`}
+                >
+                  {/* Flash overlay for new badge */}
+                  {isNew && (
+                    <motion.div
+                      className="absolute inset-0 bg-white/40 rounded-2xl pointer-events-none"
+                      initial={{ opacity: 1 }}
+                      animate={{ opacity: 0 }}
+                      transition={{ duration: 1.8 }}
+                    />
+                  )}
+                  <div className="text-4xl mb-2 drop-shadow">{meta.icon}</div>
+                  <p className="text-sm font-bold text-white leading-tight">{meta.name}</p>
+                  <p className="text-[11px] text-white/75 mt-1">
+                    {formatDate(earned.earned_at)}
+                  </p>
+                  {isNew && (
+                    <motion.div
+                      className="absolute top-2 right-2"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: [1, 1.25, 1] }}
+                      transition={{ delay: 0.4, duration: 0.5, repeat: 2 }}
+                    >
+                      <span className="text-[10px] font-bold bg-white text-gray-900 rounded-full px-1.5 py-0.5 shadow">
+                        ¡Nuevo!
+                      </span>
+                    </motion.div>
+                  )}
+                </div>
+              ) : (
+                <div className="rounded-2xl p-4 text-center border-2 border-dashed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                  <div className="text-4xl mb-2 grayscale opacity-40">{meta.icon}</div>
+                  <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 leading-tight">
+                    {meta.name}
+                  </p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1 leading-snug">
+                    {meta.description}
+                  </p>
+                  <div className="mt-2 flex items-center justify-center gap-1 text-gray-400">
+                    <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span className="text-[10px]">Bloqueado</span>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function StudentDashboard() {
   const { appUser } = useAuth()
   const { planId, loaded } = useStudentPlanId(appUser?.id)
@@ -624,6 +728,11 @@ export default function StudentDashboard() {
             <FluidityBattery studentId={appUser.id} />
             <SkillsRadar studentId={appUser.id} />
           </div>
+        )}
+
+        {/* Badges / Logros */}
+        {appUser?.id && (
+          <BadgesSection studentId={appUser.id} />
         )}
 
         {/* Quiz del día */}
