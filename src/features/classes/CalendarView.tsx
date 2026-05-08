@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import type { ClassSession, SessionStatus } from '../../hooks/useClassSessions'
+import type { ClassSession, SessionStatus, SessionType } from '../../hooks/useClassSessions'
 import { updateSessionStatus, createSession } from '../../hooks/useClassSessions'
 import { isColombianHoliday, getHolidayName } from '../../lib/colombianHolidays'
 
@@ -21,6 +21,52 @@ const STATUS_LABELS: Record<SessionStatus, string> = {
   holiday:     'Festivo',
 }
 
+interface SessionTypeConfig {
+  label: string
+  description: string
+  icon: string
+  dotColor: string
+  bgColor: string
+  textColor: string
+}
+
+const SESSION_TYPE_CONFIG: Record<SessionType, SessionTypeConfig> = {
+  precision_sprint: {
+    label: 'Precision Sprint',
+    description: "10' Warm-up situacional · 30' Role-play · 10' Feedback",
+    icon: '⚡',
+    dotColor: 'bg-red-400',
+    bgColor: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
+    textColor: 'text-red-700 dark:text-red-300',
+  },
+  culture_club: {
+    label: 'Culture Club',
+    description: "10' News Flash · 30' Debate por equipos · 10' Modismos",
+    icon: '🌍',
+    dotColor: 'bg-teal-400',
+    bgColor: 'bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800',
+    textColor: 'text-teal-700 dark:text-teal-300',
+  },
+  professional_lab: {
+    label: 'Professional Lab',
+    description: "10' Planteamiento del caso · 30' Resolución colaborativa · 10' Análisis",
+    icon: '💼',
+    dotColor: 'bg-indigo-400',
+    bgColor: 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800',
+    textColor: 'text-indigo-700 dark:text-indigo-300',
+  },
+  standard: {
+    label: 'Estándar',
+    description: 'Clase regular sin estructura CFI específica',
+    icon: '📚',
+    dotColor: 'bg-gray-400',
+    bgColor: 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700',
+    textColor: 'text-gray-600 dark:text-gray-400',
+  },
+}
+
+const SESSION_TYPES: SessionType[] = ['precision_sprint', 'culture_club', 'professional_lab', 'standard']
+
 const WEEKDAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 const MONTHS = [
   'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -40,6 +86,7 @@ interface SessionModalProps {
 
 function SessionModal({ session, teacherId, onClose, onUpdated }: SessionModalProps) {
   const [status, setStatus] = useState<SessionStatus>(session.status)
+  const [sessionType, setSessionType] = useState<SessionType>(session.session_type ?? 'standard')
   const [notes, setNotes] = useState(session.notes ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -57,7 +104,7 @@ function SessionModal({ session, teacherId, onClose, onUpdated }: SessionModalPr
     setSaving(true)
     setError(null)
     try {
-      await updateSessionStatus(session.id, status, notes || undefined)
+      await updateSessionStatus(session.id, status, notes || undefined, sessionType)
       onUpdated()
       onClose()
     } catch (err) {
@@ -145,6 +192,39 @@ function SessionModal({ session, teacherId, onClose, onUpdated }: SessionModalPr
                 {STATUS_LABELS[s]}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Session type */}
+        <div>
+          <label className="text-xs font-medium text-gray-500 dark:text-gray-400 block mb-2">
+            Tipo de sesión CFI
+          </label>
+          <div className="space-y-1.5">
+            {SESSION_TYPES.map(t => {
+              const cfg = SESSION_TYPE_CONFIG[t]
+              return (
+                <button
+                  key={t}
+                  onClick={() => setSessionType(t)}
+                  className={`w-full text-left rounded-lg border px-3 py-2 transition-colors ${
+                    sessionType === t
+                      ? cfg.bgColor
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>{cfg.icon}</span>
+                    <span className={`text-xs font-semibold ${sessionType === t ? cfg.textColor : 'text-gray-700 dark:text-gray-300'}`}>
+                      {cfg.label}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight">
+                    {cfg.description}
+                  </p>
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -241,6 +321,7 @@ function NewSessionModal({ teacherId, students, defaultDate, onClose, onCreated 
   const [studentId, setStudentId] = useState(students[0]?.id ?? '')
   const [date, setDate] = useState(defaultDateStr)
   const [time, setTime] = useState('09:00')
+  const [sessionType, setSessionType] = useState<SessionType>('standard')
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -254,6 +335,7 @@ function NewSessionModal({ teacherId, students, defaultDate, onClose, onCreated 
         teacherId,
         studentId,
         scheduledDate: `${date}T${time}:00`,
+        sessionType,
         notes: notes || undefined,
       })
       onCreated()
@@ -308,6 +390,38 @@ function NewSessionModal({ teacherId, students, defaultDate, onClose, onCreated 
               onChange={e => setTime(e.target.value)}
               className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
+          </div>
+        </div>
+
+        <div>
+          <label className="text-xs font-medium text-gray-500 dark:text-gray-400 block mb-1.5">
+            Tipo de sesión CFI
+          </label>
+          <div className="space-y-1.5">
+            {SESSION_TYPES.map(t => {
+              const cfg = SESSION_TYPE_CONFIG[t]
+              return (
+                <button
+                  key={t}
+                  onClick={() => setSessionType(t)}
+                  className={`w-full text-left rounded-lg border px-3 py-2 transition-colors ${
+                    sessionType === t
+                      ? cfg.bgColor
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>{cfg.icon}</span>
+                    <span className={`text-xs font-semibold ${sessionType === t ? cfg.textColor : 'text-gray-700 dark:text-gray-300'}`}>
+                      {cfg.label}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight">
+                    {cfg.description}
+                  </p>
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -519,8 +633,9 @@ export default function CalendarView({
                           key={s.id}
                           onClick={e => { e.stopPropagation(); setSelectedSession(s) }}
                           className={`w-full text-left text-[10px] leading-tight font-medium text-white rounded px-1 py-0.5 truncate ${STATUS_COLORS[s.status]} hover:opacity-80 transition-opacity`}
-                          title={`${s.student?.name ?? 'Estudiante'} — ${STATUS_LABELS[s.status]}`}
+                          title={`${s.student?.name ?? 'Estudiante'} — ${STATUS_LABELS[s.status]} — ${SESSION_TYPE_CONFIG[s.session_type ?? 'standard'].label}`}
                         >
+                          <span className="mr-0.5">{SESSION_TYPE_CONFIG[s.session_type ?? 'standard'].icon}</span>
                           {s.student?.name?.split(' ')[0] ?? '—'}
                         </button>
                       ))}
