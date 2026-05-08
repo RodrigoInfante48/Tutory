@@ -180,9 +180,9 @@ function Navbar() {
   )
 }
 
-// ─── Dashboard mockup card ──────────────────────────────────────────────────
+// ─── Video placeholder ──────────────────────────────────────────────────────
 
-function DashboardMockup() {
+function VideoPlaceholder() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -190,106 +190,28 @@ function DashboardMockup() {
       transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="relative w-full max-w-sm mx-auto lg:mx-0"
     >
-      {/* Outer glow */}
       <div className="absolute inset-0 rounded-2xl bg-[#86ef86]/10 blur-2xl -z-10 scale-110" />
-
-      {/* Card shell */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm overflow-hidden">
-        {/* Header bar */}
-        <div className="px-5 py-3.5 border-b border-white/[0.07] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#86ef86]" />
-            <span className="text-xs font-heading font-semibold text-white/80 tracking-wide">
-              Mis estudiantes
-            </span>
-          </div>
-          <span className="text-[10px] text-white/30">hoy · 9:41 AM</span>
+      <div className="group aspect-video rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#86ef86]/30 transition-all duration-300">
+        <div className="w-16 h-16 rounded-full border border-[#86ef86]/40 bg-[#86ef86]/10 flex items-center justify-center group-hover:bg-[#86ef86]/20 group-hover:scale-105 transition-all duration-300">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="ml-1 text-[#86ef86]"
+          >
+            <polygon points="5,3 19,12 5,21" fill="currentColor" />
+          </svg>
         </div>
-
-        {/* Student rows */}
-        <div className="divide-y divide-white/[0.05]">
-          {[
-            { name: 'Camila Torres', plan: 'B2 Upper-Int.', nextClass: 'Hoy 3:00 PM', pending: 1 },
-            { name: 'Andrés López', plan: 'A2 Elementary', nextClass: 'Mañana 10:00 AM', pending: 0 },
-            { name: 'María Jiménez', plan: 'B1 Intermediate', nextClass: 'Jue 4:30 PM', pending: 2 },
-          ].map(student => (
-            <div key={student.name} className="px-5 py-3.5 flex items-center gap-3">
-              {/* Avatar placeholder */}
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#86ef86]/30 to-[#166534]/40 flex-shrink-0 flex items-center justify-center">
-                <span className="text-[10px] font-semibold text-[#86ef86]">
-                  {student.name.split(' ').map(n => n[0]).join('')}
-                </span>
-              </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-white truncate">{student.name}</p>
-                <p className="text-[10px] text-white/40 truncate">{student.plan}</p>
-              </div>
-
-              {/* Right side */}
-              <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                <span className="text-[10px] text-white/40">{student.nextClass}</span>
-                {student.pending > 0 && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#86ef86]/15 text-[#86ef86] font-medium">
-                    {student.pending} tarea{student.pending > 1 ? 's' : ''}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="px-5 py-3 border-t border-white/[0.07] flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#86ef86] animate-pulse" />
-            <span className="text-[10px] text-white/40">3 estudiantes activos</span>
-          </div>
-          <button className="text-[10px] text-[#86ef86]/70 hover:text-[#86ef86] transition-colors duration-150">
-            Ver todos →
-          </button>
-        </div>
+        <p className="text-sm text-white/40 font-medium tracking-wide">Video del método — próximamente</p>
       </div>
-
-      {/* Floating task badge */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute -right-4 top-16 bg-[#0f0f0f] border border-white/10 rounded-xl px-3 py-2 shadow-xl"
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-base">📋</span>
-          <div>
-            <p className="text-[10px] font-medium text-white">Tarea pendiente</p>
-            <p className="text-[10px] text-white/40">Essay · Camila</p>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Floating next-class badge */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute -left-4 bottom-16 bg-[#0f0f0f] border border-white/10 rounded-xl px-3 py-2 shadow-xl"
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-base">🎯</span>
-          <div>
-            <p className="text-[10px] font-medium text-white">Próxima clase</p>
-            <p className="text-[10px] text-[#86ef86]">Hoy · 3:00 PM</p>
-          </div>
-        </div>
-      </motion.div>
     </motion.div>
   )
 }
 
 // ─── Hero ───────────────────────────────────────────────────────────────────
 
-const HEADLINE = 'El espacio de trabajo de los mejores profesores de inglés'
+const HEADLINE = 'Speak like you mean it.'
 
 function Hero() {
   const words = HEADLINE.split(' ')
@@ -317,7 +239,7 @@ function Hero() {
           >
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 bg-white/[0.03]">
               <span className="text-[#86ef86]">✦</span>
-              Diseñado para profesores de inglés
+              Método CFI · Inglés que te cambia la vida
             </span>
           </motion.div>
 
@@ -347,8 +269,8 @@ function Hero() {
             transition={{ duration: 0.55, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="text-base md:text-lg text-white/50 max-w-lg leading-relaxed"
           >
-            Gestiona tus estudiantes, clases, tareas y quizzes en un solo lugar.
-            Diseñado para tutores que se toman en serio su oficio.
+            Clases personalizadas con el método CFI. Inglés real,
+            sin memorizar listas de palabras ni gramática de libro de texto.
           </motion.p>
 
           {/* CTAs */}
@@ -360,28 +282,316 @@ function Hero() {
             className="flex flex-wrap items-center gap-3 pt-2"
           >
             <Link
-              to="/signup"
+              to="/login"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
             >
-              Crear cuenta gratis
-            </Link>
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white/70 hover:text-white border border-white/10 hover:border-white/25 transition-all duration-200 hover:scale-[1.02]"
-            >
-              Ver demo →
+              Empieza gratis
             </Link>
           </motion.div>
         </div>
 
-        {/* ── Right: mockup ── */}
+        {/* ── Right: video placeholder ── */}
         <div className="hidden lg:flex items-center justify-end">
-          <DashboardMockup />
+          <VideoPlaceholder />
         </div>
       </div>
 
       {/* Subtle bottom fade */}
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+    </section>
+  )
+}
+
+// ─── Section: El Método CFI ──────────────────────────────────────────────────
+
+const CFI_SESSIONS = [
+  {
+    name: 'Precision Sprint',
+    tagline: 'Inglés preciso. Sin margen de error.',
+    structure: [
+      { time: '0–10 min', label: 'Diagnóstico de expresión' },
+      { time: '10–30 min', label: 'Ejercicio de precisión gramatical' },
+      { time: '30–45 min', label: 'Producción guiada en contexto real' },
+      { time: '45–50 min', label: 'Retroalimentación y cierre' },
+    ],
+  },
+  {
+    name: 'Culture Club',
+    tagline: 'El inglés que vive fuera del aula.',
+    structure: [
+      { time: '0–10 min', label: 'Tema cultural del día (serie, noticia, tendencia)' },
+      { time: '10–30 min', label: 'Debate y discusión en inglés' },
+      { time: '30–45 min', label: 'Expresiones idiomáticas en contexto' },
+      { time: '45–50 min', label: 'Tarea de inmersión para casa' },
+    ],
+  },
+  {
+    name: 'Professional Lab',
+    tagline: 'Inglés que abre puertas de verdad.',
+    structure: [
+      { time: '0–10 min', label: 'Escenario laboral del día (email, reunión, pitch)' },
+      { time: '10–30 min', label: 'Rol-play del escenario' },
+      { time: '30–45 min', label: 'Corrección y pulido del lenguaje' },
+      { time: '45–50 min', label: 'Acción concreta para la semana' },
+    ],
+  },
+]
+
+function SectionMetodoCFI() {
+  return (
+    <section id="metodo" className="relative py-32 bg-[#0d0d0d]">
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="max-w-xl mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            El método
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+          >
+            Tres tipos de sesión.<br />Un solo objetivo.
+          </motion.h2>
+        </div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.06] rounded-2xl overflow-hidden border border-white/[0.06]">
+          {CFI_SESSIONS.map((session, i) => (
+            <motion.div
+              key={session.name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-[#0d0d0d] p-8 flex flex-col gap-8 hover:bg-[#0f0f0f] transition-colors duration-300"
+            >
+              {/* Top */}
+              <div>
+                <div className="w-6 h-px bg-[#86ef86] mb-6" />
+                <h3 className="font-heading text-xl font-bold text-white mb-2">{session.name}</h3>
+                <p className="text-sm text-white/40 leading-relaxed">{session.tagline}</p>
+              </div>
+
+              {/* Structure */}
+              <ul className="flex flex-col gap-4">
+                {session.structure.map((item) => (
+                  <li key={item.time} className="flex items-start gap-4">
+                    <span className="text-[11px] text-[#86ef86]/60 font-mono mt-0.5 flex-shrink-0 w-14">{item.time}</span>
+                    <span className="text-sm text-white/60 leading-snug">{item.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Section: Calculadora de Metas ───────────────────────────────────────────
+
+type Goal = 'Viajes' | 'Trabajo / Negocios' | 'Exámenes' | 'Conversación fluida'
+type TimeBracket = 'short' | 'mid' | 'long'
+
+const GOALS: Goal[] = ['Viajes', 'Trabajo / Negocios', 'Exámenes', 'Conversación fluida']
+
+const RECOMMENDATIONS: Record<Goal, Record<TimeBracket, { plan: string; sessions: number; description: string }>> = {
+  'Viajes': {
+    short: { plan: 'Explorer Básico', sessions: 8, description: 'Domina el inglés de supervivencia, reservas y conversaciones turísticas en tiempo récord.' },
+    mid:   { plan: 'Explorer Plus',   sessions: 6, description: 'Amplía tu vocabulario de viajes y gana fluidez para moverte con confianza en cualquier país.' },
+    long:  { plan: 'Explorer Pro',    sessions: 4, description: 'Construye una base sólida para comunicarte como local, no solo como turista.' },
+  },
+  'Trabajo / Negocios': {
+    short: { plan: 'Professional Fast Track', sessions: 12, description: 'Inmersión acelerada en emails, reuniones y presentaciones en inglés. Para resultados en semanas.' },
+    mid:   { plan: 'Professional Standard',   sessions: 8,  description: 'Desarrolla el inglés ejecutivo que necesitas para negociar, liderar y comunicar en entornos globales.' },
+    long:  { plan: 'Professional Growth',     sessions: 6,  description: 'Crecimiento sostenido del inglés profesional con énfasis en vocabulario técnico de tu industria.' },
+  },
+  'Exámenes': {
+    short: { plan: 'Intensive Exam Prep', sessions: 16, description: 'Preparación intensiva para IELTS, TOEFL o Cambridge. Máxima concentración en lo que puntúa.' },
+    mid:   { plan: 'Exam Prep Standard',  sessions: 12, description: 'Preparación estructurada con práctica de todas las secciones del examen y simulacros semanales.' },
+    long:  { plan: 'Exam Ready',          sessions: 8,  description: 'Construye la base lingüística y practíca con tiempo para no saturarte antes del examen.' },
+  },
+  'Conversación fluida': {
+    short: { plan: 'Fluency Sprint', sessions: 8, description: 'Sesiones conversacionales intensas para romper el bloqueo y empezar a hablar sin miedo.' },
+    mid:   { plan: 'Fluency Standard', sessions: 6, description: 'Práctica constante de conversación en temas variados para alcanzar fluidez natural.' },
+    long:  { plan: 'Fluency Pro', sessions: 4, description: 'Exposición gradual y consistente para desarrollar una fluidez duradera y sin esfuerzo.' },
+  },
+}
+
+function getTimeBracket(months: number): TimeBracket {
+  if (months <= 3) return 'short'
+  if (months <= 6) return 'mid'
+  return 'long'
+}
+
+function SectionCalculadoraMetas() {
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null)
+  const [months, setMonths] = useState(6)
+
+  const bracket = getTimeBracket(months)
+  const rec = selectedGoal ? RECOMMENDATIONS[selectedGoal][bracket] : null
+
+  return (
+    <section id="calculadora" className="relative py-32 bg-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="max-w-xl mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            Calculadora de metas
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
+          >
+            ¿Cuál es tu meta<br />y cuánto tiempo tienes?
+          </motion.h2>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start"
+        >
+          {/* Left: controls */}
+          <div className="flex flex-col gap-10">
+            {/* Goal selector */}
+            <div>
+              <p className="text-sm font-medium text-white/70 mb-4">¿Cuál es tu meta?</p>
+              <div className="grid grid-cols-2 gap-3">
+                {GOALS.map((goal) => (
+                  <button
+                    key={goal}
+                    onClick={() => setSelectedGoal(goal)}
+                    className={[
+                      'px-4 py-3 rounded-lg border text-sm font-medium text-left transition-all duration-200',
+                      selectedGoal === goal
+                        ? 'border-[#86ef86]/60 bg-[#86ef86]/10 text-[#86ef86]'
+                        : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/25 hover:text-white/80',
+                    ].join(' ')}
+                  >
+                    {goal}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Time slider */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm font-medium text-white/70">¿Cuánto tiempo tienes?</p>
+                <span className="text-sm font-bold text-[#86ef86]">
+                  {months} {months === 1 ? 'mes' : 'meses'}
+                </span>
+              </div>
+              <div className="relative">
+                <input
+                  type="range"
+                  min={1}
+                  max={12}
+                  value={months}
+                  onChange={(e) => setMonths(Number(e.target.value))}
+                  className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #86ef86 0%, #86ef86 ${((months - 1) / 11) * 100}%, rgba(255,255,255,0.12) ${((months - 1) / 11) * 100}%, rgba(255,255,255,0.12) 100%)`,
+                  }}
+                />
+                <style>{`
+                  input[type=range]::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: #86ef86;
+                    border: 2px solid #0a0a0a;
+                    box-shadow: 0 0 0 2px rgba(134,239,134,0.3);
+                    cursor: pointer;
+                  }
+                  input[type=range]::-moz-range-thumb {
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: #86ef86;
+                    border: 2px solid #0a0a0a;
+                    cursor: pointer;
+                  }
+                `}</style>
+                <div className="flex justify-between mt-2">
+                  <span className="text-[10px] text-white/25">1 mes</span>
+                  <span className="text-[10px] text-white/25">12 meses</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: recommendation */}
+          <div className="min-h-[220px]">
+            <AnimatePresence mode="wait">
+              {rec ? (
+                <motion.div
+                  key={`${selectedGoal}-${bracket}`}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="h-full rounded-2xl border border-[#86ef86]/25 bg-[#86ef86]/[0.04] p-8 flex flex-col justify-between gap-6"
+                  style={{ boxShadow: '0 0 40px rgba(134,239,134,0.08)' }}
+                >
+                  <div>
+                    <p className="text-xs text-[#86ef86]/60 tracking-widest uppercase mb-3">Te recomendamos</p>
+                    <h3 className="font-heading text-2xl font-bold text-white mb-1">{rec.plan}</h3>
+                    <p className="text-3xl font-black text-[#86ef86] font-heading mb-4">
+                      {rec.sessions} <span className="text-base font-normal text-white/40">sesiones/mes</span>
+                    </p>
+                    <p className="text-sm text-white/55 leading-relaxed">{rec.description}</p>
+                  </div>
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+                  >
+                    Empieza con este plan
+                  </Link>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="h-full rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 flex flex-col items-center justify-center gap-3 text-center"
+                >
+                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center">
+                    <span className="text-[#86ef86]/40 text-lg">→</span>
+                  </div>
+                  <p className="text-sm text-white/30">Selecciona tu meta para ver<br />la recomendación de plan</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </div>
     </section>
   )
 }
@@ -989,28 +1199,22 @@ function SectionParaQuien() {
 
 const TESTIMONIALS = [
   {
-    name: 'Carolina Ramírez',
-    role: 'Profesora de inglés, Bogotá',
+    name: 'Juliana Herrera',
+    role: 'Estudiante · Meta: trabajo en multinacional',
+    initials: 'JH',
+    text: 'En tres meses pasé de entender poco en reuniones a liderar una presentación en inglés ante clientes internacionales. El método CFI es diferente a todo lo que había probado.',
+  },
+  {
+    name: 'Camilo Restrepo',
+    role: 'Estudiante · Meta: viaje a Europa',
     initials: 'CR',
-    text: 'Antes tenía WhatsApp, Sheets y Notion abiertos al mismo tiempo. Ahora entro a Tutory y en 30 segundos sé qué le toca a cada estudiante. Cambió mi día a día.',
+    text: 'Llevaba años con apps de inglés y nunca lograba hablar con fluidez. Con Tutory, en dos meses ya podía mantener conversaciones reales. Me fui al viaje y no tuve miedo.',
   },
   {
-    name: 'Sebastián Morales',
-    role: 'Tutor independiente, Medellín',
-    initials: 'SM',
-    text: 'Lo que más me cambió fue el seguimiento de clases. Sé exactamente cuántas tomó cada estudiante y qué le falta en el ciclo. Sin Excel, sin notas en el cuaderno.',
-  },
-  {
-    name: 'Valentina Ospina',
-    role: 'Docente particular, Cali',
-    initials: 'VO',
-    text: 'Mis estudiantes entregan tareas desde el portal y yo les doy feedback ahí mismo. Se acabó el "te mando el audio por WhatsApp" y el caos de los chats.',
-  },
-  {
-    name: 'Andrés Felipe Ruiz',
-    role: 'Profesor de inglés, Bucaramanga',
-    initials: 'AF',
-    text: 'Los quizzes automáticos me ahorran horas cada semana. Los creo una vez y el sistema se los muestra a cada estudiante. Los resultados llegan al instante.',
+    name: 'María Paula Soto',
+    role: 'Estudiante · Meta: examen IELTS',
+    initials: 'MS',
+    text: 'Saqué 7.5 en el IELTS en mi primer intento. Mi profesor sabía exactamente en qué fallaba y lo trabajamos sesión a sesión. No memoricé — aprendí a pensar en inglés.',
   },
 ]
 
@@ -1050,7 +1254,7 @@ function SectionTestimonios() {
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
           className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
         >
-          Profesores que ya dejaron<br />el caos atrás
+          Lo que dicen<br />nuestros estudiantes
         </motion.h2>
       </div>
 
@@ -1271,22 +1475,6 @@ function SectionPrecios() {
 function SectionCTAFinal() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref as RefObject<Element>, { once: true, margin: '-80px' })
-  const [email, setEmail] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [showToast, setShowToast] = useState(false)
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError('Por favor ingresa un email válido')
-      return
-    }
-    setEmailError('')
-    setShowToast(true)
-    setEmail('')
-    const t = setTimeout(() => setShowToast(false), 4000)
-    return () => clearTimeout(t)
-  }
 
   return (
     <section ref={ref as RefObject<HTMLElement>} className="relative py-32 overflow-hidden bg-[#0a0a0a]">
@@ -1302,53 +1490,18 @@ function SectionCTAFinal() {
         className="relative z-10 max-w-3xl mx-auto px-6 text-center"
       >
         <h2 className="font-heading text-4xl md:text-6xl font-bold tracking-tighter text-white leading-tight mb-6">
-          Tu próxima clase merece<br />una mejor herramienta
+          ¿Listo para hablar<br />inglés de verdad?
         </h2>
-        <p className="text-base md:text-lg text-white/50 leading-relaxed mb-12 max-w-xl mx-auto">
-          Únete a los profesores que ya organizaron su enseñanza con Tutory.
+        <p className="text-base md:text-lg text-white/50 leading-relaxed mb-10 max-w-xl mx-auto">
+          Empieza hoy. Sin tarjeta de crédito, sin compromisos.
         </p>
-
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-          <div className="flex-1">
-            <input
-              type="email"
-              value={email}
-              onChange={e => { setEmail(e.target.value); setEmailError('') }}
-              placeholder="tu@email.com"
-              className="w-full px-4 py-3 rounded-lg bg-white/[0.06] border border-white/[0.12] text-white placeholder:text-white/30 text-sm outline-none focus:border-[#86ef86]/50 focus:bg-white/[0.08] transition-all duration-200"
-            />
-            {emailError && (
-              <p className="text-xs text-red-400 mt-1.5 text-left">{emailError}</p>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
-          >
-            Comenzar ahora
-          </button>
-        </form>
-
-        <p className="text-xs text-white/25 mt-4">Sin tarjeta de crédito · Sin compromisos</p>
+        <Link
+          to="/login"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+        >
+          Empieza gratis
+        </Link>
       </motion.div>
-
-      {/* Toast */}
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.97 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl bg-[#0f1a0f] border border-[#86ef86]/30 shadow-2xl"
-          >
-            <span className="w-5 h-5 rounded-full bg-[#86ef86]/20 border border-[#86ef86]/40 flex items-center justify-center flex-shrink-0">
-              <span className="text-[9px] text-[#86ef86] font-bold">✓</span>
-            </span>
-            <p className="text-sm text-white font-medium">¡Te avisaremos pronto!</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   )
 }
@@ -1467,6 +1620,8 @@ export default function LandingPage() {
     <div className="min-h-[100dvh] bg-[#0a0a0a] text-white">
       <Navbar />
       <Hero />
+      <SectionMetodoCFI />
+      <SectionCalculadoraMetas />
       <SectionProblema />
       <SectionComoFunciona />
       <SectionFuncionalidades />
