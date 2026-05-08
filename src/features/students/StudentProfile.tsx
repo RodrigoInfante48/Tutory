@@ -15,13 +15,14 @@ import { useTeacherResources, createResource, deleteResource, type ResourceType 
 import ChatWindow from '../messages/ChatWindow'
 import { useSkillScores, upsertSkillScore, SKILLS, type Skill } from '../../hooks/useSkillScores'
 import { useStudentCoins } from '../../hooks/useStudentCoins'
+import { useStudentBadges, BADGE_META, ALL_BADGE_TYPES } from '../../hooks/useStudentBadges'
 
 interface StudentProfileProps {
   student: StudentSummary
   onClose: () => void
 }
 
-type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes' | 'progreso'
+type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes' | 'progreso' | 'logros'
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'plan', label: 'Plan' },
@@ -32,6 +33,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'glosario', label: 'Glosario' },
   { id: 'mensajes', label: 'Mensajes' },
   { id: 'progreso', label: 'Progreso' },
+  { id: 'logros', label: 'Logros' },
 ]
 
 function TabLabel({ label, badge }: { label: string; badge?: number }) {
@@ -210,6 +212,9 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
               )}
               {activeTab === 'progreso' && (
                 <ProgresoTab studentId={student.id} />
+              )}
+              {activeTab === 'logros' && (
+                <LogrosTab studentId={student.id} />
               )}
             </>
           )}
@@ -1421,6 +1426,81 @@ function ProgresoTab({ studentId }: { studentId: string }) {
       </div>
 
       {saveError && <p className="text-xs text-red-500">{saveError}</p>}
+    </div>
+  )
+}
+
+function LogrosTab({ studentId }: { studentId: string }) {
+  const { badges, loading } = useStudentBadges(studentId)
+  const earnedMap = new Map(badges.map(b => [b.badge_type, b]))
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  const earnedCount = badges.length
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          Insignias obtenidas
+        </h3>
+        <span className="text-xs text-gray-400">
+          {earnedCount}/{ALL_BADGE_TYPES.length} desbloqueadas
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-primary to-green-400 transition-all duration-700"
+          style={{ width: `${(earnedCount / ALL_BADGE_TYPES.length) * 100}%` }}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        {ALL_BADGE_TYPES.map(type => {
+          const meta = BADGE_META[type]
+          const earned = earnedMap.get(type)
+
+          return earned ? (
+            <div
+              key={type}
+              className={`relative rounded-2xl p-4 text-center bg-gradient-to-br ${meta.gradient} shadow-md ${meta.glow} overflow-hidden`}
+            >
+              <div className="text-3xl mb-1.5 drop-shadow">{meta.icon}</div>
+              <p className="text-xs font-bold text-white leading-tight">{meta.name}</p>
+              <p className="text-[10px] text-white/70 mt-0.5">
+                {formatDate(earned.earned_at)}
+              </p>
+            </div>
+          ) : (
+            <div
+              key={type}
+              className="rounded-2xl p-4 text-center border-2 border-dashed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
+            >
+              <div className="text-3xl mb-1.5 grayscale opacity-35">{meta.icon}</div>
+              <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 leading-tight">
+                {meta.name}
+              </p>
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 leading-snug">
+                {meta.description}
+              </p>
+              <div className="mt-1.5 flex items-center justify-center gap-1 text-gray-400">
+                <svg className="w-2.5 h-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="text-[9px]">Pendiente</span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
