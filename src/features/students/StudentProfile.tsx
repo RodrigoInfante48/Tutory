@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import {
+  RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer,
+} from 'recharts'
 import { type StudentSummary } from '../../hooks/useTeacherStudents'
 import { useStudentProfile } from '../../hooks/useStudentProfile'
 import { useAllPlans, assignPlanToStudent } from '../../hooks/useAssignPlan'
@@ -10,13 +13,15 @@ import { useAuth } from '../auth/AuthContext'
 import CycleStatus from '../classes/CycleStatus'
 import { useTeacherResources, createResource, deleteResource, type ResourceType } from '../../hooks/useResources'
 import ChatWindow from '../messages/ChatWindow'
+import { useSkillScores, upsertSkillScore, SKILLS, type Skill } from '../../hooks/useSkillScores'
+import { useStudentCoins } from '../../hooks/useStudentCoins'
 
 interface StudentProfileProps {
   student: StudentSummary
   onClose: () => void
 }
 
-type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes'
+type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes' | 'progreso'
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'plan', label: 'Plan' },
@@ -26,6 +31,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'clases', label: 'Clases' },
   { id: 'glosario', label: 'Glosario' },
   { id: 'mensajes', label: 'Mensajes' },
+  { id: 'progreso', label: 'Progreso' },
 ]
 
 function TabLabel({ label, badge }: { label: string; badge?: number }) {
@@ -201,6 +207,9 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
                   partnerName={student.name}
                   partnerAvatar={student.avatar_url}
                 />
+              )}
+              {activeTab === 'progreso' && (
+                <ProgresoTab studentId={student.id} />
               )}
             </>
           )}
@@ -1223,6 +1232,168 @@ function MensajesTab({
         partnerName={partnerName}
         partnerAvatar={partnerAvatar}
       />
+    </div>
+  )
+}
+
+function ProgresoTab({ studentId }: { studentId: string }) {
+  const { scores, loading, reload } = useSkillScores(studentId)
+  const { total: coinsTotal, loading: coinsLoading } = useStudentCoins(studentId)
+  const [draft, setDraft] = useState<Record<Skill, number> | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+
+  const displayed = draft ?? scores
+
+  const radarData = SKILLS.map(skill => ({
+    skill,
+    score: displayed[skill],
+    fullMark: 100,
+  }))
+
+  function startEdit() {
+    setDraft({ ...scores })
+    setSaveError(null)
+  }
+
+  function cancelEdit() {
+    setDraft(null)
+    setSaveError(null)
+  }
+
+  async function handleSave() {
+    if (!draft) return
+    setSaving(true)
+    setSaveError(null)
+    try {
+      await Promise.all(
+        SKILLS.map(skill => upsertSkillScore(studentId, skill, draft[skill]))
+      )
+      await reload()
+      setDraft(null)
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Error al guardar')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Coins summary */}
+      <div className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-4">
+        <span className="text-2xl">🪙</span>
+        <div>
+          <p className="text-xs text-gray-400">Tutory Coins acumulados</p>
+          {coinsLoading ? (
+            <p className="text-xl font-bold text-gray-300">—</p>
+          ) : (
+            <p className="text-xl font-bold text-[#166534] dark:text-[#86ef86]">{coinsTotal}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Radar chart */}
+      <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-heading font-bold text-gray-900 dark:text-white uppercase tracking-wide">
+            Skills Radar
+          </h3>
+          {!draft ? (
+            <button
+              onClick={startEdit}
+              className="text-xs font-medium text-primary border border-primary/30 rounded-lg px-3 py-1.5 hover:bg-primary/5 transition-colors"
+            >
+              Editar scores
+            </button>
+          ) : (
+            <div className="flex gap-2">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="text-xs font-semibold bg-primary text-gray-900 px-3 py-1.5 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+              >
+                {saving ? 'Guardando…' : 'Guardar'}
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 px-3 py-1.5"
+              >
+                Cancelar
+              </button>
+            </div>
+          )}
+        </div>
+
+        <ResponsiveContainer width="100%" height={240}>
+          <RadarChart data={radarData} margin={{ top: 8, right: 24, bottom: 8, left: 24 }}>
+            <PolarGrid stroke="#374151" strokeOpacity={0.6} />
+            <PolarAngleAxis
+              dataKey="skill"
+              tick={{ fill: '#9ca3af', fontSize: 11, fontFamily: 'DM Sans, sans-serif' }}
+            />
+            <Radar
+              name="Skills"
+              dataKey="score"
+              stroke="#86ef86"
+              fill="#86ef86"
+              fillOpacity={0.18}
+              strokeWidth={2}
+              dot={{ fill: '#86ef86', r: 3 }}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Skill sliders / scores */}
+      <div className="space-y-3">
+        {SKILLS.map(skill => (
+          <div key={skill} className="space-y-1">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-medium text-gray-700 dark:text-gray-300">{skill}</span>
+              <span
+                className="font-bold"
+                style={{
+                  color: displayed[skill] >= 70 ? '#86ef86' : displayed[skill] >= 40 ? '#fbbf24' : '#f87171',
+                }}
+              >
+                {displayed[skill]}
+              </span>
+            </div>
+            {draft ? (
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={5}
+                value={draft[skill]}
+                onChange={e => setDraft(prev => prev ? { ...prev, [skill]: Number(e.target.value) } : prev)}
+                className="w-full accent-[#86ef86] h-1.5 rounded-full cursor-pointer"
+              />
+            ) : (
+              <div className="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${displayed[skill]}%`,
+                    background: displayed[skill] >= 70 ? '#86ef86' : displayed[skill] >= 40 ? '#fbbf24' : '#f87171',
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {saveError && <p className="text-xs text-red-500">{saveError}</p>}
     </div>
   )
 }
