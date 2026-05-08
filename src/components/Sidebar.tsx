@@ -23,6 +23,7 @@ function useNavItems(): NavItem[] {
   if (appUser?.role === 'student') {
     return [
       { label: 'Mi portal', href: '/student', emoji: '🏠' },
+      { label: 'Mi Vault', href: '/student/vault', emoji: '🗄️' },
     ]
   }
 

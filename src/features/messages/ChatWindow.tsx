@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useChat } from '../../hooks/useMessages'
 import { useAuth } from '../auth/AuthContext'
+import { useVoiceRecording, formatVoiceDuration } from '../../hooks/useVoiceRecording'
 
 interface ChatWindowProps {
   partnerId: string
@@ -35,6 +36,17 @@ function formatDay(iso: string) {
   return new Intl.DateTimeFormat('es-CO', { weekday: 'long', day: 'numeric', month: 'long' }).format(d)
 }
 
+function AudioPlayer({ url }: { url: string }) {
+  return (
+    <audio
+      src={url}
+      controls
+      className="h-9 max-w-[220px] [&::-webkit-media-controls-panel]:bg-transparent"
+      style={{ colorScheme: 'dark' }}
+    />
+  )
+}
+
 export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: ChatWindowProps) {
   const { appUser } = useAuth()
   const { messages, loading, sendMessage } = useChat(partnerId)
@@ -43,6 +55,8 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
   const [sendError, setSendError] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  const { state: recState, error: recError, durationMs, startRecording, stopRecordingAndUpload, cancelRecording } = useVoiceRecording()
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -70,6 +84,22 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
     }
   }
 
+  async function handleMicRelease() {
+    if (recState !== 'recording') return
+    setSendError(null)
+    const url = await stopRecordingAndUpload()
+    if (url) {
+      setSending(true)
+      try {
+        await sendMessage('', url)
+      } catch (e) {
+        setSendError(e instanceof Error ? e.message : 'Error al enviar nota de voz')
+      } finally {
+        setSending(false)
+      }
+    }
+  }
+
   // Group messages by day
   const grouped: { day: string; msgs: typeof messages }[] = []
   for (const msg of messages) {
@@ -81,6 +111,9 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
       last.msgs.push(msg)
     }
   }
+
+  const isRecording = recState === 'recording'
+  const isUploading = recState === 'uploading'
 
   return (
     <div className="flex flex-col h-full">
@@ -130,7 +163,11 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
                               : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-sm'
                           }`}
                         >
-                          {msg.body}
+                          {msg.voice_url ? (
+                            <AudioPlayer url={msg.voice_url} />
+                          ) : (
+                            msg.body
+                          )}
                         </div>
                         <p className={`text-[10px] text-gray-400 mt-0.5 ${isMe ? 'text-right' : 'text-left'}`}>
                           {formatTime(msg.sent_at)}
@@ -151,30 +188,76 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
 
       {/* Input */}
       <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        {sendError && (
-          <p className="text-xs text-red-500 mb-2">{sendError}</p>
+        {(sendError || recError) && (
+          <p className="text-xs text-red-500 mb-2">{sendError ?? recError}</p>
         )}
+
+        {/* Recording indicator */}
+        {(isRecording || isUploading) && (
+          <div className="flex items-center gap-2 mb-2 px-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-xs text-red-500 font-medium">
+              {isUploading ? 'Subiendo nota de voz…' : `Grabando ${formatVoiceDuration(durationMs)}`}
+            </span>
+            {isRecording && (
+              <button
+                onClick={cancelRecording}
+                className="ml-auto text-xs text-gray-400 hover:text-red-500 transition-colors"
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
+        )}
+
         <div className="flex items-end gap-2">
-          <textarea
-            ref={inputRef}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Escribe un mensaje... (Enter para enviar)"
-            rows={1}
-            className="flex-1 px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-            style={{ minHeight: '42px', maxHeight: '120px' }}
-          />
+          {/* Text input — hidden while recording */}
+          {!isRecording && !isUploading && (
+            <textarea
+              ref={inputRef}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Escribe un mensaje… (Enter para enviar)"
+              rows={1}
+              className="flex-1 px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+              style={{ minHeight: '42px', maxHeight: '120px' }}
+            />
+          )}
+
+          {/* Mic button */}
           <button
-            onClick={handleSend}
-            disabled={!draft.trim() || sending}
-            className="p-2.5 rounded-xl bg-primary text-white hover:bg-primary-dark transition-colors disabled:opacity-50 flex-shrink-0"
-            aria-label="Enviar"
+            onMouseDown={startRecording}
+            onMouseUp={handleMicRelease}
+            onTouchStart={(e) => { e.preventDefault(); startRecording() }}
+            onTouchEnd={(e) => { e.preventDefault(); handleMicRelease() }}
+            disabled={isUploading || sending}
+            title={isRecording ? 'Suelta para enviar' : 'Mantén para grabar'}
+            className={`flex-shrink-0 p-2.5 rounded-xl transition-colors disabled:opacity-50 ${
+              isRecording
+                ? 'bg-red-500 text-white scale-110'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+            }`}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
             </svg>
           </button>
+
+          {/* Send text button */}
+          {!isRecording && !isUploading && (
+            <button
+              onClick={handleSend}
+              disabled={!draft.trim() || sending}
+              className="p-2.5 rounded-xl bg-primary text-white hover:bg-primary-dark transition-colors disabled:opacity-50 flex-shrink-0"
+              aria-label="Enviar"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </div>

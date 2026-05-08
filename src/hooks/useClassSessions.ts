@@ -13,6 +13,7 @@ export interface ClassSession {
   session_type: SessionType
   notes: string | null
   rescheduled_from: string | null
+  session_recording_url: string | null
   student: {
     id: string
     name: string
@@ -41,7 +42,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
       const { data, error: err } = await supabase
         .from('class_sessions')
         .select(`
-          id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from,
+          id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from, session_recording_url,
           users:student_id ( id, name, avatar_url )
         `)
         .eq('teacher_id', teacherId)
@@ -59,6 +60,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
           session_type: SessionType
           notes: string | null
           rescheduled_from: string | null
+          session_recording_url: string | null
           users: { id: string; name: string; avatar_url: string | null } | null
         }
         return ({
@@ -70,6 +72,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
           session_type: r.session_type ?? 'standard',
           notes: r.notes,
           rescheduled_from: r.rescheduled_from,
+          session_recording_url: r.session_recording_url,
           student: r.users,
         })
       })
@@ -84,6 +87,14 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
   useEffect(() => { load() }, [load])
 
   return { sessions, loading, error, reload: load }
+}
+
+export async function updateSessionRecording(sessionId: string, url: string | null): Promise<void> {
+  const { error } = await supabase
+    .from('class_sessions')
+    .update({ session_recording_url: url })
+    .eq('id', sessionId)
+  if (error) throw error
 }
 
 export async function updateSessionStatus(
@@ -123,7 +134,7 @@ export async function createSession(params: {
       rescheduled_from: params.rescheduledFrom ?? null,
     })
     .select(`
-      id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from,
+      id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from, session_recording_url,
       users:student_id ( id, name, avatar_url )
     `)
     .single()
@@ -137,6 +148,7 @@ export async function createSession(params: {
     session_type: SessionType
     notes: string | null
     rescheduled_from: string | null
+    session_recording_url: string | null
     users: { id: string; name: string; avatar_url: string | null } | null
   }
   return {
@@ -148,6 +160,7 @@ export async function createSession(params: {
     session_type: row.session_type ?? 'standard',
     notes: row.notes,
     rescheduled_from: row.rescheduled_from,
+    session_recording_url: row.session_recording_url,
     student: row.users,
   }
 }
@@ -165,7 +178,7 @@ export function useStudentClassSessions(studentId: string | null) {
     try {
       const { data, error: err } = await supabase
         .from('class_sessions')
-        .select('id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from')
+        .select('id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from, session_recording_url')
         .eq('student_id', studentId)
         .order('scheduled_date', { ascending: false })
       if (err) throw err
@@ -178,7 +191,8 @@ export function useStudentClassSessions(studentId: string | null) {
         session_type: SessionType
         notes: string | null
         rescheduled_from: string | null
-      }) => ({ ...row, session_type: row.session_type ?? 'standard', student: null })))
+        session_recording_url: string | null
+      }) => ({ ...row, session_type: row.session_type ?? 'standard', session_recording_url: row.session_recording_url ?? null, student: null })))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar clases')
     } finally {

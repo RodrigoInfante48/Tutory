@@ -7,7 +7,7 @@ import { useStudentProfile } from '../../hooks/useStudentProfile'
 import { useAllPlans, assignPlanToStudent } from '../../hooks/useAssignPlan'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
 import { useTeacherTasksForStudent, createTask, saveFeedback } from '../../hooks/useTeacherTasks'
-import { useStudentClassSessions, updateSessionStatus, createSession, type SessionStatus, type SessionType } from '../../hooks/useClassSessions'
+import { useStudentClassSessions, updateSessionStatus, updateSessionRecording, createSession, type SessionStatus, type SessionType } from '../../hooks/useClassSessions'
 import { useStudentGlossary, addGlossaryEntry, deleteGlossaryEntry } from '../../hooks/useStudentGlossary'
 import { useAuth } from '../auth/AuthContext'
 import CycleStatus from '../classes/CycleStatus'
@@ -807,6 +807,7 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
   const [editNotes, setEditNotes] = useState('')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [editRecordingUrl, setEditRecordingUrl] = useState('')
 
   // New session form
   const [showNew, setShowNew] = useState(false)
@@ -820,11 +821,12 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
   // Edit session type
   const [editSessionType, setEditSessionType] = useState<SessionType>('standard')
 
-  function startEdit(s: { id: string; status: string; session_type: SessionType; notes: string | null }) {
+  function startEdit(s: { id: string; status: string; session_type: SessionType; notes: string | null; session_recording_url: string | null }) {
     setEditingId(s.id)
     setEditStatus(s.status as SessionStatus)
     setEditSessionType(s.session_type ?? 'standard')
     setEditNotes(s.notes ?? '')
+    setEditRecordingUrl(s.session_recording_url ?? '')
     setSaveError(null)
   }
 
@@ -833,6 +835,7 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
     setSaveError(null)
     try {
       await updateSessionStatus(sessionId, editStatus, editNotes || undefined, editSessionType)
+      await updateSessionRecording(sessionId, editRecordingUrl.trim() || null)
       setEditingId(null)
       await reload()
     } catch (err) {
@@ -980,10 +983,22 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
                 </div>
               </div>
 
-              {s.notes && editingId !== s.id && (
-                <p className="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700/50">
-                  {s.notes}
-                </p>
+              {(s.notes || s.session_recording_url) && editingId !== s.id && (
+                <div className="px-3 py-2 border-t border-gray-100 dark:border-gray-700/50 space-y-1">
+                  {s.notes && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{s.notes}</p>
+                  )}
+                  {s.session_recording_url && (
+                    <a
+                      href={s.session_recording_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                    >
+                      🎬 Ver grabación
+                    </a>
+                  )}
+                </div>
               )}
 
               {editingId === s.id && (
@@ -1031,6 +1046,18 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
                     rows={2}
                     className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
                   />
+                  <div>
+                    <label className="text-xs text-gray-400 block mb-1">
+                      🎬 URL de grabación Zoom (opcional)
+                    </label>
+                    <input
+                      type="url"
+                      value={editRecordingUrl}
+                      onChange={e => setEditRecordingUrl(e.target.value)}
+                      placeholder="https://zoom.us/rec/..."
+                      className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
                   {saveError && <p className="text-xs text-red-500">{saveError}</p>}
                   <div className="flex gap-2">
                     <button

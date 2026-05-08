@@ -7,6 +7,7 @@ import ResetPasswordPage from '../features/auth/ResetPasswordPage'
 import LandingPage from '../features/landing/LandingPage'
 import TeacherDashboard from '../features/teachers/TeacherDashboard'
 import StudentDashboard from '../features/students/StudentDashboard'
+import StudentVault from '../features/students/StudentVault'
 import TopicReader from '../features/study-plans/TopicReader'
 import AdminDashboard from '../features/admin/AdminDashboard'
 import ClassesPage from '../features/classes/ClassesPage'
@@ -73,6 +74,14 @@ export default function AppRouter() {
         element={
           <AuthGuard allowedRole="student">
             <StudentDashboard />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path="/student/vault"
+        element={
+          <AuthGuard allowedRole="student">
+            <StudentVault />
           </AuthGuard>
         }
       />
