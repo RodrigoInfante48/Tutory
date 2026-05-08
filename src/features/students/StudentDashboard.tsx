@@ -8,6 +8,7 @@ import { useStudentTasks, submitTask, markFeedbackRead, type StudentTask } from 
 import { useStudentQuiz } from '../../hooks/useStudentQuiz'
 import QuizPlayer from '../quizzes/QuizPlayer'
 import QuizHistory from '../quizzes/QuizHistory'
+import { useStudentGlossary, toggleMastered } from '../../hooks/useStudentGlossary'
 
 function useStudentPlanId(userId: string | undefined) {
   const [planId, setPlanId] = useState<string | null>(null)
@@ -311,6 +312,131 @@ function QuizSection({ studentId }: { studentId: string }) {
   )
 }
 
+function GlosarioSection({ studentId }: { studentId: string }) {
+  const { entries, loading, reload } = useStudentGlossary(studentId)
+  const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState<'all' | 'pending' | 'mastered'>('all')
+  const [togglingId, setTogglingId] = useState<string | null>(null)
+
+  async function handleToggle(id: string, current: boolean) {
+    setTogglingId(id)
+    try {
+      await toggleMastered(id, !current)
+      await reload()
+    } finally {
+      setTogglingId(null)
+    }
+  }
+
+  const filtered = entries.filter(e => {
+    if (filter === 'mastered' && !e.mastered) return false
+    if (filter === 'pending' && e.mastered) return false
+    if (search) {
+      const q = search.toLowerCase()
+      return e.word.toLowerCase().includes(q) || e.definition.toLowerCase().includes(q)
+    }
+    return true
+  })
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-6">
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  if (entries.length === 0) return null
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">
+          Mi Glosario
+        </h2>
+        <span className="text-xs text-gray-400">
+          {entries.filter(e => e.mastered).length}/{entries.length} dominadas
+        </span>
+      </div>
+
+      {/* Search */}
+      <div className="relative">
+        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Buscar palabra…"
+          className="w-full text-sm pl-9 pr-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+        />
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-1.5">
+        {(['all', 'pending', 'mastered'] as const).map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+              filter === f
+                ? 'border-primary bg-primary/10 text-primary dark:text-green-400'
+                : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+            }`}
+          >
+            {f === 'all' ? 'Todas' : f === 'mastered' ? 'Dominadas' : 'Por aprender'}
+          </button>
+        ))}
+      </div>
+
+      {/* Word list */}
+      {filtered.length === 0 ? (
+        <p className="text-sm text-gray-400 text-center py-4">No hay palabras que coincidan.</p>
+      ) : (
+        <ul className="space-y-2">
+          {filtered.map(entry => (
+            <li
+              key={entry.id}
+              className={`rounded-xl border p-3 flex items-start gap-3 transition-colors ${
+                entry.mastered
+                  ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10'
+                  : 'border-gray-200 dark:border-gray-700'
+              }`}
+            >
+              <button
+                onClick={() => handleToggle(entry.id, entry.mastered)}
+                disabled={togglingId === entry.id}
+                className={`flex-shrink-0 mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                  entry.mastered
+                    ? 'border-green-500 bg-green-500 text-white'
+                    : 'border-gray-300 dark:border-gray-600 hover:border-primary'
+                }`}
+                title={entry.mastered ? 'Marcar como pendiente' : 'Marcar como dominada'}
+              >
+                {entry.mastered && (
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </button>
+              <div className="flex-1 min-w-0">
+                <p className={`text-sm font-semibold ${entry.mastered ? 'text-green-700 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
+                  {entry.word}
+                </p>
+                <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">{entry.definition}</p>
+                {entry.context_sentence && (
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 italic">"{entry.context_sentence}"</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 export default function StudentDashboard() {
   const { appUser } = useAuth()
   const { planId, loaded } = useStudentPlanId(appUser?.id)
@@ -337,6 +463,11 @@ export default function StudentDashboard() {
         {/* Tasks */}
         {appUser?.id && (
           <TasksSection studentId={appUser.id} />
+        )}
+
+        {/* Glossary */}
+        {appUser?.id && (
+          <GlosarioSection studentId={appUser.id} />
         )}
 
         {/* Plan */}

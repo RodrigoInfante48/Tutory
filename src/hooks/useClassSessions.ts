@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 export type SessionStatus = 'scheduled' | 'taken' | 'no_show' | 'cancelled' | 'rescheduled' | 'holiday'
+export type SessionType = 'precision_sprint' | 'culture_club' | 'professional_lab' | 'standard'
 
 export interface ClassSession {
   id: string
@@ -9,6 +10,7 @@ export interface ClassSession {
   teacher_id: string
   scheduled_date: string
   status: SessionStatus
+  session_type: SessionType
   notes: string | null
   rescheduled_from: string | null
   student: {
@@ -39,7 +41,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
       const { data, error: err } = await supabase
         .from('class_sessions')
         .select(`
-          id, student_id, teacher_id, scheduled_date, status, notes, rescheduled_from,
+          id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from,
           users:student_id ( id, name, avatar_url )
         `)
         .eq('teacher_id', teacherId)
@@ -54,6 +56,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
           teacher_id: string
           scheduled_date: string
           status: SessionStatus
+          session_type: SessionType
           notes: string | null
           rescheduled_from: string | null
           users: { id: string; name: string; avatar_url: string | null } | null
@@ -64,6 +67,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
           teacher_id: r.teacher_id,
           scheduled_date: r.scheduled_date,
           status: r.status,
+          session_type: r.session_type ?? 'standard',
           notes: r.notes,
           rescheduled_from: r.rescheduled_from,
           student: r.users,
@@ -86,10 +90,15 @@ export async function updateSessionStatus(
   sessionId: string,
   status: SessionStatus,
   notes?: string,
+  sessionType?: SessionType,
 ): Promise<void> {
   const { error } = await supabase
     .from('class_sessions')
-    .update({ status, ...(notes !== undefined ? { notes } : {}) })
+    .update({
+      status,
+      ...(notes !== undefined ? { notes } : {}),
+      ...(sessionType !== undefined ? { session_type: sessionType } : {}),
+    })
     .eq('id', sessionId)
   if (error) throw error
 }
@@ -100,6 +109,7 @@ export async function createSession(params: {
   scheduledDate: string
   notes?: string
   rescheduledFrom?: string
+  sessionType?: SessionType
 }): Promise<ClassSession> {
   const { data, error } = await supabase
     .from('class_sessions')
@@ -108,11 +118,12 @@ export async function createSession(params: {
       student_id: params.studentId,
       scheduled_date: params.scheduledDate,
       status: 'scheduled' as SessionStatus,
+      session_type: params.sessionType ?? 'standard',
       notes: params.notes ?? null,
       rescheduled_from: params.rescheduledFrom ?? null,
     })
     .select(`
-      id, student_id, teacher_id, scheduled_date, status, notes, rescheduled_from,
+      id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from,
       users:student_id ( id, name, avatar_url )
     `)
     .single()
@@ -123,6 +134,7 @@ export async function createSession(params: {
     teacher_id: string
     scheduled_date: string
     status: SessionStatus
+    session_type: SessionType
     notes: string | null
     rescheduled_from: string | null
     users: { id: string; name: string; avatar_url: string | null } | null
@@ -133,6 +145,7 @@ export async function createSession(params: {
     teacher_id: row.teacher_id,
     scheduled_date: row.scheduled_date,
     status: row.status,
+    session_type: row.session_type ?? 'standard',
     notes: row.notes,
     rescheduled_from: row.rescheduled_from,
     student: row.users,
@@ -152,7 +165,7 @@ export function useStudentClassSessions(studentId: string | null) {
     try {
       const { data, error: err } = await supabase
         .from('class_sessions')
-        .select('id, student_id, teacher_id, scheduled_date, status, notes, rescheduled_from')
+        .select('id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from')
         .eq('student_id', studentId)
         .order('scheduled_date', { ascending: false })
       if (err) throw err
@@ -162,9 +175,10 @@ export function useStudentClassSessions(studentId: string | null) {
         teacher_id: string
         scheduled_date: string
         status: SessionStatus
+        session_type: SessionType
         notes: string | null
         rescheduled_from: string | null
-      }) => ({ ...row, student: null })))
+      }) => ({ ...row, session_type: row.session_type ?? 'standard', student: null })))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar clases')
     } finally {

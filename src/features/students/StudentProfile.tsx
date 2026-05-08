@@ -4,7 +4,8 @@ import { useStudentProfile } from '../../hooks/useStudentProfile'
 import { useAllPlans, assignPlanToStudent } from '../../hooks/useAssignPlan'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
 import { useTeacherTasksForStudent, createTask, saveFeedback } from '../../hooks/useTeacherTasks'
-import { useStudentClassSessions, updateSessionStatus, createSession, type SessionStatus } from '../../hooks/useClassSessions'
+import { useStudentClassSessions, updateSessionStatus, createSession, type SessionStatus, type SessionType } from '../../hooks/useClassSessions'
+import { useStudentGlossary, addGlossaryEntry, deleteGlossaryEntry } from '../../hooks/useStudentGlossary'
 import { useAuth } from '../auth/AuthContext'
 import CycleStatus from '../classes/CycleStatus'
 import { useTeacherResources, createResource, deleteResource, type ResourceType } from '../../hooks/useResources'
@@ -15,7 +16,7 @@ interface StudentProfileProps {
   onClose: () => void
 }
 
-type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'mensajes'
+type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes'
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'plan', label: 'Plan' },
@@ -23,6 +24,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'tareas', label: 'Tareas' },
   { id: 'quizzes', label: 'Quizzes' },
   { id: 'clases', label: 'Clases' },
+  { id: 'glosario', label: 'Glosario' },
   { id: 'mensajes', label: 'Mensajes' },
 ]
 
@@ -189,6 +191,9 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
               )}
               {activeTab === 'clases' && (
                 <ClasesTab studentId={student.id} teacherId={appUser?.id ?? ''} />
+              )}
+              {activeTab === 'glosario' && (
+                <GlosarioTab studentId={student.id} teacherId={appUser?.id ?? ''} />
               )}
               {activeTab === 'mensajes' && (
                 <MensajesTab
@@ -772,6 +777,20 @@ const SESSION_STATUS_OPTIONS: { value: SessionStatus; label: string }[] = [
   { value: 'holiday',     label: 'Festivo' },
 ]
 
+const SESSION_TYPE_OPTIONS: { value: SessionType; label: string; icon: string; description: string }[] = [
+  { value: 'precision_sprint',  label: 'Precision Sprint',  icon: '⚡', description: "10' Warm-up · 30' Role-play · 10' Feedback" },
+  { value: 'culture_club',      label: 'Culture Club',      icon: '🌍', description: "10' News Flash · 30' Debate · 10' Modismos" },
+  { value: 'professional_lab',  label: 'Professional Lab',  icon: '💼', description: "10' Caso · 30' Resolución · 10' Análisis" },
+  { value: 'standard',          label: 'Estándar',          icon: '📚', description: 'Clase regular' },
+]
+
+const SESSION_TYPE_COLORS: Record<SessionType, string> = {
+  precision_sprint: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  culture_club:     'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+  professional_lab: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+  standard:         'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+}
+
 function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: string }) {
   const { sessions, loading, reload } = useStudentClassSessions(studentId)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -784,13 +803,18 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
   const [showNew, setShowNew] = useState(false)
   const [newDate, setNewDate] = useState('')
   const [newTime, setNewTime] = useState('09:00')
+  const [newSessionType, setNewSessionType] = useState<SessionType>('standard')
   const [newNotes, setNewNotes] = useState('')
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
 
-  function startEdit(s: { id: string; status: string; notes: string | null }) {
+  // Edit session type
+  const [editSessionType, setEditSessionType] = useState<SessionType>('standard')
+
+  function startEdit(s: { id: string; status: string; session_type: SessionType; notes: string | null }) {
     setEditingId(s.id)
     setEditStatus(s.status as SessionStatus)
+    setEditSessionType(s.session_type ?? 'standard')
     setEditNotes(s.notes ?? '')
     setSaveError(null)
   }
@@ -799,7 +823,7 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
     setSaving(true)
     setSaveError(null)
     try {
-      await updateSessionStatus(sessionId, editStatus, editNotes || undefined)
+      await updateSessionStatus(sessionId, editStatus, editNotes || undefined, editSessionType)
       setEditingId(null)
       await reload()
     } catch (err) {
@@ -818,10 +842,12 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
         teacherId,
         studentId,
         scheduledDate: `${newDate}T${newTime}:00`,
+        sessionType: newSessionType,
         notes: newNotes || undefined,
       })
       setNewDate('')
       setNewTime('09:00')
+      setNewSessionType('standard')
       setNewNotes('')
       setShowNew(false)
       await reload()
@@ -873,6 +899,25 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
               />
             </div>
           </div>
+          <div>
+            <label className="text-xs text-gray-400 block mb-1.5">Tipo CFI</label>
+            <div className="grid grid-cols-2 gap-1.5">
+              {SESSION_TYPE_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={() => setNewSessionType(opt.value)}
+                  className={`text-left text-xs rounded-lg border px-2 py-1.5 transition-colors ${
+                    newSessionType === opt.value
+                      ? 'border-primary bg-primary/10 text-primary dark:text-green-400'
+                      : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                  }`}
+                >
+                  <span className="mr-1">{opt.icon}</span>{opt.label}
+                  <p className="text-[9px] text-gray-400 mt-0.5 leading-tight line-clamp-1">{opt.description}</p>
+                </button>
+              ))}
+            </div>
+          </div>
           <input
             type="text"
             placeholder="Notas (opcional)"
@@ -903,9 +948,15 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
           {sessions.map(s => (
             <li key={s.id} className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="flex items-center justify-between gap-2 p-3 bg-gray-50 dark:bg-gray-800">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {formatDate(s.scheduled_date, true)}
-                </p>
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {formatDate(s.scheduled_date, true)}
+                  </p>
+                  <span className={`inline-block mt-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded-full ${SESSION_TYPE_COLORS[s.session_type ?? 'standard']}`}>
+                    {SESSION_TYPE_OPTIONS.find(o => o.value === (s.session_type ?? 'standard'))?.icon}{' '}
+                    {SESSION_TYPE_OPTIONS.find(o => o.value === (s.session_type ?? 'standard'))?.label}
+                  </span>
+                </div>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={s.status} />
                   <button
@@ -946,6 +997,24 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
                       ))}
                     </div>
                   </div>
+                  <div>
+                    <label className="text-xs text-gray-400 block mb-1.5">Tipo CFI</label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {SESSION_TYPE_OPTIONS.map(opt => (
+                        <button
+                          key={opt.value}
+                          onClick={() => setEditSessionType(opt.value)}
+                          className={`text-left text-xs rounded-lg border px-2 py-1.5 transition-colors ${
+                            editSessionType === opt.value
+                              ? 'border-primary bg-primary/10 text-primary dark:text-green-400'
+                              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          <span className="mr-1">{opt.icon}</span>{opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   <textarea
                     value={editNotes}
                     onChange={e => setEditNotes(e.target.value)}
@@ -971,6 +1040,165 @@ function ClasesTab({ studentId, teacherId }: { studentId: string; teacherId: str
                   </div>
                 </div>
               )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function GlosarioTab({ studentId, teacherId }: { studentId: string; teacherId: string }) {
+  const { entries, loading, reload } = useStudentGlossary(studentId)
+  const [showForm, setShowForm] = useState(false)
+  const [word, setWord] = useState('')
+  const [definition, setDefinition] = useState('')
+  const [contextSentence, setContextSentence] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [filter, setFilter] = useState<'all' | 'pending' | 'mastered'>('all')
+
+  async function handleAdd() {
+    if (!word.trim() || !definition.trim()) return
+    setSaving(true)
+    setSaveError(null)
+    try {
+      await addGlossaryEntry({
+        studentId,
+        word,
+        definition,
+        contextSentence: contextSentence || undefined,
+        addedBy: teacherId,
+      })
+      setWord('')
+      setDefinition('')
+      setContextSentence('')
+      setShowForm(false)
+      await reload()
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Error al guardar')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleDelete(id: string) {
+    setDeletingId(id)
+    try {
+      await deleteGlossaryEntry(id)
+      await reload()
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const filtered = entries.filter(e =>
+    filter === 'all' ? true : filter === 'mastered' ? e.mastered : !e.mastered
+  )
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1">
+          {(['all', 'pending', 'mastered'] as const).map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                filter === f
+                  ? 'border-primary bg-primary/10 text-primary dark:text-green-400'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              {f === 'all' ? `Todas (${entries.length})` : f === 'mastered' ? `Dominadas (${entries.filter(e => e.mastered).length})` : `Pendientes (${entries.filter(e => !e.mastered).length})`}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setShowForm(s => !s)}
+          className="text-xs font-medium text-primary border border-primary/30 rounded-lg px-3 py-1.5 hover:bg-primary/5 transition-colors"
+        >
+          {showForm ? 'Cancelar' : '+ Agregar'}
+        </button>
+      </div>
+
+      {/* Add form */}
+      {showForm && (
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 space-y-3">
+          <input
+            type="text"
+            placeholder="Palabra o expresión *"
+            value={word}
+            onChange={e => setWord(e.target.value)}
+            className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          <textarea
+            placeholder="Definición *"
+            value={definition}
+            onChange={e => setDefinition(e.target.value)}
+            rows={2}
+            className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+          />
+          <input
+            type="text"
+            placeholder="Oración de contexto (opcional)"
+            value={contextSentence}
+            onChange={e => setContextSentence(e.target.value)}
+            className="w-full text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          {saveError && <p className="text-xs text-red-500">{saveError}</p>}
+          <button
+            onClick={handleAdd}
+            disabled={saving || !word.trim() || !definition.trim()}
+            className="w-full text-sm font-semibold bg-primary text-gray-900 rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Guardando…' : 'Agregar al glosario'}
+          </button>
+        </div>
+      )}
+
+      {/* List */}
+      {loading ? (
+        <div className="flex justify-center py-8">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <EmptyState message={entries.length === 0 ? 'Sin palabras en el glosario. Agrega la primera.' : 'No hay palabras en esta categoría.'} />
+      ) : (
+        <ul className="space-y-2">
+          {filtered.map(entry => (
+            <li
+              key={entry.id}
+              className={`rounded-xl border p-3 transition-colors ${
+                entry.mastered
+                  ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10'
+                  : 'border-gray-200 dark:border-gray-700'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm font-semibold ${entry.mastered ? 'text-green-700 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
+                    {entry.mastered && <span className="mr-1">✓</span>}
+                    {entry.word}
+                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">{entry.definition}</p>
+                  {entry.context_sentence && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 italic">"{entry.context_sentence}"</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleDelete(entry.id)}
+                  disabled={deletingId === entry.id}
+                  className="flex-shrink-0 p-1 text-gray-300 hover:text-red-400 dark:hover:text-red-400 transition-colors disabled:opacity-50"
+                  aria-label="Eliminar"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
             </li>
           ))}
         </ul>
