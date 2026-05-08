@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthGuard from '../components/AuthGuard'
+import ErrorBoundary from '../components/ErrorBoundary'
 import LoginPage from '../features/auth/LoginPage'
 import SignUpPage from '../features/auth/SignUpPage'
 import ForgotPasswordPage from '../features/auth/ForgotPasswordPage'
@@ -53,76 +54,92 @@ function RootRoute() {
 export default function AppRouter() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/login" element={<ErrorBoundary section="Login"><LoginPage /></ErrorBoundary>} />
+      <Route path="/signup" element={<ErrorBoundary section="Registro"><SignUpPage /></ErrorBoundary>} />
+      <Route path="/forgot-password" element={<ErrorBoundary section="Recuperar contraseña"><ForgotPasswordPage /></ErrorBoundary>} />
+      <Route path="/reset-password" element={<ErrorBoundary section="Resetear contraseña"><ResetPasswordPage /></ErrorBoundary>} />
 
       {/* Root: landing page for guests, role redirect for authenticated users */}
-      <Route path="/" element={<RootRoute />} />
+      <Route path="/" element={<ErrorBoundary section="Inicio"><RootRoute /></ErrorBoundary>} />
 
       <Route
         path="/teacher"
         element={
-          <AuthGuard allowedRole="teacher">
-            <TeacherDashboard />
-          </AuthGuard>
+          <ErrorBoundary section="Dashboard del docente">
+            <AuthGuard allowedRole="teacher">
+              <TeacherDashboard />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/student"
         element={
-          <AuthGuard allowedRole="student">
-            <StudentDashboard />
-          </AuthGuard>
+          <ErrorBoundary section="Portal del estudiante">
+            <AuthGuard allowedRole="student">
+              <StudentDashboard />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/student/vault"
         element={
-          <AuthGuard allowedRole="student">
-            <StudentVault />
-          </AuthGuard>
+          <ErrorBoundary section="Mi Vault">
+            <AuthGuard allowedRole="student">
+              <StudentVault />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/student/topic/:topicId"
         element={
-          <AuthGuard allowedRole="student">
-            <TopicReader />
-          </AuthGuard>
+          <ErrorBoundary section="Lector de tema">
+            <AuthGuard allowedRole="student">
+              <TopicReader />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/teacher/classes"
         element={
-          <AuthGuard allowedRole="teacher">
-            <ClassesPage />
-          </AuthGuard>
+          <ErrorBoundary section="Clases">
+            <AuthGuard allowedRole="teacher">
+              <ClassesPage />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/teacher/resources"
         element={
-          <AuthGuard allowedRole="teacher">
-            <ResourcesPage />
-          </AuthGuard>
+          <ErrorBoundary section="Recursos">
+            <AuthGuard allowedRole="teacher">
+              <ResourcesPage />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/teacher/messages"
         element={
-          <AuthGuard allowedRole="teacher">
-            <MessagesPage />
-          </AuthGuard>
+          <ErrorBoundary section="Mensajes">
+            <AuthGuard allowedRole="teacher">
+              <MessagesPage />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
       <Route
         path="/admin"
         element={
-          <AuthGuard allowedRole="admin">
-            <AdminDashboard />
-          </AuthGuard>
+          <ErrorBoundary section="Panel de administración">
+            <AuthGuard allowedRole="admin">
+              <AdminDashboard />
+            </AuthGuard>
+          </ErrorBoundary>
         }
       />
 

@@ -33,8 +33,8 @@ export default function MessagesPage() {
   return (
     <AppLayout title="Mensajes">
       <div className="flex h-[calc(100vh-64px)]">
-        {/* Sidebar: conversation list */}
-        <div className="w-80 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 flex flex-col bg-white dark:bg-gray-900">
+        {/* Conversation list — hidden on mobile when a chat is open */}
+        <div className={`${active ? 'hidden md:flex' : 'flex'} w-full md:w-80 md:flex-shrink-0 border-r border-gray-200 dark:border-gray-800 flex-col bg-white dark:bg-gray-900`}>
           <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-800">
             <h2 className="font-heading font-semibold text-gray-900 dark:text-white">Mensajes</h2>
           </div>
@@ -87,14 +87,28 @@ export default function MessagesPage() {
           </div>
         </div>
 
-        {/* Chat area */}
-        <div className="flex-1 flex flex-col">
+        {/* Chat area — full screen on mobile when a conversation is selected */}
+        <div className={`${active ? 'flex' : 'hidden md:flex'} flex-1 flex-col`}>
           {active ? (
-            <ChatWindow
-              partnerId={active.partnerId}
-              partnerName={active.partnerName}
-              partnerAvatar={active.partnerAvatar}
-            />
+            <>
+              {/* Back button — mobile only */}
+              <div className="md:hidden px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                <button
+                  onClick={() => setActiveId(null)}
+                  className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Volver
+                </button>
+              </div>
+              <ChatWindow
+                partnerId={active.partnerId}
+                partnerName={active.partnerName}
+                partnerAvatar={active.partnerAvatar}
+              />
+            </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
               <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-4xl mb-4">💬</div>

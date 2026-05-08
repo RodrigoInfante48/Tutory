@@ -1,41 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { useUnreadCount } from '../hooks/useMessages'
-import { useAuth } from '../features/auth/AuthContext'
-
-interface NavItem {
-  label: string
-  href: string
-  emoji: string
-  badge?: number
-}
-
-function useNavItems(): NavItem[] {
-  const { appUser } = useAuth()
-  const unreadCount = useUnreadCount()
-
-  if (appUser?.role === 'admin') {
-    return [
-      { label: 'Panel Admin', href: '/admin', emoji: '🛠️' },
-    ]
-  }
-
-  if (appUser?.role === 'student') {
-    return [
-      { label: 'Mi portal', href: '/student', emoji: '🏠' },
-      { label: 'Mi Vault', href: '/student/vault', emoji: '🗄️' },
-    ]
-  }
-
-  return [
-    { label: 'Dashboard', href: '/teacher', emoji: '🏠' },
-    { label: 'Clases', href: '/teacher/classes', emoji: '📅' },
-    { label: 'Tareas', href: '/teacher/tasks', emoji: '📝' },
-    { label: 'Quizzes', href: '/teacher/quizzes', emoji: '🧠' },
-    { label: 'Recursos', href: '/teacher/resources', emoji: '📚' },
-    { label: 'Mensajes', href: '/teacher/messages', emoji: '💬', badge: unreadCount },
-  ]
-}
+import { useNavItems } from '../hooks/useNavItems'
 
 export default function Sidebar() {
   const location = useLocation()
