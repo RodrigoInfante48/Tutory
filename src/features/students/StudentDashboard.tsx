@@ -1,4 +1,9 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import {
+  RadarChart, PolarGrid, PolarAngleAxis, Radar,
+  ResponsiveContainer,
+} from 'recharts'
 import AppLayout from '../../app/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
@@ -9,6 +14,8 @@ import { useStudentQuiz } from '../../hooks/useStudentQuiz'
 import QuizPlayer from '../quizzes/QuizPlayer'
 import QuizHistory from '../quizzes/QuizHistory'
 import { useStudentGlossary, toggleMastered } from '../../hooks/useStudentGlossary'
+import { useStudentCoins } from '../../hooks/useStudentCoins'
+import { useSkillScores, SKILLS } from '../../hooks/useSkillScores'
 
 function useStudentPlanId(userId: string | undefined) {
   const [planId, setPlanId] = useState<string | null>(null)
@@ -437,6 +444,162 @@ function GlosarioSection({ studentId }: { studentId: string }) {
   )
 }
 
+// Coins needed to fill each level of the battery
+const BATTERY_MAX = 500
+
+function FluidityBattery({ studentId }: { studentId: string }) {
+  const { total, loading } = useStudentCoins(studentId)
+  const pct = Math.min(100, (total / BATTERY_MAX) * 100)
+
+  return (
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 space-y-3">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">⚡</span>
+          <h2 className="text-sm font-heading font-bold text-gray-900 dark:text-white tracking-wide uppercase">
+            Batería de Fluidez
+          </h2>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-base">🪙</span>
+          {loading ? (
+            <span className="text-lg font-bold text-gray-300 dark:text-gray-600">—</span>
+          ) : (
+            <motion.span
+              key={total}
+              initial={{ scale: 1.4, color: '#86ef86' }}
+              animate={{ scale: 1, color: '#166534' }}
+              transition={{ duration: 0.4 }}
+              className="text-lg font-bold dark:!text-[#86ef86]"
+              style={{ color: '#166534' }}
+            >
+              {total}
+            </motion.span>
+          )}
+          <span className="text-xs text-gray-400 font-medium">coins</span>
+        </div>
+      </div>
+
+      {/* Battery bar */}
+      <div className="relative h-5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700">
+        {/* Tick marks */}
+        {[25, 50, 75].map(tick => (
+          <div
+            key={tick}
+            className="absolute top-0 bottom-0 w-px bg-white/60 dark:bg-gray-700/80 z-10"
+            style={{ left: `${tick}%` }}
+          />
+        ))}
+        <motion.div
+          className="absolute left-0 top-0 bottom-0 rounded-full"
+          style={{ background: 'linear-gradient(90deg, #4ade80, #86ef86)' }}
+          initial={{ width: 0 }}
+          animate={{ width: `${pct}%` }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
+        >
+          {/* Shine */}
+          <div className="absolute inset-0 rounded-full opacity-40"
+            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 60%)' }}
+          />
+        </motion.div>
+      </div>
+
+      {/* Labels */}
+      <div className="flex items-center justify-between text-xs text-gray-400">
+        <span>0</span>
+        <span className="font-medium text-gray-500 dark:text-gray-400">
+          {loading ? '…' : `${Math.round(pct)}%`} llena
+        </span>
+        <span>{BATTERY_MAX} 🏆</span>
+      </div>
+
+      {/* Reward legend */}
+      <div className="grid grid-cols-2 gap-1.5 pt-1">
+        {[
+          { icon: '🏫', label: 'Clase tomada', pts: '+10' },
+          { icon: '📝', label: 'Tarea entregada', pts: '+5' },
+          { icon: '🎯', label: 'Quiz ≥ 80%', pts: '+15' },
+          { icon: '📖', label: '10+ palabras dom.', pts: '+20' },
+        ].map(item => (
+          <div key={item.label} className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
+            <span>{item.icon}</span>
+            <span className="truncate">{item.label}</span>
+            <span className="ml-auto font-semibold text-[#166534] dark:text-[#86ef86]">{item.pts}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SkillsRadar({ studentId }: { studentId: string }) {
+  const { scores, loading } = useSkillScores(studentId)
+
+  const data = SKILLS.map(skill => ({
+    skill,
+    score: scores[skill],
+    fullMark: 100,
+  }))
+
+  return (
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 space-y-3">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🎮</span>
+        <h2 className="text-sm font-heading font-bold text-gray-900 dark:text-white tracking-wide uppercase">
+          Skills Radar
+        </h2>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-8">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={260}>
+          <RadarChart data={data} margin={{ top: 8, right: 24, bottom: 8, left: 24 }}>
+            <PolarGrid
+              stroke="#374151"
+              strokeOpacity={0.6}
+            />
+            <PolarAngleAxis
+              dataKey="skill"
+              tick={{ fill: '#9ca3af', fontSize: 11, fontFamily: 'DM Sans, sans-serif' }}
+            />
+            <Radar
+              name="Skills"
+              dataKey="score"
+              stroke="#86ef86"
+              fill="#86ef86"
+              fillOpacity={0.18}
+              strokeWidth={2}
+              dot={{ fill: '#86ef86', r: 3 }}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      )}
+
+      {/* Score pills */}
+      <div className="grid grid-cols-3 gap-1.5">
+        {SKILLS.map(skill => (
+          <div
+            key={skill}
+            className="rounded-lg bg-gray-50 dark:bg-gray-800 px-2 py-1.5 text-center"
+          >
+            <p className="text-[10px] text-gray-400 leading-tight">{skill}</p>
+            <p
+              className="text-sm font-bold mt-0.5"
+              style={{ color: scores[skill] >= 70 ? '#86ef86' : scores[skill] >= 40 ? '#fbbf24' : '#f87171' }}
+            >
+              {scores[skill]}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function StudentDashboard() {
   const { appUser } = useAuth()
   const { planId, loaded } = useStudentPlanId(appUser?.id)
@@ -454,6 +617,14 @@ export default function StudentDashboard() {
             Aquí está tu portal de aprendizaje.
           </p>
         </div>
+
+        {/* Gamification: Fluidity Battery + Skills Radar */}
+        {appUser?.id && (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <FluidityBattery studentId={appUser.id} />
+            <SkillsRadar studentId={appUser.id} />
+          </div>
+        )}
 
         {/* Quiz del día */}
         {appUser?.id && (
