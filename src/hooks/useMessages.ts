@@ -7,6 +7,7 @@ export interface Message {
   sender_id: string
   receiver_id: string
   body: string
+  voice_url: string | null
   sent_at: string
   read_at: string | null
 }
@@ -36,7 +37,7 @@ export function useConversations() {
       const { data, error: err } = await supabase
         .from('messages')
         .select(`
-          id, sender_id, receiver_id, body, sent_at, read_at,
+          id, sender_id, receiver_id, body, voice_url, sent_at, read_at,
           sender:users!messages_sender_id_fkey(id, name, avatar_url),
           receiver:users!messages_receiver_id_fkey(id, name, avatar_url)
         `)
@@ -54,11 +55,14 @@ export function useConversations() {
           : (msg.sender as unknown as { id: string; name: string; avatar_url: string | null })
 
         if (!convMap.has(partner.id)) {
+          const msgBody = (msg as unknown as { voice_url?: string }).voice_url && !msg.body
+            ? '🎤 Nota de voz'
+            : msg.body
           convMap.set(partner.id, {
             partnerId: partner.id,
             partnerName: partner.name,
             partnerAvatar: partner.avatar_url,
-            lastMessage: msg.body,
+            lastMessage: msgBody,
             lastMessageAt: msg.sent_at,
             unreadCount: !isSender && !msg.read_at ? 1 : 0,
           })
@@ -95,7 +99,7 @@ export function useChat(partnerId: string) {
       setLoading(true)
       const { data, error: err } = await supabase
         .from('messages')
-        .select('id, sender_id, receiver_id, body, sent_at, read_at')
+        .select('id, sender_id, receiver_id, body, voice_url, sent_at, read_at')
         .or(
           `and(sender_id.eq.${appUser.id},receiver_id.eq.${partnerId}),and(sender_id.eq.${partnerId},receiver_id.eq.${appUser.id})`
         )
@@ -154,13 +158,15 @@ export function useChat(partnerId: string) {
   }, [appUser, partnerId, load])
 
   const sendMessage = useCallback(
-    async (body: string) => {
-      if (!appUser || !partnerId || !body.trim()) return
+    async (body: string, voiceUrl?: string) => {
+      if (!appUser || !partnerId) return
+      if (!voiceUrl && !body.trim()) return
       const optimistic: Message = {
         id: crypto.randomUUID(),
         sender_id: appUser.id,
         receiver_id: partnerId,
         body: body.trim(),
+        voice_url: voiceUrl ?? null,
         sent_at: new Date().toISOString(),
         read_at: null,
       }
@@ -170,9 +176,9 @@ export function useChat(partnerId: string) {
         sender_id: appUser.id,
         receiver_id: partnerId,
         body: body.trim(),
+        ...(voiceUrl ? { voice_url: voiceUrl } : {}),
       })
       if (err) {
-        // Rollback optimistic update
         setMessages((prev) => prev.filter((m) => m.id !== optimistic.id))
         throw err
       }
