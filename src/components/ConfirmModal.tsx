@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface ConfirmModalProps {
@@ -17,6 +18,14 @@ export default function ConfirmModal({
   onCancel,
   danger = false,
 }: ConfirmModalProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onCancel])
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
