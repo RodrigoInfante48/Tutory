@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AppLayout from '../../app/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import { useTeacherStudents, type StudentSummary } from '../../hooks/useTeacherStudents'
@@ -14,9 +14,11 @@ type Tab = 'students' | 'quizzes'
 export default function TeacherDashboard() {
   const { appUser } = useAuth()
   const { students, loading, error } = useTeacherStudents()
-  const { atRiskCount } = useTeacherCycleAlerts(appUser?.id ?? null)
+  const navigate = useNavigate()
+  const { atRiskCount, alerts } = useTeacherCycleAlerts(appUser?.id ?? null)
   const [selectedStudent, setSelectedStudent] = useState<StudentSummary | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>('students')
+  const [alertsOpen, setAlertsOpen] = useState(false)
 
   const firstName = appUser?.name?.split(' ')[0] ?? 'Docente'
 
@@ -36,7 +38,34 @@ export default function TeacherDashboard() {
         </div>
 
         {/* Quick actions */}
-        <div className="flex flex-wrap gap-3 mb-6">
+        <div className="flex flex-wrap gap-3 mb-4">
+          <button
+            onClick={() => navigate('/teacher/classes', { state: { openTaskModal: true } })}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#86ef86] hover:bg-[#6ee06e] text-gray-900 text-sm font-medium transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            Nueva tarea
+          </button>
+          <button
+            onClick={() => navigate('/teacher/classes', { state: { openQuizModal: true } })}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#86ef86] hover:bg-[#6ee06e] text-gray-900 text-sm font-medium transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Nuevo quiz
+          </button>
+          <Link
+            to="/teacher/resources"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#86ef86] hover:bg-[#6ee06e] text-gray-900 text-sm font-medium transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            Subir recurso
+          </Link>
           <Link
             to="/teacher/classes"
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary/40 transition-colors shadow-sm"
@@ -45,13 +74,63 @@ export default function TeacherDashboard() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Calendario de clases</span>
-            {atRiskCount > 0 && (
-              <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-red-500 text-white">
-                {atRiskCount}
-              </span>
-            )}
           </Link>
         </div>
+
+        {/* Cycle alerts */}
+        {atRiskCount > 0 && (
+          <div className="mb-6">
+            <button
+              onClick={() => setAlertsOpen(o => !o)}
+              className="flex items-center gap-2 w-full px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-left"
+            >
+              <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-red-500 text-white shrink-0">
+                {atRiskCount}
+              </span>
+              <span className="text-sm font-medium">
+                {atRiskCount === 1 ? '1 estudiante en riesgo de ciclo' : `${atRiskCount} estudiantes en riesgo de ciclo`}
+              </span>
+              <svg
+                className={`ml-auto w-4 h-4 transition-transform ${alertsOpen ? 'rotate-180' : ''}`}
+                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {alertsOpen && (
+              <div className="mt-1 rounded-xl border border-red-200 dark:border-red-700 overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-xs uppercase tracking-wide">
+                      <th className="px-4 py-2 text-left font-semibold">Estudiante</th>
+                      <th className="px-4 py-2 text-center font-semibold">Tomadas</th>
+                      <th className="px-4 py-2 text-center font-semibold">Mínimo</th>
+                      <th className="px-4 py-2 text-center font-semibold">Fin de ciclo</th>
+                      <th className="px-4 py-2 text-center font-semibold">Déficit</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-red-100 dark:divide-red-800">
+                    {alerts.map(alert => (
+                      <tr
+                        key={alert.studentId}
+                        className={alert.isImpossible
+                          ? 'bg-red-100 dark:bg-red-900/40'
+                          : 'bg-white dark:bg-gray-900'}
+                      >
+                        <td className="px-4 py-2.5 font-medium text-gray-900 dark:text-white">{alert.studentName}</td>
+                        <td className="px-4 py-2.5 text-center text-gray-700 dark:text-gray-300">{alert.takenCount}</td>
+                        <td className="px-4 py-2.5 text-center text-gray-700 dark:text-gray-300">{alert.minClasses}</td>
+                        <td className="px-4 py-2.5 text-center text-gray-500 dark:text-gray-400">{alert.endDate}</td>
+                        <td className="px-4 py-2.5 text-center font-bold text-red-600 dark:text-red-400">-{alert.deficit}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 border-b border-gray-200 dark:border-gray-700">
