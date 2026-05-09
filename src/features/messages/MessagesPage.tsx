@@ -41,8 +41,16 @@ export default function MessagesPage() {
 
           <div className="flex-1 overflow-y-auto">
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-3 px-4 py-3.5 animate-pulse">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-full w-2/3" />
+                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full w-1/2" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : error ? (
               <p className="text-sm text-red-500 text-center py-8 px-4">{error}</p>
