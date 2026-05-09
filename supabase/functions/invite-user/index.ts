@@ -66,6 +66,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: insertError.message }, { status: 500, headers: corsHeaders })
     }
 
+    // Record audit event (best-effort — don't fail the invite if this errors)
+    await adminClient.from('audit_logs').insert({
+      actor_id: caller.id,
+      action: 'invite_user',
+      target_type: 'user',
+      target_id: inviteData.user.id,
+      metadata: { email, role },
+    })
+
     return Response.json({ success: true, userId: inviteData.user.id }, { headers: corsHeaders })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error'
