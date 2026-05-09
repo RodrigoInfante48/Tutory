@@ -2,6 +2,26 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { type StudyPlan, type Unit, type Topic } from '../../hooks/useStudyPlan'
 
+export function StudyPlanSkeleton() {
+  return (
+    <div className="space-y-5 animate-pulse">
+      <div className="rounded-xl bg-gray-100 dark:bg-gray-800 p-4 space-y-3">
+        <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-1/2" />
+        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full w-3/4" />
+        <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full w-full mt-3" />
+      </div>
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full w-1/3" />
+            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full w-8" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 interface StudyPlanViewProps {
   plan: StudyPlan
 }

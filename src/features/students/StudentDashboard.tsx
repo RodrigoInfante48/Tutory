@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import SkeletonCard from '../../components/SkeletonCard'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   ResponsiveContainer,
@@ -7,7 +8,7 @@ import {
 import AppLayout from '../../app/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
-import StudyPlanView from '../study-plans/StudyPlanView'
+import StudyPlanView, { StudyPlanSkeleton } from '../study-plans/StudyPlanView'
 import { supabase } from '../../lib/supabase'
 import { useStudentTasks, submitTask, markFeedbackRead, type StudentTask } from '../../hooks/useStudentTasks'
 import { useStudentQuiz } from '../../hooks/useStudentQuiz'
@@ -181,8 +182,11 @@ function TasksSection({ studentId }: { studentId: string }) {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-8">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="space-y-3">
+        <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-24 animate-pulse" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <SkeletonCard key={i} lines={2} />
+        ))}
       </div>
     )
   }
@@ -251,8 +255,9 @@ function QuizSection({ studentId }: { studentId: string }) {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-6">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="space-y-3 animate-pulse">
+        <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-28" />
+        <SkeletonCard lines={3} />
       </div>
     )
   }
@@ -752,9 +757,7 @@ export default function StudentDashboard() {
 
         {/* Plan */}
         {!loaded || loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          </div>
+          <StudyPlanSkeleton />
         ) : plan ? (
           <div className="space-y-3">
             <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">

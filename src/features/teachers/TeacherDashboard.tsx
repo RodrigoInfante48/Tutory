@@ -7,6 +7,7 @@ import StudentCard from '../students/StudentCard'
 import StudentProfile from '../students/StudentProfile'
 import QuizList from '../quizzes/QuizList'
 import { useTeacherCycleAlerts } from '../../hooks/useCycles'
+import SkeletonCard from '../../components/SkeletonCard'
 
 type Tab = 'students' | 'quizzes'
 
@@ -83,11 +84,8 @@ export default function TeacherDashboard() {
 
             {loading && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-28 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse"
-                  />
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <SkeletonCard key={i} avatar lines={3} />
                 ))}
               </div>
             )}

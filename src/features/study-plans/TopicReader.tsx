@@ -17,8 +17,29 @@ export default function TopicReader() {
   if (loading) {
     return (
       <AppLayout title="Cargando...">
-        <div className="flex items-center justify-center h-64">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="max-w-2xl mx-auto px-4 py-8 space-y-8 animate-pulse">
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full w-24" />
+          <div className="space-y-3">
+            <div className="h-7 bg-gray-200 dark:bg-gray-700 rounded-full w-2/3" />
+          </div>
+          <div className="space-y-3">
+            {[1, 0.9, 1, 0.75, 0.95, 0.6].map((w, i) => (
+              <div
+                key={i}
+                className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-full"
+                style={{ width: `${w * 100}%` }}
+              />
+            ))}
+          </div>
+          <div className="space-y-3 pt-4">
+            {[0.8, 1, 0.7].map((w, i) => (
+              <div
+                key={i}
+                className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-full"
+                style={{ width: `${w * 100}%` }}
+              />
+            ))}
+          </div>
         </div>
       </AppLayout>
     )
