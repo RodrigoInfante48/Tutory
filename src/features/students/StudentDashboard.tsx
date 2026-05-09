@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import ConfirmModal from '../../components/ConfirmModal'
 import SkeletonCard from '../../components/SkeletonCard'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
@@ -181,11 +182,11 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
   const [body, setBody] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const hasNewFeedback = task.submission?.feedback && !task.submission.feedback_read_at
 
-  async function handleSubmit() {
-    if (!body.trim()) return
+  async function doSubmit() {
     setSubmitting(true)
     setSubmitError(null)
     try {
@@ -198,6 +199,11 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
     } finally {
       setSubmitting(false)
     }
+  }
+
+  function handleSubmit() {
+    if (!body.trim()) return
+    setShowConfirm(true)
   }
 
   async function handleReadFeedback() {
@@ -273,6 +279,15 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
                 {submitting ? 'Entregando…' : 'Entregar tarea'}
               </button>
               {submitError && <p className="text-xs text-red-500">{submitError}</p>}
+              {showConfirm && (
+                <ConfirmModal
+                  title="¿Entregar tarea?"
+                  description="No podrás editarla después."
+                  confirmLabel="Entregar"
+                  onConfirm={() => { setShowConfirm(false); doSubmit() }}
+                  onCancel={() => setShowConfirm(false)}
+                />
+              )}
             </div>
           )}
         </div>
