@@ -147,13 +147,23 @@ export default function TopicReader() {
                 {saving ? 'Guardando...' : 'Enviar respuestas'}
               </button>
             ) : (
-              <button
-                onClick={() => navigate('/student')}
-                className="w-full py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300
-                  font-semibold text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              >
-                Volver al plan
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => { setSelected({}); setSubmitted(false) }}
+                  className="w-full py-3 rounded-xl border border-gray-200 dark:border-gray-700
+                    text-gray-600 dark:text-gray-400 font-semibold text-sm
+                    hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                >
+                  Reintentar
+                </button>
+                <button
+                  onClick={() => navigate('/student')}
+                  className="w-full py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300
+                    font-semibold text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Volver al plan
+                </button>
+              </div>
             )}
           </div>
         )}
