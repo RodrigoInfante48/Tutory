@@ -95,7 +95,11 @@ export function useStudentQuiz(studentId: string | undefined) {
 
   useEffect(() => { load() }, [load])
 
-  return { todayQuiz, alreadyTaken, myScore, history, loading, error, reload: load }
+  const avgScore = history.length > 0
+    ? Math.round(history.reduce((sum, h) => sum + h.score, 0) / history.length)
+    : null
+
+  return { todayQuiz, alreadyTaken, myScore, avgScore, history, loading, error, reload: load }
 }
 
 export async function submitQuizResult(
