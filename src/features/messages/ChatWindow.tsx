@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useChat } from '../../hooks/useMessages'
+import { useChat, useTypingIndicator } from '../../hooks/useMessages'
 import { useAuth } from '../auth/AuthContext'
 import { useVoiceRecording, formatVoiceDuration } from '../../hooks/useVoiceRecording'
 
@@ -50,6 +50,7 @@ function AudioPlayer({ url }: { url: string }) {
 export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: ChatWindowProps) {
   const { appUser } = useAuth()
   const { messages, loading, sendMessage } = useChat(partnerId)
+  const { partnerIsTyping, handleTyping } = useTypingIndicator(partnerId)
   const [draft, setDraft] = useState('')
   const [sending, setSending] = useState(false)
   const [sendError, setSendError] = useState<string | null>(null)
@@ -183,6 +184,16 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
             </div>
           ))
         )}
+        {partnerIsTyping && (
+          <div className="flex items-end gap-2">
+            <Avatar name={partnerName} url={partnerAvatar} />
+            <div className="px-3.5 py-2.5 rounded-2xl rounded-bl-sm bg-gray-100 dark:bg-gray-800 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce [animation-delay:0ms]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce [animation-delay:150ms]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce [animation-delay:300ms]" />
+            </div>
+          </div>
+        )}
         <div ref={bottomRef} />
       </div>
 
@@ -216,7 +227,7 @@ export default function ChatWindow({ partnerId, partnerName, partnerAvatar }: Ch
             <textarea
               ref={inputRef}
               value={draft}
-              onChange={(e) => setDraft(e.target.value)}
+              onChange={(e) => { setDraft(e.target.value); handleTyping() }}
               onKeyDown={handleKeyDown}
               placeholder="Escribe un mensaje… (Enter para enviar)"
               rows={1}

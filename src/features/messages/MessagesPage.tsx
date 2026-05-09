@@ -71,9 +71,7 @@ export default function MessagesPage() {
                   <div className="relative">
                     <Avatar name={conv.partnerName} url={conv.partnerAvatar} />
                     {conv.unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
-                        {conv.unreadCount > 9 ? '9+' : conv.unreadCount}
-                      </span>
+                      <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white dark:border-gray-900" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
