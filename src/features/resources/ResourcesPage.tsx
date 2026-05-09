@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AppLayout from '../../app/AppLayout'
+import ConfirmModal from '../../components/ConfirmModal'
 import {
   useTeacherResources,
   createResource,
@@ -47,6 +48,7 @@ export default function ResourcesPage() {
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
   const filtered = resources.filter((r) => {
     if (filterType !== 'all' && r.type !== filterType) return false
@@ -94,8 +96,7 @@ export default function ResourcesPage() {
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm('¿Eliminar este recurso?')) return
+  async function confirmDelete(id: string) {
     setDeletingId(id)
     try {
       await deleteResource(id)
@@ -105,7 +106,12 @@ export default function ResourcesPage() {
     }
   }
 
+  function handleDelete(id: string) {
+    setPendingDeleteId(id)
+  }
+
   return (
+    <>
     <AppLayout title="Recursos">
       <div className="p-6 max-w-4xl mx-auto space-y-6">
         {/* Header */}
@@ -333,5 +339,17 @@ export default function ResourcesPage() {
         )}
       </div>
     </AppLayout>
+
+    {pendingDeleteId && (
+      <ConfirmModal
+        title="¿Eliminar recurso?"
+        description="Esta acción no se puede deshacer."
+        confirmLabel="Eliminar"
+        danger
+        onConfirm={() => { const id = pendingDeleteId; setPendingDeleteId(null); confirmDelete(id) }}
+        onCancel={() => setPendingDeleteId(null)}
+      />
+    )}
+    </>
   )
 }

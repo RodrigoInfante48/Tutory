@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import type { ClassSession, SessionStatus, SessionType } from '../../hooks/useClassSessions'
 import { updateSessionStatus, createSession } from '../../hooks/useClassSessions'
 import { isColombianHoliday, getHolidayName } from '../../lib/colombianHolidays'
+import ConfirmModal from '../../components/ConfirmModal'
 
 const STATUS_COLORS: Record<SessionStatus, string> = {
   scheduled:   'bg-blue-500',
@@ -90,6 +91,7 @@ function SessionModal({ session, teacherId, onClose, onUpdated }: SessionModalPr
   const [notes, setNotes] = useState(session.notes ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
 
   // Reschedule form
   const [showReschedule, setShowReschedule] = useState(false)
@@ -293,7 +295,7 @@ function SessionModal({ session, teacherId, onClose, onUpdated }: SessionModalPr
             Cancelar
           </button>
           <button
-            onClick={handleSave}
+            onClick={() => status === 'cancelled' ? setShowCancelConfirm(true) : handleSave()}
             disabled={saving}
             className="flex-1 text-sm font-semibold bg-primary text-gray-900 rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -301,6 +303,17 @@ function SessionModal({ session, teacherId, onClose, onUpdated }: SessionModalPr
           </button>
         </div>
       </div>
+
+      {showCancelConfirm && (
+        <ConfirmModal
+          title="¿Marcar clase como cancelada?"
+          description="Esta acción quedará registrada y no se puede deshacer fácilmente."
+          confirmLabel="Cancelar clase"
+          danger
+          onConfirm={() => { setShowCancelConfirm(false); handleSave() }}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
     </div>
   )
 }
