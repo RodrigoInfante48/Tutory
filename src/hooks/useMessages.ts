@@ -189,6 +189,70 @@ export function useChat(partnerId: string) {
   return { messages, loading, error, sendMessage }
 }
 
+export function useTypingIndicator(partnerId: string) {
+  const { appUser } = useAuth()
+  const [partnerIsTyping, setPartnerIsTyping] = useState(false)
+  const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const stopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (!appUser || !partnerId) return
+    const channel = supabase
+      .channel(`typing-${appUser.id}-${partnerId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'typing_indicators',
+          filter: `conversation_with=eq.${appUser.id}`,
+        },
+        (payload) => {
+          const row = payload.new as { user_id: string; updated_at: string } | undefined
+          if (!row || row.user_id !== partnerId) return
+          const age = Date.now() - new Date(row.updated_at).getTime()
+          if (age < 3000) {
+            setPartnerIsTyping(true)
+            if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
+            clearTimerRef.current = setTimeout(() => setPartnerIsTyping(false), 3000)
+          } else {
+            setPartnerIsTyping(false)
+          }
+        }
+      )
+      .subscribe()
+    return () => {
+      supabase.removeChannel(channel)
+      if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
+    }
+  }, [appUser, partnerId])
+
+  const notifyTyping = useCallback(async () => {
+    if (!appUser || !partnerId) return
+    await supabase.from('typing_indicators').upsert(
+      { user_id: appUser.id, conversation_with: partnerId, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,conversation_with' }
+    )
+  }, [appUser, partnerId])
+
+  const clearTyping = useCallback(async () => {
+    if (!appUser || !partnerId) return
+    await supabase
+      .from('typing_indicators')
+      .update({ updated_at: new Date(0).toISOString() })
+      .eq('user_id', appUser.id)
+      .eq('conversation_with', partnerId)
+  }, [appUser, partnerId])
+
+  const handleTyping = useCallback(() => {
+    notifyTyping()
+    if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
+    stopTimerRef.current = setTimeout(() => clearTyping(), 3000)
+  }, [notifyTyping, clearTyping])
+
+  return { partnerIsTyping, handleTyping }
+}
+
 export function useUnreadCount() {
   const { appUser } = useAuth()
   const [count, setCount] = useState(0)
