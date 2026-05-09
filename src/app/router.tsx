@@ -14,6 +14,7 @@ import AdminDashboard from '../features/admin/AdminDashboard'
 import ClassesPage from '../features/classes/ClassesPage'
 import ResourcesPage from '../features/resources/ResourcesPage'
 import MessagesPage from '../features/messages/MessagesPage'
+import GroupsPage from '../features/groups/GroupsPage'
 import RoleRedirect from './RoleRedirect'
 import { useAuth } from '../features/auth/AuthContext'
 
@@ -128,6 +129,16 @@ export default function AppRouter() {
           <ErrorBoundary section="Mensajes">
             <AuthGuard allowedRole="teacher">
               <MessagesPage />
+            </AuthGuard>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path="/teacher/groups"
+        element={
+          <ErrorBoundary section="Grupos">
+            <AuthGuard allowedRole="teacher">
+              <GroupsPage />
             </AuthGuard>
           </ErrorBoundary>
         }

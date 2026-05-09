@@ -42,13 +42,14 @@ export async function createQuiz(quiz: {
   title: string
   date: string
   questions: Question[]
+  group_id?: string | null
 }) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('No autenticado')
 
   const { error } = await supabase
     .from('quizzes')
-    .insert({ teacher_id: user.id, ...quiz })
+    .insert({ teacher_id: user.id, ...quiz, group_id: quiz.group_id ?? null })
 
   if (error) throw new Error(error.message)
 }

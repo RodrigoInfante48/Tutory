@@ -9,6 +9,7 @@ import {
 } from '../../hooks/useResources'
 import { useAuth } from '../auth/AuthContext'
 import { useTeacherStudents } from '../../hooks/useTeacherStudents'
+import { useTeacherGroupsSimple, getGroupMemberIds } from '../../hooks/useGroups'
 
 const TYPE_OPTIONS: { value: ResourceType; label: string; emoji: string }[] = [
   { value: 'link', label: 'Enlace', emoji: '🔗' },
@@ -26,10 +27,13 @@ function formatDate(iso: string) {
   return new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(iso))
 }
 
+type AssignMode = 'global' | 'student' | 'group'
+
 export default function ResourcesPage() {
   const { appUser } = useAuth()
   const { resources, loading, error, reload } = useTeacherResources()
   const { students } = useTeacherStudents()
+  const groups = useTeacherGroupsSimple()
 
   const [showForm, setShowForm] = useState(false)
   const [filterType, setFilterType] = useState<ResourceType | 'all'>('all')
@@ -38,6 +42,8 @@ export default function ResourcesPage() {
   const [form, setForm] = useState<CreateResourceInput>({
     title: '', url: '', description: '', type: 'link', student_id: null,
   })
+  const [assignMode, setAssignMode] = useState<AssignMode>('global')
+  const [assignTarget, setAssignTarget] = useState<string>('')
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -59,9 +65,27 @@ export default function ResourcesPage() {
     try {
       setSaving(true)
       setFormError(null)
-      await createResource(appUser.id, form)
+
+      if (assignMode === 'group' && assignTarget) {
+        const memberIds = await getGroupMemberIds(assignTarget)
+        if (memberIds.length === 0) {
+          setFormError('El grupo no tiene miembros.')
+          return
+        }
+        await Promise.all(
+          memberIds.map(studentId =>
+            createResource(appUser.id, { ...form, student_id: studentId })
+          )
+        )
+      } else {
+        const studentId = assignMode === 'student' ? (assignTarget || null) : null
+        await createResource(appUser.id, { ...form, student_id: studentId })
+      }
+
       setShowForm(false)
       setForm({ title: '', url: '', description: '', type: 'link', student_id: null })
+      setAssignMode('global')
+      setAssignTarget('')
       reload()
     } catch (e) {
       setFormError(e instanceof Error ? e.message : 'Error al crear recurso')
@@ -93,7 +117,7 @@ export default function ResourcesPage() {
             </p>
           </div>
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() => { setShowForm(true); setAssignMode('global'); setAssignTarget('') }}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white font-medium text-sm hover:bg-primary-dark transition-colors"
           >
             <span className="text-base">+</span> Nuevo recurso
@@ -129,7 +153,7 @@ export default function ResourcesPage() {
             <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-xl">
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="font-heading font-semibold text-gray-900 dark:text-white">Nuevo recurso</h2>
-                <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">&times;</button>
+                <button onClick={() => { setShowForm(false); setAssignMode('global'); setAssignTarget('') }} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">&times;</button>
               </div>
               <form onSubmit={handleCreate} className="p-6 space-y-4">
                 {formError && (
@@ -181,21 +205,51 @@ export default function ResourcesPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Asignar a</label>
                     <select
-                      value={form.student_id ?? ''}
-                      onChange={(e) => setForm({ ...form, student_id: e.target.value || null })}
+                      value={assignMode}
+                      onChange={e => { setAssignMode(e.target.value as AssignMode); setAssignTarget('') }}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                     >
-                      <option value="">Todos (global)</option>
-                      {students.map((s) => (
+                      <option value="global">Todos (global)</option>
+                      <option value="student">Estudiante...</option>
+                      {groups.length > 0 && <option value="group">Grupo...</option>}
+                    </select>
+                  </div>
+                </div>
+                {assignMode === 'student' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Seleccionar estudiante</label>
+                    <select
+                      value={assignTarget}
+                      onChange={e => setAssignTarget(e.target.value)}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    >
+                      <option value="">— elige un estudiante —</option>
+                      {students.map(s => (
                         <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
                     </select>
                   </div>
-                </div>
+                )}
+                {assignMode === 'group' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Seleccionar grupo</label>
+                    <select
+                      value={assignTarget}
+                      onChange={e => setAssignTarget(e.target.value)}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    >
+                      <option value="">— elige un grupo —</option>
+                      {groups.map(g => (
+                        <option key={g.id} value={g.id}>{g.name}</option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-gray-400 mt-1">Se creará un recurso para cada miembro del grupo.</p>
+                  </div>
+                )}
                 <div className="flex gap-3 pt-2">
                   <button
                     type="button"
-                    onClick={() => setShowForm(false)}
+                    onClick={() => { setShowForm(false); setAssignMode('global'); setAssignTarget('') }}
                     className="flex-1 px-4 py-2 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
                     Cancelar

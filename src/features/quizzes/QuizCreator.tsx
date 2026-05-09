@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createQuiz, type Question } from '../../hooks/useTeacherQuizzes'
+import { useTeacherGroupsSimple } from '../../hooks/useGroups'
 
 interface Props {
   onCreated: () => void
@@ -13,9 +14,11 @@ function emptyQuestion(): Question {
 export default function QuizCreator({ onCreated, onCancel }: Props) {
   const [title, setTitle] = useState('')
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  const [groupId, setGroupId] = useState<string>('')
   const [questions, setQuestions] = useState<Question[]>([emptyQuestion()])
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const groups = useTeacherGroupsSimple()
 
   function updateQuestion(index: number, patch: Partial<Question>) {
     setQuestions(qs => qs.map((q, i) => i === index ? { ...q, ...patch } : q))
@@ -55,7 +58,7 @@ export default function QuizCreator({ onCreated, onCancel }: Props) {
 
     setSaving(true)
     try {
-      await createQuiz({ title: title.trim(), date, questions })
+      await createQuiz({ title: title.trim(), date, questions, group_id: groupId || null })
       onCreated()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al crear el quiz')
@@ -105,6 +108,25 @@ export default function QuizCreator({ onCreated, onCancel }: Props) {
           />
         </div>
       </div>
+
+      {/* Group assignment */}
+      {groups.length > 0 && (
+        <div>
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+            Asignar a grupo (opcional)
+          </label>
+          <select
+            value={groupId}
+            onChange={e => setGroupId(e.target.value)}
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            <option value="">Todos los estudiantes</option>
+            {groups.map(g => (
+              <option key={g.id} value={g.id}>{g.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Questions */}
       <div className="space-y-4">
