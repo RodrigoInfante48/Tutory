@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import AppLayout from '../../app/AppLayout'
 import { useAuth } from '../auth/AuthContext'
 import { useAdminMetrics } from '../../hooks/useAdminMetrics'
@@ -6,7 +6,109 @@ import { useAdminUsers, type AdminTeacher, type AdminStudent, type AdminAlert } 
 import MetricCard from '../../components/MetricCard'
 import { supabase } from '../../lib/supabase'
 
-type Tab = 'teachers' | 'students' | 'alerts' | 'invite'
+type Tab = 'teachers' | 'students' | 'alerts' | 'invite' | 'activity'
+
+interface AuditLog {
+  id: string
+  action: string
+  target_type: string | null
+  target_id: string | null
+  metadata: Record<string, unknown> | null
+  created_at: string
+  actor: { name: string; email: string } | null
+}
+
+const actionLabel: Record<string, string> = {
+  invite_user: 'Invitó usuario',
+}
+
+function ActivityPanel() {
+  const [logs, setLogs] = useState<AuditLog[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    supabase
+      .from('audit_logs')
+      .select('id, action, target_type, target_id, metadata, created_at, actor:actor_id(name, email)')
+      .order('created_at', { ascending: false })
+      .limit(50)
+      .then(({ data }) => {
+        setLogs((data as unknown as AuditLog[]) ?? [])
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="space-y-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-10 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
+        ))}
+      </div>
+    )
+  }
+
+  if (logs.length === 0) {
+    return (
+      <p className="text-center py-12 text-gray-400 dark:text-gray-600 text-sm">
+        Sin actividad registrada.
+      </p>
+    )
+  }
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-gray-200 dark:border-gray-800">
+            <th className="text-left pb-3 pr-4 font-medium text-gray-500 dark:text-gray-400">Fecha</th>
+            <th className="text-left pb-3 pr-4 font-medium text-gray-500 dark:text-gray-400">Actor</th>
+            <th className="text-left pb-3 pr-4 font-medium text-gray-500 dark:text-gray-400">Acción</th>
+            <th className="text-left pb-3 font-medium text-gray-500 dark:text-gray-400">Objetivo</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+          {logs.map(log => {
+            const targetLabel = log.target_type
+              ? `${log.target_type}${log.metadata?.email ? ` (${log.metadata.email})` : log.target_id ? ` · ${log.target_id}` : ''}`
+              : '—'
+            return (
+              <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <td className="py-3 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                  {new Date(log.created_at).toLocaleString('es-CO', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </td>
+                <td className="py-3 pr-4">
+                  {log.actor ? (
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">{log.actor.name}</p>
+                      <p className="text-xs text-gray-400">{log.actor.email}</p>
+                    </div>
+                  ) : (
+                    <span className="text-gray-300 dark:text-gray-600">—</span>
+                  )}
+                </td>
+                <td className="py-3 pr-4">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-primary/10 text-primary-dark dark:text-primary text-xs font-medium">
+                    {actionLabel[log.action] ?? log.action}
+                  </span>
+                </td>
+                <td className="py-3 text-gray-500 dark:text-gray-400 text-xs">
+                  {targetLabel}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 function Avatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
   if (avatarUrl) {
@@ -382,6 +484,7 @@ export default function AdminDashboard() {
     { key: 'students', label: 'Estudiantes', count: students.filter(s => s.active).length },
     { key: 'alerts', label: 'Alertas', count: alerts.filter(a => !a.resolved).length },
     { key: 'invite', label: 'Invitar usuario' },
+    { key: 'activity', label: 'Actividad reciente' },
   ]
 
   return (
@@ -496,6 +599,7 @@ export default function AdminDashboard() {
               <AlertsPanel alerts={alerts} loading={usersLoading} />
             )}
             {activeTab === 'invite' && <InvitePanel />}
+            {activeTab === 'activity' && <ActivityPanel />}
           </div>
         </div>
 
