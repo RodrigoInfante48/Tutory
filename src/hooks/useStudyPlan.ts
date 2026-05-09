@@ -115,7 +115,12 @@ export function useStudyPlan(planId: string | null, studentId: string) {
 
   useEffect(() => { load() }, [load])
 
-  return { plan, loading, error, reload: load }
+  const allTopics = plan?.units.flatMap(u => u.topics) ?? []
+  const totalTopics = allTopics.length
+  const completedTopics = allTopics.filter(t => t.progress?.completed).length
+  const progressPct = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0
+
+  return { plan, loading, error, reload: load, totalTopics, completedTopics, progressPct }
 }
 
 export function useTopicDetail(topicId: string) {

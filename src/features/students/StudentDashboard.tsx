@@ -18,6 +18,117 @@ import { useStudentGlossary, toggleMastered } from '../../hooks/useStudentGlossa
 import { useStudentCoins } from '../../hooks/useStudentCoins'
 import { useSkillScores, SKILLS } from '../../hooks/useSkillScores'
 import { useStudentBadges, BADGE_META, ALL_BADGE_TYPES } from '../../hooks/useStudentBadges'
+import { useStudentNextClass } from '../../hooks/useStudentNextClass'
+import { useActivityStreak } from '../../hooks/useActivityStreak'
+
+const SESSION_TYPE_LABELS: Record<string, string> = {
+  precision_sprint: 'Precision Sprint',
+  culture_club: 'Culture Club',
+  professional_lab: 'Professional Lab',
+  standard: 'Clase estándar',
+}
+
+function formatNextClass(iso: string): string {
+  return new Intl.DateTimeFormat('es-CO', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(iso))
+}
+
+interface ProgressOverviewProps {
+  studentId: string
+  totalTopics: number
+  completedTopics: number
+  progressPct: number
+  avgScore: number | null
+}
+
+function ProgressOverview({ studentId, totalTopics, completedTopics, progressPct, avgScore }: ProgressOverviewProps) {
+  const { nextClass, loading: loadingClass } = useStudentNextClass(studentId)
+  const { streak, loading: loadingStreak } = useActivityStreak(studentId)
+
+  return (
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 space-y-4">
+      {/* Plan progress */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium text-gray-700 dark:text-gray-300">Progreso del plan</span>
+          <span className="font-bold text-gray-900 dark:text-white">
+            {totalTopics === 0 ? '—' : `${completedTopics}/${totalTopics} temas`}
+          </span>
+        </div>
+        <div className="relative h-3 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+          <motion.div
+            className="absolute left-0 top-0 bottom-0 rounded-full"
+            style={{ background: 'linear-gradient(90deg, #4ade80, #86ef86)' }}
+            initial={{ width: 0 }}
+            animate={{ width: totalTopics === 0 ? '0%' : `${progressPct}%` }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          />
+        </div>
+        <p className="text-xs text-gray-400 text-right">
+          {totalTopics === 0 ? 'Sin plan asignado' : `${progressPct}% completado`}
+        </p>
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-3">
+        {/* Quiz avg */}
+        <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3 text-center">
+          <p className="text-[11px] text-gray-400 mb-1">Promedio quizzes</p>
+          <p className="text-xl font-bold font-heading text-gray-900 dark:text-white">
+            {avgScore !== null ? `${avgScore}%` : '—'}
+          </p>
+          <p className="text-[10px] text-gray-400 mt-0.5">
+            {avgScore === null ? 'Sin quizzes aún' : avgScore >= 80 ? '¡Excelente!' : avgScore >= 60 ? 'Bien' : 'Sigue practicando'}
+          </p>
+        </div>
+
+        {/* Streak */}
+        <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3 text-center">
+          <p className="text-[11px] text-gray-400 mb-1">Racha</p>
+          {loadingStreak ? (
+            <div className="h-7 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse mx-auto w-12" />
+          ) : (
+            <>
+              <p className="text-xl font-bold font-heading text-gray-900 dark:text-white">
+                {streak > 0 ? `🔥 ${streak}` : '—'}
+              </p>
+              <p className="text-[10px] text-gray-400 mt-0.5">
+                {streak === 0 ? 'Sin actividad' : streak === 1 ? 'día seguido' : 'días seguidos'}
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Next class */}
+        <div className="rounded-xl bg-gray-50 dark:bg-gray-800 p-3 text-center">
+          <p className="text-[11px] text-gray-400 mb-1">Próxima clase</p>
+          {loadingClass ? (
+            <div className="h-7 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse mx-auto w-14" />
+          ) : nextClass ? (
+            <>
+              <p className="text-[11px] font-bold text-gray-900 dark:text-white leading-tight">
+                {formatNextClass(nextClass.scheduled_date)}
+              </p>
+              <p className="text-[10px] text-gray-400 mt-0.5 truncate">
+                {SESSION_TYPE_LABELS[nextClass.session_type] ?? nextClass.session_type}
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-xl font-bold font-heading text-gray-900 dark:text-white">—</p>
+              <p className="text-[10px] text-gray-400 mt-0.5">Sin programar</p>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function useStudentPlanId(userId: string | undefined) {
   const [planId, setPlanId] = useState<string | null>(null)
@@ -243,8 +354,17 @@ function TasksSection({ studentId }: { studentId: string }) {
   )
 }
 
-function QuizSection({ studentId }: { studentId: string }) {
-  const { todayQuiz, alreadyTaken, myScore, history, loading, reload } = useStudentQuiz(studentId)
+interface QuizSectionProps {
+  studentId: string
+  todayQuiz: ReturnType<typeof useStudentQuiz>['todayQuiz']
+  alreadyTaken: boolean
+  myScore: number | null
+  history: ReturnType<typeof useStudentQuiz>['history']
+  loading: boolean
+  reload: () => void
+}
+
+function QuizSection({ studentId, todayQuiz, alreadyTaken, myScore, history, loading, reload }: QuizSectionProps) {
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null)
   const [showHistory, setShowHistory] = useState(false)
 
@@ -712,7 +832,8 @@ function BadgesSection({ studentId }: { studentId: string }) {
 export default function StudentDashboard() {
   const { appUser } = useAuth()
   const { planId, loaded } = useStudentPlanId(appUser?.id)
-  const { plan, loading } = useStudyPlan(planId, appUser?.id ?? '')
+  const { plan, loading, totalTopics, completedTopics, progressPct } = useStudyPlan(planId, appUser?.id ?? '')
+  const { todayQuiz, alreadyTaken, myScore, avgScore, history: quizHistory, loading: quizLoading, reload: reloadQuiz } = useStudentQuiz(appUser?.id)
 
   return (
     <AppLayout title="Mi Portal">
@@ -726,6 +847,17 @@ export default function StudentDashboard() {
             Aquí está tu portal de aprendizaje.
           </p>
         </div>
+
+        {/* Progress overview */}
+        {appUser?.id && (
+          <ProgressOverview
+            studentId={appUser.id}
+            totalTopics={totalTopics}
+            completedTopics={completedTopics}
+            progressPct={progressPct}
+            avgScore={avgScore}
+          />
+        )}
 
         {/* Gamification: Fluidity Battery + Skills Radar */}
         {appUser?.id && (
@@ -742,7 +874,15 @@ export default function StudentDashboard() {
 
         {/* Quiz del día */}
         {appUser?.id && (
-          <QuizSection studentId={appUser.id} />
+          <QuizSection
+            studentId={appUser.id}
+            todayQuiz={todayQuiz}
+            alreadyTaken={alreadyTaken}
+            myScore={myScore}
+            history={quizHistory}
+            loading={quizLoading}
+            reload={reloadQuiz}
+          />
         )}
 
         {/* Tasks */}
