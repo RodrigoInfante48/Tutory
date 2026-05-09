@@ -28,6 +28,7 @@ export function useNavItems(): NavItem[] {
     { label: 'Clases', href: '/teacher/classes', emoji: '📅' },
     { label: 'Tareas', href: '/teacher/tasks', emoji: '📝' },
     { label: 'Quizzes', href: '/teacher/quizzes', emoji: '🧠' },
+    { label: 'Grupos', href: '/teacher/groups', emoji: '👥' },
     { label: 'Recursos', href: '/teacher/resources', emoji: '📚' },
     { label: 'Mensajes', href: '/teacher/messages', emoji: '💬', badge: unreadCount },
   ]
