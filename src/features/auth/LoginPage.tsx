@@ -157,19 +157,6 @@ export default function LoginPage() {
             >
               ¿Olvidaste tu contraseña?
             </Link>
-            <Link
-              to="/signup"
-              style={{
-                fontSize: '12px',
-                color: '#7a8ba8',
-                textDecoration: 'none',
-                transition: 'color 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#86ef86')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#7a8ba8')}
-            >
-              ¿Eres nuevo? Créate una cuenta
-            </Link>
           </div>
         </form>
       </div>
