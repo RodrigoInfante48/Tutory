@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useInView, useMotionValue, animate } from 'framer-motion'
-import { supabase } from '../../lib/supabase'
+
+const WHATSAPP_URL = 'https://wa.me/573209974750'
+const WHATSAPP_DISPLAY = '+57 320 997 4750'
 
 // ─── Animation variants ────────────────────────────────────────────────────
 
@@ -22,6 +24,16 @@ const wordVariant = {
     y: 0,
     transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   },
+}
+
+// ─── WhatsApp icon ─────────────────────────────────────────────────────────
+
+function WhatsAppIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  )
 }
 
 // ─── Navbar ────────────────────────────────────────────────────────────────
@@ -89,13 +101,7 @@ function Navbar() {
               to="/login"
               className="text-sm px-4 py-2 rounded-md border border-white/20 text-white/80 hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-[1.02]"
             >
-              Iniciar sesión
-            </Link>
-            <Link
-              to="/signup"
-              className="text-sm px-4 py-2 rounded-md bg-[#86ef86] text-[#0a0a0a] font-medium hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
-            >
-              Empieza gratis
+              Ingresar →
             </Link>
           </div>
 
@@ -164,14 +170,7 @@ function Navbar() {
                   onClick={() => setMenuOpen(false)}
                   className="text-center text-sm px-4 py-2.5 rounded-md border border-white/20 text-white/80 hover:text-white hover:border-white/40 transition-all duration-200"
                 >
-                  Iniciar sesión
-                </Link>
-                <Link
-                  to="/signup"
-                  onClick={() => setMenuOpen(false)}
-                  className="text-center text-sm px-4 py-2.5 rounded-md bg-[#86ef86] text-[#0a0a0a] font-medium hover:bg-[#9ef89e] transition-all duration-200"
-                >
-                  Empieza gratis
+                  Ingresar →
                 </Link>
               </div>
             </motion.div>
@@ -241,7 +240,7 @@ function Hero() {
           >
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 bg-white/[0.03]">
               <span className="text-[#86ef86]">✦</span>
-              Método CFI · Inglés que te cambia la vida
+              Acceso privado · Solo estudiantes seleccionados
             </span>
           </motion.div>
 
@@ -271,8 +270,8 @@ function Hero() {
             transition={{ duration: 0.55, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="text-base md:text-lg text-white/50 max-w-lg leading-relaxed"
           >
-            Clases personalizadas con el método CFI. Inglés real,
-            sin memorizar listas de palabras ni gramática de libro de texto.
+            No somos una app masiva. Tutory es el espacio privado donde
+            tu profe gestiona tu aprendizaje — personalizado, sin distracciones.
           </motion.p>
 
           {/* CTAs */}
@@ -283,19 +282,21 @@ function Hero() {
             transition={{ duration: 0.5, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-wrap items-center gap-3 pt-2"
           >
-            <Link
-              to="/signup"
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
             >
-              Soy profesor — Empieza gratis
-            </Link>
-            <a
-              href="#clase-prueba"
-              onClick={e => { e.preventDefault(); document.querySelector('#clase-prueba')?.scrollIntoView({ behavior: 'smooth' }) }}
+              <WhatsAppIcon />
+              Quiero empezar
+            </a>
+            <Link
+              to="/login"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/20 text-white/80 text-sm font-semibold hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-[1.02]"
             >
-              Quiero aprender inglés
-            </a>
+              Ya tengo cuenta
+            </Link>
           </motion.div>
         </div>
 
@@ -577,11 +578,13 @@ function SectionCalculadoraMetas() {
                     <p className="text-sm text-white/55 leading-relaxed">{rec.description}</p>
                   </div>
                   <a
-                    href="#clase-prueba"
-                    onClick={e => { e.preventDefault(); document.querySelector('#clase-prueba')?.scrollIntoView({ behavior: 'smooth' }) }}
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
                   >
-                    Reserva tu clase de prueba
+                    <WhatsAppIcon />
+                    Consultar por WhatsApp
                   </a>
                 </motion.div>
               ) : (
@@ -1178,42 +1181,33 @@ function SectionParaQuien() {
           </motion.div>
         </div>
 
-        {/* CTA at the bottom — split for teachers and students */}
+        {/* CTA at the bottom */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"
+          className="mt-20 max-w-md mx-auto rounded-2xl border border-[#86ef86]/20 bg-[#86ef86]/[0.03] p-8 text-center flex flex-col items-center gap-4"
+          style={{ boxShadow: '0 0 40px rgba(134,239,134,0.06)' }}
         >
-          {/* Para profesores */}
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 text-center">
-            <span className="text-2xl">🎓</span>
-            <p className="text-sm font-semibold text-white">Soy profesor de inglés</p>
-            <p className="text-xs text-white/40">Gestiona tus estudiantes gratis</p>
-            <Link
-              to="/signup"
-              className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
-            >
-              Crear cuenta gratis
-            </Link>
-            <p className="text-[11px] text-white/25">Sin tarjeta de crédito</p>
+          <div className="w-12 h-12 rounded-xl bg-[#86ef86]/10 border border-[#86ef86]/20 flex items-center justify-center text-[#86ef86]">
+            <WhatsAppIcon size={22} />
           </div>
-
-          {/* Para estudiantes */}
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 text-center">
-            <span className="text-2xl">📖</span>
-            <p className="text-sm font-semibold text-white">Quiero aprender inglés</p>
-            <p className="text-xs text-white/40">Prueba el método CFI sin costo</p>
-            <a
-              href="#clase-prueba"
-              onClick={e => { e.preventDefault(); document.querySelector('#clase-prueba')?.scrollIntoView({ behavior: 'smooth' }) }}
-              className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#86ef86]/40 text-[#86ef86] text-sm font-semibold hover:bg-[#86ef86]/10 transition-all duration-200 hover:scale-[1.02]"
-            >
-              Reservar clase de prueba
-            </a>
-            <p className="text-[11px] text-white/25">Primera clase gratis</p>
-          </div>
+          <p className="text-sm font-semibold text-white">¿Quieres empezar?</p>
+          <p className="text-xs text-white/40 leading-relaxed max-w-xs">
+            Escríbenos y te explicamos cómo funciona.<br />
+            Solo aceptamos estudiantes que se lo toman en serio.
+          </p>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+          >
+            <WhatsAppIcon />
+            Escribir al WhatsApp
+          </a>
+          <p className="text-[11px] text-white/25">{WHATSAPP_DISPLAY}</p>
         </motion.div>
       </div>
     </section>
@@ -1366,38 +1360,9 @@ function SectionMetricas() {
   )
 }
 
-// ─── Section: Clase de Prueba ────────────────────────────────────────────────
-
-const GOALS_PRUEBA = ['Viajes', 'Trabajo / Negocios', 'Exámenes', 'Conversación fluida'] as const
-const AVAILABILITY_OPTIONS = ['Mañanas', 'Tardes', 'Noches'] as const
+// ─── Section: ¿Listo para empezar? ──────────────────────────────────────────
 
 function SectionClaseDePrueba() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [whatsapp, setWhatsapp] = useState('')
-  const [goal, setGoal] = useState('')
-  const [availability, setAvailability] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState('')
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-
-    const { error: dbError } = await supabase
-      .from('leads')
-      .insert({ name, email, whatsapp, goal, availability, status: 'pending' })
-
-    setLoading(false)
-    if (dbError) {
-      setError('Algo salió mal. Intenta de nuevo.')
-    } else {
-      setSuccess(true)
-    }
-  }
-
   return (
     <section id="clase-prueba" className="relative py-32 bg-[#0d0d0d]">
       <div className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
@@ -1412,7 +1377,7 @@ function SectionClaseDePrueba() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
           >
-            Primera clase gratis
+            Acceso directo
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -1421,139 +1386,55 @@ function SectionClaseDePrueba() {
             transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight mb-4"
           >
-            Tu primera clase, gratis.
+            ¿Listo para empezar?
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-            className="text-base text-white/50"
+            className="text-base text-white/50 leading-relaxed"
           >
-            En 50 minutos sabes si el método CFI es para ti. Sin compromiso.
+            No hay formularios ni listas de espera interminables. Escríbenos
+            directamente — cuéntanos tu meta y encontramos el plan ideal para ti.
           </motion.p>
         </div>
 
-        {/* Form card */}
+        {/* WhatsApp card */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-md mx-auto rounded-2xl border border-[#86ef86]/20 bg-[#0a0a0a] p-8"
-          style={{ boxShadow: '0 0 60px rgba(134,239,134,0.06)' }}
+          className="max-w-sm mx-auto rounded-2xl border border-[#86ef86]/25 bg-[#0a0a0a] p-10 flex flex-col items-center gap-6 text-center"
+          style={{ boxShadow: '0 0 60px rgba(134,239,134,0.08)' }}
         >
-          {success ? (
-            <div className="flex flex-col items-center gap-4 py-8 text-center">
-              <div className="w-14 h-14 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 flex items-center justify-center">
-                <span className="text-2xl">✓</span>
-              </div>
-              <h3 className="font-heading text-xl font-bold text-white">¡Listo!</h3>
-              <p className="text-sm text-white/55 leading-relaxed">
-                Te contactamos en menos de 24 horas para coordinar tu clase de prueba.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Name */}
-              <div>
-                <label className="block text-xs font-medium text-white/50 mb-2">Nombre</label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Tu nombre completo"
-                  className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/10 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#86ef86]/40 transition-colors duration-200"
-                />
-              </div>
+          <div className="w-16 h-16 rounded-2xl bg-[#86ef86]/10 border border-[#86ef86]/25 flex items-center justify-center text-[#86ef86]">
+            <WhatsAppIcon size={30} />
+          </div>
 
-              {/* Email */}
-              <div>
-                <label className="block text-xs font-medium text-white/50 mb-2">Email</label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
-                  className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/10 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#86ef86]/40 transition-colors duration-200"
-                />
-              </div>
+          <div className="flex flex-col gap-1.5">
+            <p className="font-heading text-xl font-bold text-white">Escríbenos por WhatsApp</p>
+            <p className="text-sm text-white/45 leading-relaxed">
+              Solo aceptamos estudiantes que se lo toman en serio.<br />
+              Respondemos en menos de 24 horas.
+            </p>
+          </div>
 
-              {/* WhatsApp */}
-              <div>
-                <label className="block text-xs font-medium text-white/50 mb-2">WhatsApp</label>
-                <input
-                  type="tel"
-                  value={whatsapp}
-                  onChange={e => setWhatsapp(e.target.value)}
-                  placeholder="+57 300 000 0000"
-                  className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/10 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#86ef86]/40 transition-colors duration-200"
-                />
-              </div>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+          >
+            <WhatsAppIcon />
+            Escribir al WhatsApp
+          </a>
 
-              {/* Goal */}
-              <div>
-                <label className="block text-xs font-medium text-white/50 mb-2">¿Cuál es tu meta?</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {GOALS_PRUEBA.map(g => (
-                    <button
-                      key={g}
-                      type="button"
-                      onClick={() => setGoal(g)}
-                      className={[
-                        'px-3 py-2.5 rounded-lg border text-xs font-medium text-left transition-all duration-200',
-                        goal === g
-                          ? 'border-[#86ef86]/60 bg-[#86ef86]/10 text-[#86ef86]'
-                          : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-white/20 hover:text-white/70',
-                      ].join(' ')}
-                    >
-                      {g}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Availability */}
-              <div>
-                <label className="block text-xs font-medium text-white/50 mb-2">¿Cuándo prefieres tomar clases?</label>
-                <div className="flex gap-2">
-                  {AVAILABILITY_OPTIONS.map(a => (
-                    <button
-                      key={a}
-                      type="button"
-                      onClick={() => setAvailability(a)}
-                      className={[
-                        'flex-1 px-3 py-2.5 rounded-lg border text-xs font-medium transition-all duration-200',
-                        availability === a
-                          ? 'border-[#86ef86]/60 bg-[#86ef86]/10 text-[#86ef86]'
-                          : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-white/20 hover:text-white/70',
-                      ].join(' ')}
-                    >
-                      {a}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {error && (
-                <p className="text-xs text-red-400">{error}</p>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="mt-2 w-full px-6 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                {loading ? 'Enviando…' : 'Reservar mi clase de prueba'}
-              </button>
-
-              <p className="text-[11px] text-white/25 text-center">
-                Te contactamos en menos de 24 horas. Sin spam.
-              </p>
-            </form>
-          )}
+          <div className="flex flex-col gap-1 items-center">
+            <p className="text-sm font-medium text-[#86ef86]">{WHATSAPP_DISPLAY}</p>
+            <p className="text-[11px] text-white/25">Colombia · Lunes a sábado</p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -1561,32 +1442,6 @@ function SectionClaseDePrueba() {
 }
 
 // ─── Section: Precios ────────────────────────────────────────────────────────
-
-const FREE_FEATURES = [
-  'Hasta 5 estudiantes activos',
-  'Plan de estudios básico',
-  'Tareas y entregas',
-  'Historial de clases',
-  'Chat interno con estudiantes',
-  'Acceso desde cualquier dispositivo',
-]
-
-const PRO_FEATURES = [
-  'Estudiantes ilimitados',
-  'Quizzes automáticos ilimitados',
-  'Recursos por estudiante',
-  'Reportes de progreso avanzados',
-  'Grupos y clases grupales',
-  'Soporte prioritario',
-]
-
-function CheckIcon() {
-  return (
-    <span className="w-4 h-4 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 flex items-center justify-center flex-shrink-0">
-      <span className="text-[8px] text-[#86ef86] font-bold">✓</span>
-    </span>
-  )
-}
 
 function SectionPrecios() {
   return (
@@ -1602,7 +1457,7 @@ function SectionPrecios() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
           >
-            Precios
+            Planes
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -1611,80 +1466,51 @@ function SectionPrecios() {
             transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
           >
-            Empieza gratis.<br />Escala cuando quieras.
+            Hecho a tu medida.
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-          {/* Free card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 flex flex-col"
-          >
-            <div className="mb-8">
-              <h3 className="font-heading text-xl font-bold text-white mb-3">Gratis</h3>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="font-heading text-5xl font-black text-white">$0</span>
-                <span className="text-white/40 text-sm">/ siempre</span>
-              </div>
-              <p className="text-sm text-white/50">Todo lo esencial para empezar a organizar tu enseñanza.</p>
-              <p className="text-xs text-[#86ef86]/60 mt-1 font-medium">Para profesores de inglés</p>
-            </div>
-            <ul className="flex flex-col gap-3 mb-8 flex-1">
-              {FREE_FEATURES.map((f) => (
-                <li key={f} className="flex items-center gap-3">
-                  <CheckIcon />
-                  <span className="text-sm text-white/65">{f}</span>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-2xl mx-auto rounded-2xl border border-white/[0.08] bg-white/[0.03] p-10 flex flex-col md:flex-row items-center gap-8"
+        >
+          <div className="flex-1 flex flex-col gap-4">
+            <p className="font-heading text-xl font-bold text-white leading-snug">
+              Los planes se coordinan<br />directamente contigo.
+            </p>
+            <p className="text-sm text-white/50 leading-relaxed">
+              No hay tarifas públicas fijas porque cada estudiante es diferente.
+              Hablamos de tus metas, tu disponibilidad y encontramos el plan
+              que tiene sentido para ti — sin sorpresas.
+            </p>
+            <ul className="flex flex-col gap-2 mt-2">
+              {['Clases individuales o grupales', 'Paquetes semanales flexibles', 'Primera clase de diagnóstico sin costo'].map(item => (
+                <li key={item} className="flex items-center gap-3">
+                  <span className="w-4 h-4 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[8px] text-[#86ef86] font-bold">✓</span>
+                  </span>
+                  <span className="text-sm text-white/65">{item}</span>
                 </li>
               ))}
             </ul>
-            <Link
-              to="/signup"
-              className="block text-center px-6 py-3 rounded-lg border border-white/20 text-white/80 hover:text-white hover:border-white/40 text-sm font-medium transition-all duration-200 hover:scale-[1.02]"
-            >
-              Crear cuenta gratis
-            </Link>
-          </motion.div>
+          </div>
 
-          {/* Pro card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="group relative rounded-2xl border border-[#86ef86]/30 bg-[#86ef86]/[0.03] p-8 flex flex-col transition-all duration-300 hover:border-[#86ef86]/50 hover:shadow-[0_0_40px_rgba(134,239,134,0.12)]"
-          >
-            <div className="absolute top-4 right-4">
-              <span className="text-[11px] px-2.5 py-1 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 text-[#86ef86] font-medium">
-                Próximamente
-              </span>
-            </div>
-            <div className="mb-8">
-              <h3 className="font-heading text-xl font-bold text-white mb-3">Pro</h3>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="font-heading text-2xl font-black text-[#86ef86]">Precio especial</span>
-              </div>
-              <p className="text-sm text-white/50">Para early adopters. Regístrate y te avisamos primero.</p>
-            </div>
-            <ul className="flex flex-col gap-3 mb-8 flex-1">
-              {PRO_FEATURES.map((f) => (
-                <li key={f} className="flex items-center gap-3">
-                  <CheckIcon />
-                  <span className="text-sm text-white/65">{f}</span>
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/login"
-              className="block text-center px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+          <div className="flex-shrink-0 flex flex-col items-center gap-4 text-center">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
             >
-              Unirme a la lista de espera
-            </Link>
-          </motion.div>
-        </div>
+              <WhatsAppIcon />
+              Consultar planes
+            </a>
+            <p className="text-[11px] text-white/30">{WHATSAPP_DISPLAY}</p>
+          </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -1713,14 +1539,18 @@ function SectionCTAFinal() {
           ¿Listo para hablar<br />inglés de verdad?
         </h2>
         <p className="text-base md:text-lg text-white/50 leading-relaxed mb-10 max-w-xl mx-auto">
-          Empieza hoy. Sin tarjeta de crédito, sin compromisos.
+          Escríbenos por WhatsApp. Sin formularios, sin esperas.
+          Solo cuéntanos tu meta y empezamos.
         </p>
-        <Link
-          to="/signup"
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
         >
-          Soy profesor — Empieza gratis
-        </Link>
+          <WhatsAppIcon />
+          Escribir al WhatsApp
+        </a>
       </motion.div>
     </section>
   )
