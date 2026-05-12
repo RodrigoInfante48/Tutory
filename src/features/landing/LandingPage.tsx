@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useInView, useMotionValue, animate } from 'framer-motion'
+import { supabase } from '../../lib/supabase'
 
 // ─── Animation variants ────────────────────────────────────────────────────
 
@@ -38,6 +39,7 @@ function Navbar() {
   const navLinks = [
     { label: 'Funcionalidades', href: '#funcionalidades' },
     { label: 'Cómo funciona', href: '#como-funciona' },
+    { label: 'Clase de prueba', href: '#clase-prueba' },
     { label: 'Precios', href: '#precios' },
   ]
 
@@ -282,11 +284,18 @@ function Hero() {
             className="flex flex-wrap items-center gap-3 pt-2"
           >
             <Link
-              to="/login"
+              to="/signup"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
             >
-              Empieza gratis
+              Soy profesor — Empieza gratis
             </Link>
+            <a
+              href="#clase-prueba"
+              onClick={e => { e.preventDefault(); document.querySelector('#clase-prueba')?.scrollIntoView({ behavior: 'smooth' }) }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/20 text-white/80 text-sm font-semibold hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-[1.02]"
+            >
+              Quiero aprender inglés
+            </a>
           </motion.div>
         </div>
 
@@ -567,12 +576,13 @@ function SectionCalculadoraMetas() {
                     </p>
                     <p className="text-sm text-white/55 leading-relaxed">{rec.description}</p>
                   </div>
-                  <Link
-                    to="/login"
+                  <a
+                    href="#clase-prueba"
+                    onClick={e => { e.preventDefault(); document.querySelector('#clase-prueba')?.scrollIntoView({ behavior: 'smooth' }) }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
                   >
-                    Empieza con este plan
-                  </Link>
+                    Reserva tu clase de prueba
+                  </a>
                 </motion.div>
               ) : (
                 <motion.div
@@ -1168,27 +1178,42 @@ function SectionParaQuien() {
           </motion.div>
         </div>
 
-        {/* CTA at the bottom */}
+        {/* CTA at the bottom — split for teachers and students */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-20 text-center"
+          className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"
         >
-          <Link
-            to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
-          >
-            Empieza gratis hoy
-          </Link>
-          <p className="text-xs text-white/30 mt-3">Sin tarjeta de crédito · Sin compromisos</p>
-          <p className="text-xs text-white/30 mt-1">
-            ¿Ya tienes cuenta?{' '}
-            <Link to="/login" className="text-[#86ef86]/60 hover:text-[#86ef86] transition-colors duration-150 underline underline-offset-2">
-              Inicia sesión
+          {/* Para profesores */}
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 text-center">
+            <span className="text-2xl">🎓</span>
+            <p className="text-sm font-semibold text-white">Soy profesor de inglés</p>
+            <p className="text-xs text-white/40">Gestiona tus estudiantes gratis</p>
+            <Link
+              to="/signup"
+              className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
+            >
+              Crear cuenta gratis
             </Link>
-          </p>
+            <p className="text-[11px] text-white/25">Sin tarjeta de crédito</p>
+          </div>
+
+          {/* Para estudiantes */}
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 text-center">
+            <span className="text-2xl">📖</span>
+            <p className="text-sm font-semibold text-white">Quiero aprender inglés</p>
+            <p className="text-xs text-white/40">Prueba el método CFI sin costo</p>
+            <a
+              href="#clase-prueba"
+              onClick={e => { e.preventDefault(); document.querySelector('#clase-prueba')?.scrollIntoView({ behavior: 'smooth' }) }}
+              className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#86ef86]/40 text-[#86ef86] text-sm font-semibold hover:bg-[#86ef86]/10 transition-all duration-200 hover:scale-[1.02]"
+            >
+              Reservar clase de prueba
+            </a>
+            <p className="text-[11px] text-white/25">Primera clase gratis</p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -1341,6 +1366,200 @@ function SectionMetricas() {
   )
 }
 
+// ─── Section: Clase de Prueba ────────────────────────────────────────────────
+
+const GOALS_PRUEBA = ['Viajes', 'Trabajo / Negocios', 'Exámenes', 'Conversación fluida'] as const
+const AVAILABILITY_OPTIONS = ['Mañanas', 'Tardes', 'Noches'] as const
+
+function SectionClaseDePrueba() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
+  const [goal, setGoal] = useState('')
+  const [availability, setAvailability] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+
+    const { error: dbError } = await supabase
+      .from('leads')
+      .insert({ name, email, whatsapp, goal, availability, status: 'pending' })
+
+    setLoading(false)
+    if (dbError) {
+      setError('Algo salió mal. Intenta de nuevo.')
+    } else {
+      setSuccess(true)
+    }
+  }
+
+  return (
+    <section id="clase-prueba" className="relative py-32 bg-[#0d0d0d]">
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-xs font-medium text-[#86ef86]/60 tracking-widest uppercase mb-5"
+          >
+            Primera clase gratis
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight mb-4"
+          >
+            Tu primera clase, gratis.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="text-base text-white/50"
+          >
+            En 50 minutos sabes si el método CFI es para ti. Sin compromiso.
+          </motion.p>
+        </div>
+
+        {/* Form card */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-md mx-auto rounded-2xl border border-[#86ef86]/20 bg-[#0a0a0a] p-8"
+          style={{ boxShadow: '0 0 60px rgba(134,239,134,0.06)' }}
+        >
+          {success ? (
+            <div className="flex flex-col items-center gap-4 py-8 text-center">
+              <div className="w-14 h-14 rounded-full bg-[#86ef86]/15 border border-[#86ef86]/30 flex items-center justify-center">
+                <span className="text-2xl">✓</span>
+              </div>
+              <h3 className="font-heading text-xl font-bold text-white">¡Listo!</h3>
+              <p className="text-sm text-white/55 leading-relaxed">
+                Te contactamos en menos de 24 horas para coordinar tu clase de prueba.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              {/* Name */}
+              <div>
+                <label className="block text-xs font-medium text-white/50 mb-2">Nombre</label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Tu nombre completo"
+                  className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/10 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#86ef86]/40 transition-colors duration-200"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-xs font-medium text-white/50 mb-2">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                  className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/10 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#86ef86]/40 transition-colors duration-200"
+                />
+              </div>
+
+              {/* WhatsApp */}
+              <div>
+                <label className="block text-xs font-medium text-white/50 mb-2">WhatsApp</label>
+                <input
+                  type="tel"
+                  value={whatsapp}
+                  onChange={e => setWhatsapp(e.target.value)}
+                  placeholder="+57 300 000 0000"
+                  className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/10 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#86ef86]/40 transition-colors duration-200"
+                />
+              </div>
+
+              {/* Goal */}
+              <div>
+                <label className="block text-xs font-medium text-white/50 mb-2">¿Cuál es tu meta?</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {GOALS_PRUEBA.map(g => (
+                    <button
+                      key={g}
+                      type="button"
+                      onClick={() => setGoal(g)}
+                      className={[
+                        'px-3 py-2.5 rounded-lg border text-xs font-medium text-left transition-all duration-200',
+                        goal === g
+                          ? 'border-[#86ef86]/60 bg-[#86ef86]/10 text-[#86ef86]'
+                          : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-white/20 hover:text-white/70',
+                      ].join(' ')}
+                    >
+                      {g}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Availability */}
+              <div>
+                <label className="block text-xs font-medium text-white/50 mb-2">¿Cuándo prefieres tomar clases?</label>
+                <div className="flex gap-2">
+                  {AVAILABILITY_OPTIONS.map(a => (
+                    <button
+                      key={a}
+                      type="button"
+                      onClick={() => setAvailability(a)}
+                      className={[
+                        'flex-1 px-3 py-2.5 rounded-lg border text-xs font-medium transition-all duration-200',
+                        availability === a
+                          ? 'border-[#86ef86]/60 bg-[#86ef86]/10 text-[#86ef86]'
+                          : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-white/20 hover:text-white/70',
+                      ].join(' ')}
+                    >
+                      {a}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {error && (
+                <p className="text-xs text-red-400">{error}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-2 w-full px-6 py-3.5 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {loading ? 'Enviando…' : 'Reservar mi clase de prueba'}
+              </button>
+
+              <p className="text-[11px] text-white/25 text-center">
+                Te contactamos en menos de 24 horas. Sin spam.
+              </p>
+            </form>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 // ─── Section: Precios ────────────────────────────────────────────────────────
 
 const FREE_FEATURES = [
@@ -1412,6 +1631,7 @@ function SectionPrecios() {
                 <span className="text-white/40 text-sm">/ siempre</span>
               </div>
               <p className="text-sm text-white/50">Todo lo esencial para empezar a organizar tu enseñanza.</p>
+              <p className="text-xs text-[#86ef86]/60 mt-1 font-medium">Para profesores de inglés</p>
             </div>
             <ul className="flex flex-col gap-3 mb-8 flex-1">
               {FREE_FEATURES.map((f) => (
@@ -1496,10 +1716,10 @@ function SectionCTAFinal() {
           Empieza hoy. Sin tarjeta de crédito, sin compromisos.
         </p>
         <Link
-          to="/login"
+          to="/signup"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
         >
-          Empieza gratis
+          Soy profesor — Empieza gratis
         </Link>
       </motion.div>
     </section>
@@ -1628,6 +1848,7 @@ export default function LandingPage() {
       <SectionParaQuien />
       <SectionTestimonios />
       <SectionMetricas />
+      <SectionClaseDePrueba />
       <SectionPrecios />
       <SectionCTAFinal />
       <Footer />
