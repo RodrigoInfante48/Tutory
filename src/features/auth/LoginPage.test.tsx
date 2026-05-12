@@ -31,64 +31,139 @@ function renderLoginPage() {
   )
 }
 
+async function enterPin(user: ReturnType<typeof userEvent.setup>, pin: string) {
+  for (const digit of pin) {
+    await user.click(screen.getByRole('button', { name: digit }))
+  }
+}
+
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(useAuth).mockReturnValue(makeAuthContext())
 })
 
 describe('LoginPage', () => {
-  it('renders email and password fields', () => {
+  it('renders email field and PIN keypad', () => {
     renderLoginPage()
     expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/teclado numérico/i)).toBeInTheDocument()
   })
 
-  it('renders the submit button', () => {
+  it('renders all 10 digit keys plus delete and confirm', () => {
     renderLoginPage()
-    expect(screen.getByRole('button', { name: /ingresar/i })).toBeInTheDocument()
+    for (const digit of ['0','1','2','3','4','5','6','7','8','9']) {
+      expect(screen.getByRole('button', { name: digit })).toBeInTheDocument()
+    }
+    expect(screen.getByRole('button', { name: /borrar/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /confirmar/i })).toBeInTheDocument()
   })
 
-  it('submit button is disabled when fields are empty', () => {
+  it('keypad is visually disabled when email is empty', () => {
     renderLoginPage()
-    expect(screen.getByRole('button', { name: /ingresar/i })).toBeDisabled()
+    const pad = screen.getByLabelText(/teclado numérico/i)
+    expect(pad.className).toContain('pin-pad-disabled')
   })
 
-  it('submit button becomes enabled when both fields have values', async () => {
+  it('keypad becomes active after typing email', async () => {
     const user = userEvent.setup()
     renderLoginPage()
 
     await user.type(screen.getByLabelText(/correo electrónico/i), 'test@example.com')
-    await user.type(screen.getByLabelText(/contraseña/i), 'secret')
 
-    expect(screen.getByRole('button', { name: /ingresar/i })).not.toBeDisabled()
+    const pad = screen.getByLabelText(/teclado numérico/i)
+    expect(pad.className).not.toContain('pin-pad-disabled')
   })
 
-  it('shows error message when signIn returns an error', async () => {
+  it('PIN dots fill as digits are entered', async () => {
+    const user = userEvent.setup()
+    renderLoginPage()
+    await user.type(screen.getByLabelText(/correo electrónico/i), 'test@example.com')
+
+    const dotsBefore = document.querySelectorAll('.pin-dot-filled')
+    expect(dotsBefore).toHaveLength(0)
+
+    await user.click(screen.getByRole('button', { name: '1' }))
+    expect(document.querySelectorAll('.pin-dot-filled')).toHaveLength(1)
+
+    await user.click(screen.getByRole('button', { name: '2' }))
+    expect(document.querySelectorAll('.pin-dot-filled')).toHaveLength(2)
+  })
+
+  it('delete key removes last digit', async () => {
+    const user = userEvent.setup()
+    renderLoginPage()
+    await user.type(screen.getByLabelText(/correo electrónico/i), 'test@example.com')
+
+    await user.click(screen.getByRole('button', { name: '5' }))
+    await user.click(screen.getByRole('button', { name: '3' }))
+    expect(document.querySelectorAll('.pin-dot-filled')).toHaveLength(2)
+
+    await user.click(screen.getByRole('button', { name: /borrar/i }))
+    expect(document.querySelectorAll('.pin-dot-filled')).toHaveLength(1)
+  })
+
+  it('auto-submits when 4th digit is pressed', async () => {
+    mockSignIn.mockResolvedValueOnce({ error: null })
+    const user = userEvent.setup()
+    renderLoginPage()
+
+    await user.type(screen.getByLabelText(/correo electrónico/i), 'user@example.com')
+    await enterPin(user, '1234')
+
+    expect(mockSignIn).toHaveBeenCalledWith('user@example.com', '1234')
+  })
+
+  it('confirm button also triggers submit with 4 digits', async () => {
+    mockSignIn.mockResolvedValueOnce({ error: null })
+    const user = userEvent.setup()
+    renderLoginPage()
+
+    await user.type(screen.getByLabelText(/correo electrónico/i), 'user@example.com')
+    await user.click(screen.getByRole('button', { name: '1' }))
+    await user.click(screen.getByRole('button', { name: '2' }))
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: '4' }))
+
+    expect(mockSignIn).toHaveBeenCalledWith('user@example.com', '1234')
+  })
+
+  it('shows error and clears PIN when signIn returns an error', async () => {
     mockSignIn.mockResolvedValueOnce({ error: 'Invalid credentials' })
     const user = userEvent.setup()
     renderLoginPage()
 
     await user.type(screen.getByLabelText(/correo electrónico/i), 'bad@example.com')
-    await user.type(screen.getByLabelText(/contraseña/i), 'wrongpass')
-    await user.click(screen.getByRole('button', { name: /ingresar/i }))
+    await enterPin(user, '0000')
 
-    expect(await screen.findByText(/correo o contraseña incorrectos/i)).toBeInTheDocument()
+    expect(await screen.findByText(/correo o pin incorrectos/i)).toBeInTheDocument()
+    expect(document.querySelectorAll('.pin-dot-filled')).toHaveLength(0)
   })
 
   it('does not show error initially', () => {
     renderLoginPage()
-    expect(screen.queryByText(/correo o contraseña incorrectos/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/correo o pin incorrectos/i)).not.toBeInTheDocument()
   })
 
-  it('calls signIn with trimmed email and password on submit', async () => {
+  it('does not call signIn with fewer than 4 digits via confirm button', async () => {
+    const user = userEvent.setup()
+    renderLoginPage()
+
+    await user.type(screen.getByLabelText(/correo electrónico/i), 'user@example.com')
+    await user.click(screen.getByRole('button', { name: '1' }))
+    await user.click(screen.getByRole('button', { name: '2' }))
+    await user.click(screen.getByRole('button', { name: /confirmar/i }))
+
+    expect(mockSignIn).not.toHaveBeenCalled()
+  })
+
+  it('trims email before sending to signIn', async () => {
     mockSignIn.mockResolvedValueOnce({ error: null })
     const user = userEvent.setup()
     renderLoginPage()
 
     await user.type(screen.getByLabelText(/correo electrónico/i), '  user@example.com  ')
-    await user.type(screen.getByLabelText(/contraseña/i), 'mypassword')
-    await user.click(screen.getByRole('button', { name: /ingresar/i }))
+    await enterPin(user, '9876')
 
-    expect(mockSignIn).toHaveBeenCalledWith('user@example.com', 'mypassword')
+    expect(mockSignIn).toHaveBeenCalledWith('user@example.com', '9876')
   })
 })
