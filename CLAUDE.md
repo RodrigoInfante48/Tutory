@@ -40,6 +40,15 @@ La app funciona en producción. Rutas implementadas:
 
 ---
 
+## Modelo de negocio clarificado
+
+- **Cliente pagador principal:** Profesores (B2B SaaS). Ellos contratan Tutory, no los estudiantes.
+- **Estudiantes:** Acceden por invitación del profesor o creación directa por admin. No hay auto-registro público masivo.
+- **Freemium:** Para profesores — gratis hasta 5 estudiantes activos, plan Pro = ilimitados (próximamente).
+- **Estudiantes nuevos sin profesor asignado:** Ven dashboard con estado "Esperando asignación de profesor" — nunca un dashboard vacío sin contexto.
+- **Revenue de clases:** Modelo de paquetes semanales por goal (a implementar en landing page fase 2).
+- **`/signup`:** Existe para testing interno y onboarding controlado. Llama al edge function `register-student` (admin API) para bypassear la restricción de signups públicos de Supabase. No es un registro público abierto.
+
 ---
 
 ## Stack decidido para Tutory
