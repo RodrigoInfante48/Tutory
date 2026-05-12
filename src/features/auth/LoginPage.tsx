@@ -1,4 +1,4 @@
-import { useState, useEffect, type FormEvent } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth, type UserRole } from './AuthContext'
 
@@ -8,6 +8,8 @@ const ROLE_HOME: Record<UserRole, string> = {
   student: '/student',
 }
 
+const PAD_KEYS = ['1','2','3','4','5','6','7','8','9','⌫','0','→'] as const
+
 export default function LoginPage() {
   const { signIn, appUser, profileMissing } = useAuth()
   const navigate = useNavigate()
@@ -15,12 +17,10 @@ export default function LoginPage() {
   const passwordResetSuccess = (location.state as { passwordReset?: boolean } | null)?.passwordReset === true
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [pin, setPin] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [shake, setShake] = useState(false)
-  // Tracks that the user just submitted credentials successfully,
-  // so we can detect when AuthContext finishes without a profile.
   const [submitted, setSubmitted] = useState(false)
 
   const triggerShake = () => {
@@ -33,7 +33,6 @@ export default function LoginPage() {
       navigate(ROLE_HOME[appUser.role], { replace: true })
       return
     }
-    // Auth succeeded (session exists) but profile didn't load — surface the error.
     if (submitted && profileMissing) {
       setLoading(false)
       setSubmitted(false)
@@ -42,29 +41,45 @@ export default function LoginPage() {
     }
   }, [appUser, profileMissing, submitted, navigate])
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!email.trim() || !password) return
+  const submit = async (pinValue: string) => {
+    if (!email.trim() || pinValue.length !== 4 || loading) return
     setError(null)
     setLoading(true)
 
-    const { error: signInError } = await signIn(email.trim(), password)
+    const { error: signInError } = await signIn(email.trim(), pinValue)
 
     if (signInError) {
       setLoading(false)
-      setError('Correo o contraseña incorrectos')
+      setPin('')
+      setError('Correo o PIN incorrectos')
       triggerShake()
       return
     }
 
-    // Keep spinner on — AuthContext is now running fetchAppUser.
-    // The useEffect above will navigate on success or show an error on failure.
     setSubmitted(true)
   }
 
+  const handleKey = (key: typeof PAD_KEYS[number]) => {
+    if (loading) return
+    if (key === '⌫') {
+      setPin(p => p.slice(0, -1))
+      return
+    }
+    if (key === '→') {
+      if (pin.length === 4) submit(pin)
+      return
+    }
+    if (pin.length >= 4) return
+    const next = pin + key
+    setPin(next)
+    if (next.length === 4) submit(next)
+  }
+
+  const emailReady = email.trim().length > 0
+  const padDisabled = !emailReady || loading
+
   return (
     <div className="login-page">
-      {/* Gradient blobs */}
       <div className="login-blob login-blob-left" />
       <div className="login-blob login-blob-right" />
 
@@ -93,11 +108,12 @@ export default function LoginPage() {
             color: '#86ef86',
             textAlign: 'center',
           }}>
-            Contraseña actualizada. Ya puedes ingresar.
+            PIN actualizado. Ya puedes ingresar.
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="login-body" noValidate>
+        <div className="login-body">
+          {/* Email */}
           <div className="login-field">
             <label className="login-label" htmlFor="email">Correo electrónico</label>
             <input
@@ -106,59 +122,58 @@ export default function LoginPage() {
               autoComplete="email"
               placeholder="tu@correo.com"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => { setEmail(e.target.value); setPin('') }}
               className="login-input"
               disabled={loading}
             />
           </div>
 
-          <div className="login-field">
-            <label className="login-label" htmlFor="password">Contraseña</label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="login-input"
-              disabled={loading}
-            />
+          {/* PIN dots */}
+          <div className="pin-label-row">
+            <span className="login-label">PIN de acceso</span>
+          </div>
+          <div className="pin-dots" aria-label={`PIN: ${pin.length} de 4 dígitos ingresados`}>
+            {[0,1,2,3].map(i => (
+              <div
+                key={i}
+                className={`pin-dot${pin.length > i ? ' pin-dot-filled' : ''}`}
+              />
+            ))}
           </div>
 
           {error && (
             <p className="login-error">{error}</p>
           )}
 
-          <button
-            type="submit"
-            className="login-btn"
-            disabled={loading || !email.trim() || !password}
-          >
-            {loading ? (
-              <span className="login-spinner" />
-            ) : (
-              'Ingresar'
-            )}
-          </button>
-
-          <div style={{ textAlign: 'center', marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <Link
-              to="/forgot-password"
-              style={{
-                fontSize: '12px',
-                color: '#86ef86',
-                textDecoration: 'none',
-                opacity: 0.8,
-                transition: 'opacity 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
+          {/* Numeric keypad */}
+          <div className={`pin-pad${padDisabled ? ' pin-pad-disabled' : ''}`} aria-label="Teclado numérico">
+            {PAD_KEYS.map(key => {
+              const isConfirm = key === '→'
+              const isDelete = key === '⌫'
+              const confirmActive = isConfirm && pin.length === 4 && !padDisabled
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  aria-label={isDelete ? 'Borrar' : isConfirm ? 'Confirmar' : key}
+                  className={[
+                    'pin-key',
+                    isDelete ? 'pin-key-action' : '',
+                    isConfirm ? 'pin-key-confirm' : '',
+                    confirmActive ? 'pin-key-confirm-active' : '',
+                  ].join(' ')}
+                  onClick={() => handleKey(key)}
+                  disabled={padDisabled || (isConfirm && pin.length !== 4)}
+                  tabIndex={padDisabled ? -1 : 0}
+                >
+                  {loading && isConfirm ? (
+                    <span className="login-spinner" />
+                  ) : key}
+                </button>
+              )
+            })}
           </div>
-        </form>
+        </div>
       </div>
 
       <style>{`
@@ -172,7 +187,6 @@ export default function LoginPage() {
           position: relative;
           overflow: hidden;
         }
-        .dark .login-page { background: #05070B; }
 
         .login-blob {
           position: absolute;
@@ -250,7 +264,7 @@ export default function LoginPage() {
         }
 
         .login-body {
-          padding: 24px 26px 30px;
+          padding: 24px 26px 28px;
           display: flex;
           flex-direction: column;
           gap: 4px;
@@ -279,12 +293,94 @@ export default function LoginPage() {
           outline: none;
           transition: border-color 0.2s;
           width: 100%;
+          box-sizing: border-box;
         }
-        .login-input:focus {
-          border-color: rgba(134,239,134,0.4);
-        }
+        .login-input:focus { border-color: rgba(134,239,134,0.4); }
         .login-input::placeholder { color: #7a8ba8; }
         .login-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* PIN dots */
+        .pin-label-row {
+          margin-top: 6px;
+          margin-bottom: 10px;
+        }
+        .pin-dots {
+          display: flex;
+          justify-content: center;
+          gap: 18px;
+          margin-bottom: 14px;
+        }
+        .pin-dot {
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          border: 2px solid rgba(134,239,134,0.35);
+          background: transparent;
+          transition: background 0.15s, border-color 0.15s, transform 0.12s;
+        }
+        .pin-dot-filled {
+          background: #86ef86;
+          border-color: #86ef86;
+          transform: scale(1.1);
+        }
+
+        /* Keypad */
+        .pin-pad {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+          margin-top: 4px;
+          transition: opacity 0.2s;
+        }
+        .pin-pad-disabled {
+          opacity: 0.35;
+          pointer-events: none;
+        }
+
+        .pin-key {
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 14px;
+          color: #F2F6FF;
+          font-family: 'Sora', sans-serif;
+          font-size: 20px;
+          font-weight: 600;
+          height: 58px;
+          cursor: pointer;
+          transition: background 0.12s, transform 0.1s, border-color 0.12s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .pin-key:hover:not(:disabled) {
+          background: rgba(134,239,134,0.10);
+          border-color: rgba(134,239,134,0.2);
+        }
+        .pin-key:active:not(:disabled) {
+          transform: scale(0.93);
+          background: rgba(134,239,134,0.18);
+        }
+        .pin-key:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .pin-key-action {
+          color: #f87171;
+          font-size: 22px;
+        }
+        .pin-key-confirm {
+          color: #7a8ba8;
+          font-size: 22px;
+        }
+        .pin-key-confirm-active {
+          background: #86ef86;
+          border-color: #86ef86;
+          color: #031a03;
+        }
+        .pin-key-confirm-active:hover:not(:disabled) {
+          background: #a3f5a3;
+          border-color: #a3f5a3;
+        }
 
         .login-error {
           font-size: 13px;
@@ -297,30 +393,8 @@ export default function LoginPage() {
           text-align: center;
         }
 
-        .login-btn {
-          width: 100%;
-          padding: 13px;
-          border-radius: 14px;
-          border: none;
-          background: #86ef86;
-          color: #031a03;
-          font-family: 'Sora', sans-serif;
-          font-size: 15px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: transform 0.15s, opacity 0.15s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-top: 6px;
-          min-height: 48px;
-        }
-        .login-btn:hover:not(:disabled) { transform: translateY(-1px); opacity: 0.92; }
-        .login-btn:active:not(:disabled) { transform: translateY(0); }
-        .login-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
         .login-spinner {
-          width: 18px; height: 18px;
+          width: 16px; height: 16px;
           border: 2px solid rgba(3,26,3,0.3);
           border-top-color: #031a03;
           border-radius: 50%;
