@@ -1,0 +1,2296 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+		<title>Inglés con Sebas &#8211; Inglés en línea. Clases online.</title>
+<meta name='robots' content='max-image-preview:large' />
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<link rel='dns-prefetch' href='//www.googletagmanager.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="Inglés con Sebas &raquo; Feed" href="https://inglesconsebas.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Inglés con Sebas &raquo; Feed de los comentarios" href="https://inglesconsebas.com/comments/feed/" />
+<script>
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/inglesconsebas.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.8.5"}};
+/*! This file is auto-generated */
+!function(s,n){var o,i,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),a=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===a[t]})}function u(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);for(var n=e.getImageData(16,16,1,1),a=0;a<n.data.length;a++)if(0!==n.data[a])return!1;return!0}function f(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\udedf")}return!1}function g(e,t,n,a){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):s.createElement("canvas"),o=r.getContext("2d",{willReadFrequently:!0}),i=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(function(e){i[e]=t(o,e,n,a)}),i}function t(e){var t=s.createElement("script");t.src=e,t.defer=!0,s.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",i=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){s.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+g.toString()+"("+[JSON.stringify(i),f.toString(),p.toString(),u.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"}),r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=function(e){c(n=e.data),r.terminate(),t(n)})}catch(e){}c(n=g(i,f,p,u))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+</script>
+
+<link rel='stylesheet' id='quiz-maker-admin-css' href='https://inglesconsebas.com/wp-content/plugins/quiz-maker/admin/css/admin.css?ver=6.7.0.85' media='all' />
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<style id='classic-theme-styles-inline-css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<link rel='stylesheet' id='wp-components-css' href='https://inglesconsebas.com/wp-includes/css/dist/components/style.min.css?ver=6.8.5' media='all' />
+<link rel='stylesheet' id='wp-preferences-css' href='https://inglesconsebas.com/wp-includes/css/dist/preferences/style.min.css?ver=6.8.5' media='all' />
+<link rel='stylesheet' id='wp-block-editor-css' href='https://inglesconsebas.com/wp-includes/css/dist/block-editor/style.min.css?ver=6.8.5' media='all' />
+<link rel='stylesheet' id='popup-maker-block-library-style-css' href='https://inglesconsebas.com/wp-content/plugins/popup-maker/dist/packages/block-library-style.css?ver=dbea705cfafe089d65f1' media='all' />
+<link rel='stylesheet' id='storefront-gutenberg-blocks-css' href='https://inglesconsebas.com/wp-content/themes/storefront/assets/css/base/gutenberg-blocks.css?ver=2.8.0' media='all' />
+<style id='storefront-gutenberg-blocks-inline-css'>
+
+				.wp-block-button__link:not(.has-text-color) {
+					color: #333333;
+				}
+
+				.wp-block-button__link:not(.has-text-color):hover,
+				.wp-block-button__link:not(.has-text-color):focus,
+				.wp-block-button__link:not(.has-text-color):active {
+					color: #333333;
+				}
+
+				.wp-block-button__link:not(.has-background) {
+					background-color: #eeeeee;
+				}
+
+				.wp-block-button__link:not(.has-background):hover,
+				.wp-block-button__link:not(.has-background):focus,
+				.wp-block-button__link:not(.has-background):active {
+					border-color: #d5d5d5;
+					background-color: #d5d5d5;
+				}
+
+				.wp-block-quote footer,
+				.wp-block-quote cite,
+				.wp-block-quote__citation {
+					color: #6d6d6d;
+				}
+
+				.wp-block-pullquote cite,
+				.wp-block-pullquote footer,
+				.wp-block-pullquote__citation {
+					color: #6d6d6d;
+				}
+
+				.wp-block-image figcaption {
+					color: #6d6d6d;
+				}
+
+				.wp-block-separator.is-style-dots::before {
+					color: #333333;
+				}
+
+				.wp-block-file a.wp-block-file__button {
+					color: #333333;
+					background-color: #eeeeee;
+					border-color: #eeeeee;
+				}
+
+				.wp-block-file a.wp-block-file__button:hover,
+				.wp-block-file a.wp-block-file__button:focus,
+				.wp-block-file a.wp-block-file__button:active {
+					color: #333333;
+					background-color: #d5d5d5;
+				}
+
+				.wp-block-code,
+				.wp-block-preformatted pre {
+					color: #6d6d6d;
+				}
+
+				.wp-block-table:not( .has-background ):not( .is-style-stripes ) tbody tr:nth-child(2n) td {
+					background-color: #fdfdfd;
+				}
+
+				.wp-block-cover .wp-block-cover__inner-container h1,
+				.wp-block-cover .wp-block-cover__inner-container h2,
+				.wp-block-cover .wp-block-cover__inner-container h3,
+				.wp-block-cover .wp-block-cover__inner-container h4,
+				.wp-block-cover .wp-block-cover__inner-container h5,
+				.wp-block-cover .wp-block-cover__inner-container h6 {
+					color: #000000;
+				}
+			
+</style>
+<style id='global-styles-inline-css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 14px;--wp--preset--font-size--medium: 23px;--wp--preset--font-size--large: 26px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 16px;--wp--preset--font-size--huge: 37px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel='stylesheet' id='contact-form-7-css' href='https://inglesconsebas.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1.4' media='all' />
+<link rel='stylesheet' id='quiz-maker-css' href='https://inglesconsebas.com/wp-content/plugins/quiz-maker/public/css/quiz-maker-public.css?ver=6.7.0.85' media='all' />
+<link rel='stylesheet' id='table-addons-for-elementor-css' href='https://inglesconsebas.com/wp-content/plugins/table-addons-for-elementor/public/css/table-addons-for-elementor-public.css?ver=2.1.5' media='all' />
+<style id='woocommerce-inline-inline-css'>
+.woocommerce form .form-row .required { visibility: visible; }
+</style>
+<link rel='stylesheet' id='woo-variation-swatches-css' href='https://inglesconsebas.com/wp-content/plugins/woo-variation-swatches/assets/css/frontend.min.css?ver=1772905359' media='all' />
+<style id='woo-variation-swatches-inline-css'>
+:root {
+--wvs-tick:url("data:image/svg+xml;utf8,%3Csvg filter='drop-shadow(0px 0px 2px rgb(0 0 0 / .8))' xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 30 30'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='4' d='M4 16L11 23 27 7'/%3E%3C/svg%3E");
+
+--wvs-cross:url("data:image/svg+xml;utf8,%3Csvg filter='drop-shadow(0px 0px 5px rgb(255 255 255 / .6))' xmlns='http://www.w3.org/2000/svg' width='72px' height='72px' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23ff0000' stroke-linecap='round' stroke-width='0.6' d='M5 5L19 19M19 5L5 19'/%3E%3C/svg%3E");
+--wvs-single-product-item-width:30px;
+--wvs-single-product-item-height:30px;
+--wvs-single-product-item-font-size:16px}
+</style>
+<link rel='stylesheet' id='brands-styles-css' href='https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/css/brands.css?ver=10.3.8' media='all' />
+<link rel='stylesheet' id='storefront-style-css' href='https://inglesconsebas.com/wp-content/themes/storefront/style.css?ver=2.8.0' media='all' />
+<style id='storefront-style-inline-css'>
+
+			.main-navigation ul li a,
+			.site-title a,
+			ul.menu li a,
+			.site-branding h1 a,
+			button.menu-toggle,
+			button.menu-toggle:hover,
+			.handheld-navigation .dropdown-toggle {
+				color: #333333;
+			}
+
+			button.menu-toggle,
+			button.menu-toggle:hover {
+				border-color: #333333;
+			}
+
+			.main-navigation ul li a:hover,
+			.main-navigation ul li:hover > a,
+			.site-title a:hover,
+			.site-header ul.menu li.current-menu-item > a {
+				color: #747474;
+			}
+
+			table:not( .has-background ) th {
+				background-color: #f8f8f8;
+			}
+
+			table:not( .has-background ) tbody td {
+				background-color: #fdfdfd;
+			}
+
+			table:not( .has-background ) tbody tr:nth-child(2n) td,
+			fieldset,
+			fieldset legend {
+				background-color: #fbfbfb;
+			}
+
+			.site-header,
+			.secondary-navigation ul ul,
+			.main-navigation ul.menu > li.menu-item-has-children:after,
+			.secondary-navigation ul.menu ul,
+			.storefront-handheld-footer-bar,
+			.storefront-handheld-footer-bar ul li > a,
+			.storefront-handheld-footer-bar ul li.search .site-search,
+			button.menu-toggle,
+			button.menu-toggle:hover {
+				background-color: #ffffff;
+			}
+
+			p.site-description,
+			.site-header,
+			.storefront-handheld-footer-bar {
+				color: #404040;
+			}
+
+			button.menu-toggle:after,
+			button.menu-toggle:before,
+			button.menu-toggle span:before {
+				background-color: #333333;
+			}
+
+			h1, h2, h3, h4, h5, h6, .wc-block-grid__product-title {
+				color: #333333;
+			}
+
+			.widget h1 {
+				border-bottom-color: #333333;
+			}
+
+			body,
+			.secondary-navigation a {
+				color: #6d6d6d;
+			}
+
+			.widget-area .widget a,
+			.hentry .entry-header .posted-on a,
+			.hentry .entry-header .post-author a,
+			.hentry .entry-header .post-comments a,
+			.hentry .entry-header .byline a {
+				color: #727272;
+			}
+
+			a {
+				color: #f77b00;
+			}
+
+			a:focus,
+			button:focus,
+			.button.alt:focus,
+			input:focus,
+			textarea:focus,
+			input[type="button"]:focus,
+			input[type="reset"]:focus,
+			input[type="submit"]:focus,
+			input[type="email"]:focus,
+			input[type="tel"]:focus,
+			input[type="url"]:focus,
+			input[type="password"]:focus,
+			input[type="search"]:focus {
+				outline-color: #f77b00;
+			}
+
+			button, input[type="button"], input[type="reset"], input[type="submit"], .button, .widget a.button {
+				background-color: #eeeeee;
+				border-color: #eeeeee;
+				color: #333333;
+			}
+
+			button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .button:hover, .widget a.button:hover {
+				background-color: #d5d5d5;
+				border-color: #d5d5d5;
+				color: #333333;
+			}
+
+			button.alt, input[type="button"].alt, input[type="reset"].alt, input[type="submit"].alt, .button.alt, .widget-area .widget a.button.alt {
+				background-color: #333333;
+				border-color: #333333;
+				color: #ffffff;
+			}
+
+			button.alt:hover, input[type="button"].alt:hover, input[type="reset"].alt:hover, input[type="submit"].alt:hover, .button.alt:hover, .widget-area .widget a.button.alt:hover {
+				background-color: #1a1a1a;
+				border-color: #1a1a1a;
+				color: #ffffff;
+			}
+
+			.pagination .page-numbers li .page-numbers.current {
+				background-color: #e6e6e6;
+				color: #636363;
+			}
+
+			#comments .comment-list .comment-content .comment-text {
+				background-color: #f8f8f8;
+			}
+
+			.site-footer {
+				background-color: #f0f0f0;
+				color: #6d6d6d;
+			}
+
+			.site-footer a:not(.button):not(.components-button) {
+				color: #333333;
+			}
+
+			.site-footer .storefront-handheld-footer-bar a:not(.button):not(.components-button) {
+				color: #333333;
+			}
+
+			.site-footer h1, .site-footer h2, .site-footer h3, .site-footer h4, .site-footer h5, .site-footer h6, .site-footer .widget .widget-title, .site-footer .widget .widgettitle {
+				color: #333333;
+			}
+
+			.page-template-template-homepage.has-post-thumbnail .type-page.has-post-thumbnail .entry-title {
+				color: #000000;
+			}
+
+			.page-template-template-homepage.has-post-thumbnail .type-page.has-post-thumbnail .entry-content {
+				color: #000000;
+			}
+
+			.wc-block-components-button:not(.is-link) {
+				background-color: #333333;
+				color: #ffffff;
+			}
+
+			.wc-block-components-button:not(.is-link):hover,
+			.wc-block-components-button:not(.is-link):focus,
+			.wc-block-components-button:not(.is-link):active {
+				background-color: #1a1a1a;
+				color: #ffffff;
+			}
+
+			.wc-block-components-button:not(.is-link):disabled {
+				background-color: #333333;
+				color: #ffffff;
+			}
+
+			.wc-block-cart__submit-container {
+				background-color: #ffffff;
+			}
+
+			.wc-block-cart__submit-container::before {
+				color: rgba(220,220,220,0.5);
+			}
+
+			.wc-block-components-order-summary-item__quantity {
+				background-color: #ffffff;
+				border-color: #6d6d6d;
+				box-shadow: 0 0 0 2px #ffffff;
+				color: #6d6d6d;
+			}
+
+			@media screen and ( min-width: 768px ) {
+				.secondary-navigation ul.menu a:hover {
+					color: #595959;
+				}
+
+				.secondary-navigation ul.menu a {
+					color: #404040;
+				}
+
+				.main-navigation ul.menu ul.sub-menu,
+				.main-navigation ul.nav-menu ul.children {
+					background-color: #f0f0f0;
+				}
+
+				.site-header {
+					border-bottom-color: #f0f0f0;
+				}
+			}
+</style>
+<link rel='stylesheet' id='storefront-icons-css' href='https://inglesconsebas.com/wp-content/themes/storefront/assets/css/base/icons.css?ver=2.8.0' media='all' />
+<link rel='stylesheet' id='storefront-fonts-css' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C300%2C300italic%2C400italic%2C600%2C700%2C900&#038;subset=latin%2Clatin-ext&#038;ver=2.8.0' media='all' />
+<link rel='stylesheet' id='popup-maker-site-css' href='//inglesconsebas.com/wp-content/uploads/pum/pum-site-styles.css?generated=1604245070&#038;ver=1.21.5' media='all' />
+<link rel='stylesheet' id='storefront-woocommerce-style-css' href='https://inglesconsebas.com/wp-content/themes/storefront/assets/css/woocommerce/woocommerce.css?ver=2.8.0' media='all' />
+<style id='storefront-woocommerce-style-inline-css'>
+
+			a.cart-contents,
+			.site-header-cart .widget_shopping_cart a {
+				color: #333333;
+			}
+
+			a.cart-contents:hover,
+			.site-header-cart .widget_shopping_cart a:hover,
+			.site-header-cart:hover > li > a {
+				color: #747474;
+			}
+
+			table.cart td.product-remove,
+			table.cart td.actions {
+				border-top-color: #ffffff;
+			}
+
+			.storefront-handheld-footer-bar ul li.cart .count {
+				background-color: #333333;
+				color: #ffffff;
+				border-color: #ffffff;
+			}
+
+			.woocommerce-tabs ul.tabs li.active a,
+			ul.products li.product .price,
+			.onsale,
+			.wc-block-grid__product-onsale,
+			.widget_search form:before,
+			.widget_product_search form:before {
+				color: #6d6d6d;
+			}
+
+			.woocommerce-breadcrumb a,
+			a.woocommerce-review-link,
+			.product_meta a {
+				color: #727272;
+			}
+
+			.wc-block-grid__product-onsale,
+			.onsale {
+				border-color: #6d6d6d;
+			}
+
+			.star-rating span:before,
+			.quantity .plus, .quantity .minus,
+			p.stars a:hover:after,
+			p.stars a:after,
+			.star-rating span:before,
+			#payment .payment_methods li input[type=radio]:first-child:checked+label:before {
+				color: #f77b00;
+			}
+
+			.widget_price_filter .ui-slider .ui-slider-range,
+			.widget_price_filter .ui-slider .ui-slider-handle {
+				background-color: #f77b00;
+			}
+
+			.order_details {
+				background-color: #f8f8f8;
+			}
+
+			.order_details > li {
+				border-bottom: 1px dotted #e3e3e3;
+			}
+
+			.order_details:before,
+			.order_details:after {
+				background: -webkit-linear-gradient(transparent 0,transparent 0),-webkit-linear-gradient(135deg,#f8f8f8 33.33%,transparent 33.33%),-webkit-linear-gradient(45deg,#f8f8f8 33.33%,transparent 33.33%)
+			}
+
+			#order_review {
+				background-color: #ffffff;
+			}
+
+			#payment .payment_methods > li .payment_box,
+			#payment .place-order {
+				background-color: #fafafa;
+			}
+
+			#payment .payment_methods > li:not(.woocommerce-notice) {
+				background-color: #f5f5f5;
+			}
+
+			#payment .payment_methods > li:not(.woocommerce-notice):hover {
+				background-color: #f0f0f0;
+			}
+
+			.woocommerce-pagination .page-numbers li .page-numbers.current {
+				background-color: #e6e6e6;
+				color: #636363;
+			}
+
+			.wc-block-grid__product-onsale,
+			.onsale,
+			.woocommerce-pagination .page-numbers li .page-numbers:not(.current) {
+				color: #6d6d6d;
+			}
+
+			p.stars a:before,
+			p.stars a:hover~a:before,
+			p.stars.selected a.active~a:before {
+				color: #6d6d6d;
+			}
+
+			p.stars.selected a.active:before,
+			p.stars:hover a:before,
+			p.stars.selected a:not(.active):before,
+			p.stars.selected a.active:before {
+				color: #f77b00;
+			}
+
+			.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger {
+				background-color: #eeeeee;
+				color: #333333;
+			}
+
+			.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger:hover {
+				background-color: #d5d5d5;
+				border-color: #d5d5d5;
+				color: #333333;
+			}
+
+			.button.added_to_cart:focus,
+			.button.wc-forward:focus {
+				outline-color: #f77b00;
+			}
+
+			.added_to_cart,
+			.site-header-cart .widget_shopping_cart a.button,
+			.wc-block-grid__products .wc-block-grid__product .wp-block-button__link {
+				background-color: #eeeeee;
+				border-color: #eeeeee;
+				color: #333333;
+			}
+
+			.added_to_cart:hover,
+			.site-header-cart .widget_shopping_cart a.button:hover,
+			.wc-block-grid__products .wc-block-grid__product .wp-block-button__link:hover {
+				background-color: #d5d5d5;
+				border-color: #d5d5d5;
+				color: #333333;
+			}
+
+			.added_to_cart.alt, .added_to_cart, .widget a.button.checkout {
+				background-color: #333333;
+				border-color: #333333;
+				color: #ffffff;
+			}
+
+			.added_to_cart.alt:hover, .added_to_cart:hover, .widget a.button.checkout:hover {
+				background-color: #1a1a1a;
+				border-color: #1a1a1a;
+				color: #ffffff;
+			}
+
+			.button.loading {
+				color: #eeeeee;
+			}
+
+			.button.loading:hover {
+				background-color: #eeeeee;
+			}
+
+			.button.loading:after {
+				color: #333333;
+			}
+
+			@media screen and ( min-width: 768px ) {
+				.site-header-cart .widget_shopping_cart,
+				.site-header .product_list_widget li .quantity {
+					color: #404040;
+				}
+
+				.site-header-cart .widget_shopping_cart .buttons,
+				.site-header-cart .widget_shopping_cart .total {
+					background-color: #f5f5f5;
+				}
+
+				.site-header-cart .widget_shopping_cart {
+					background-color: #f0f0f0;
+				}
+			}
+				.storefront-product-pagination a {
+					color: #6d6d6d;
+					background-color: #ffffff;
+				}
+				.storefront-sticky-add-to-cart {
+					color: #6d6d6d;
+					background-color: #ffffff;
+				}
+
+				.storefront-sticky-add-to-cart a:not(.button) {
+					color: #333333;
+				}
+</style>
+<link rel='stylesheet' id='elementor-icons-css' href='https://inglesconsebas.com/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css?ver=5.45.0' media='all' />
+<link rel='stylesheet' id='elementor-frontend-css' href='https://inglesconsebas.com/wp-content/plugins/elementor/assets/css/frontend.min.css?ver=3.34.0' media='all' />
+<link rel='stylesheet' id='elementor-post-6-css' href='https://inglesconsebas.com/wp-content/uploads/elementor/css/post-6.css?ver=1777576974' media='all' />
+<link rel='stylesheet' id='lae-animate-css' href='https://inglesconsebas.com/wp-content/plugins/addons-for-elementor/assets/css/lib/animate.css?ver=9.0' media='all' />
+<link rel='stylesheet' id='lae-sliders-styles-css' href='https://inglesconsebas.com/wp-content/plugins/addons-for-elementor/assets/css/lib/sliders.min.css?ver=9.0' media='all' />
+<link rel='stylesheet' id='lae-icomoon-styles-css' href='https://inglesconsebas.com/wp-content/plugins/addons-for-elementor/assets/css/icomoon.css?ver=9.0' media='all' />
+<link rel='stylesheet' id='lae-frontend-styles-css' href='https://inglesconsebas.com/wp-content/plugins/addons-for-elementor/assets/css/lae-frontend.css?ver=9.0' media='all' />
+<link rel='stylesheet' id='lae-grid-styles-css' href='https://inglesconsebas.com/wp-content/plugins/addons-for-elementor/assets/css/lae-grid.css?ver=9.0' media='all' />
+<link rel='stylesheet' id='lae-widgets-styles-css' href='https://inglesconsebas.com/wp-content/plugins/addons-for-elementor/assets/css/widgets/lae-widgets.min.css?ver=9.0' media='all' />
+<link rel='stylesheet' id='storefront-woocommerce-brands-style-css' href='https://inglesconsebas.com/wp-content/themes/storefront/assets/css/woocommerce/extensions/brands.css?ver=2.8.0' media='all' />
+<script src="https://inglesconsebas.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script src="https://inglesconsebas.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.10.3.8" id="wc-jquery-blockui-js" data-wp-strategy="defer"></script>
+<script id="wc-add-to-cart-js-extra">
+var wc_add_to_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","i18n_view_cart":"Ver carrito","cart_url":"https:\/\/inglesconsebas.com\/cart\/","is_cart":"","cart_redirect_after_add":"no"};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=10.3.8" id="wc-add-to-cart-js" defer data-wp-strategy="defer"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.10.3.8" id="wc-js-cookie-js" defer data-wp-strategy="defer"></script>
+<script id="woocommerce-js-extra">
+var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","i18n_password_show":"Mostrar contrase\u00f1a","i18n_password_hide":"Ocultar contrase\u00f1a"};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=10.3.8" id="woocommerce-js" defer data-wp-strategy="defer"></script>
+
+<!-- Fragmento de código de la etiqueta de Google (gtag.js) añadida por Site Kit -->
+<!-- Fragmento de código de Google Analytics añadido por Site Kit -->
+<script src="https://www.googletagmanager.com/gtag/js?id=GT-P8QZMF5C" id="google_gtagjs-js" async></script>
+<script id="google_gtagjs-js-after">
+window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}
+gtag("set","linker",{"domains":["inglesconsebas.com"]});
+gtag("js", new Date());
+gtag("set", "developer_id.dZTNiMT", true);
+gtag("config", "GT-P8QZMF5C");
+</script>
+<link rel="https://api.w.org/" href="https://inglesconsebas.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://inglesconsebas.com/wp-json/wp/v2/pages/753" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://inglesconsebas.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.8.5" />
+<meta name="generator" content="WooCommerce 10.3.8" />
+<link rel="canonical" href="https://inglesconsebas.com/" />
+<link rel='shortlink' href='https://inglesconsebas.com/' />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://inglesconsebas.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Finglesconsebas.com%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://inglesconsebas.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Finglesconsebas.com%2F&#038;format=xml" />
+        <script type="text/javascript">
+            ( function () {
+                window.lae_fs = { can_use_premium_code: false};
+            } )();
+        </script>
+        <meta name="generator" content="Site Kit by Google 1.167.0" /><!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(61230670, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true,
+        ecommerce:"dataLayer"
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/61230670" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter --><script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?167",t.onload=function(){VK.Retargeting.Init("VK-RTRG-477632-hY9v2"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-477632-hY9v2" style="position:fixed; left:-999px;" alt=""/></noscript><!-- MailerLite Universal -->
+<script>
+(function(m,a,i,l,e,r){ m['MailerLiteObject']=e;function f(){
+var c={ a:arguments,q:[]};var r=this.push(c);return "number"!=typeof r?r:f.bind(c.q);}
+f.q=f.q||[];m[e]=m[e]||f.bind(f.q);m[e].q=m[e].q||f.q;r=a.createElement(i);
+var _=a.getElementsByTagName(i)[0];r.async=1;r.src=l+'?v'+(~~(new Date().getTime()/1000000));
+_.parentNode.insertBefore(r,_);})(window, document, 'script', 'https://static.mailerlite.com/js/universal.js', 'ml');
+
+var ml_account = ml('accounts', '1951704', 'w5c3y8a0f0', 'load');
+</script>
+<!-- End MailerLite Universal -->
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PP9DMHL');</script>
+<!-- End Google Tag Manager --><!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '203694831059093');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=203694831059093&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code --><style id="mystickymenu" type="text/css">#mysticky-nav { width:100%; position: static; height: auto !important; }#mysticky-nav.wrapfixed { position:fixed; left: 0px; margin-top:0px;  z-index: 99990; -webkit-transition: 0.3s; -moz-transition: 0.3s; -o-transition: 0.3s; transition: 0.3s; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; filter: alpha(opacity=90); opacity:0.9; background-color: #806bf9;}#mysticky-nav.wrapfixed .myfixed{ background-color: #806bf9; position: relative;top: auto;left: auto;right: auto;}#mysticky-nav.wrapfixed ul li.menu-item a { color: #ffffff;}#mysticky-nav .myfixed { margin:0 auto; float:none; border:0px; background:none; max-width:100%; }</style>			<style type="text/css">
+																	#mysticky-nav.wrapfixed > .site-header {margin-bottom: 0;}
+					#mysticky-nav.wrapfixed > .storefront-primary-navigation {padding: 10px 0;}
+																							</style>
+			        <style>
+            span[class*="simple-icon-"] {
+            	width: 1.5rem;
+            	height: 1.5rem;
+            	display: inline-block;
+
+            }
+            span[class*="simple-icon-"] svg {
+            	display: inline-block;
+            	vertical-align: middle;
+                height: inherit;
+                width: inherit;
+            }
+        </style>
+    	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+	<meta name="generator" content="Elementor 3.34.0; features: additional_custom_breakpoints; settings: css_print_method-external, google_font-enabled, font_display-auto">
+			<style>
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {
+					background-image: none !important;
+				}
+				@media screen and (max-height: 1024px) {
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+				@media screen and (max-height: 640px) {
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+			</style>
+			<link rel="icon" href="https://inglesconsebas.com/wp-content/uploads/cropped-ISOLOGO-CORPORATE-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://inglesconsebas.com/wp-content/uploads/cropped-ISOLOGO-CORPORATE-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://inglesconsebas.com/wp-content/uploads/cropped-ISOLOGO-CORPORATE-180x180.png" />
+<meta name="msapplication-TileImage" content="https://inglesconsebas.com/wp-content/uploads/cropped-ISOLOGO-CORPORATE-270x270.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" /></head>
+<body class="home wp-singular page-template page-template-elementor_canvas page page-id-753 wp-custom-logo wp-embed-responsive wp-theme-storefront theme-storefront woocommerce-no-js eio-default woo-variation-swatches wvs-behavior-blur wvs-theme-storefront wvs-mobile wvs-show-label wvs-tooltip storefront-secondary-navigation storefront-align-wide right-sidebar woocommerce-active elementor-default elementor-template-canvas elementor-kit-6 elementor-page elementor-page-753">
+			<div data-elementor-type="wp-page" data-elementor-id="753" class="elementor elementor-753" data-elementor-post-type="page">
+						<section class="elementor-section elementor-top-section elementor-element elementor-element-fd8ce4c elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="fd8ce4c" data-element_type="section">
+						<div class="elementor-container elementor-column-gap-default">
+					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-4de4a32" data-id="4de4a32" data-element_type="column">
+			<div class="elementor-widget-wrap elementor-element-populated">
+						<div class="elementor-element elementor-element-d95af54 elementor-widget elementor-widget-html" data-id="d95af54" data-element_type="widget" data-widget_type="html.default">
+				<div class="elementor-widget-container">
+					<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Inglés con Sebas · Clases de inglés online</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS — DARK (default)
+═══════════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  --brand:#86ef86;
+  --brand2:#5ddb5d;
+  --brandRgb:134,239,134;
+  --bg0:#05070B;
+  --bg1:#080d14;
+  --bg2:#0A0F18;
+  --card:rgba(255,255,255,.05);
+  --cardHov:rgba(255,255,255,.08);
+  --cardBorder:rgba(255,255,255,.08);
+  --cardBorderHov:rgba(134,239,134,.25);
+  --white:#F8FAFF;
+  --text:#F2F6FF;
+  --muted:#C6D0E2;
+  --muted2:#9AA6BF;
+  --stroke:rgba(255,255,255,.08);
+  --strokeG:rgba(134,239,134,.18);
+  --navBg:rgba(5,7,11,.88);
+  --navBorder:rgba(255,255,255,.07);
+  --pillBg:rgba(134,239,134,.1);
+  --pillBorder:rgba(134,239,134,.25);
+  --heroGrad1:rgba(134,239,134,.13);
+  --heroGrad2:rgba(134,239,134,.08);
+  --heroGrad3:rgba(134,239,134,.05);
+  --sectionLineBg:rgba(134,239,134,.18);
+  --tableHeaderBg:rgba(255,255,255,.025);
+  --tableRowHov:rgba(134,239,134,.04);
+  --toggleBg:rgba(255,255,255,.07);
+  --toggleBorder:rgba(255,255,255,.12);
+  --selectBg:rgba(255,255,255,.06);
+  --selectBorder:rgba(255,255,255,.1);
+  --tagBg:rgba(255,255,255,.05);
+  --tagBorder:rgba(255,255,255,.08);
+  --csCardBg:rgba(134,239,134,.03);
+  --csCardBorder:rgba(134,239,134,.15);
+  --footerBg:#080d14;
+  --footerText:rgba(242,246,255,.35);
+  --insetTop:inset 0 1px 0 rgba(255,255,255,.07);
+  --shadow:0 22px 70px rgba(0,0,0,.62);
+  --shadowSm:0 8px 32px rgba(0,0,0,.45);
+  --marqueeText:#C6D0E2;
+  --fabBg:rgba(5,7,11,.88);
+  --fabBorder:rgba(255,255,255,.14);
+  --interviewCardBg:rgba(255,255,255,.04);
+  --interviewCardBorder:rgba(255,255,255,.08);
+}
+
+/* ═══════════════════════════════════════════
+   TOKENS — LIGHT
+═══════════════════════════════════════════ */
+[data-theme="light"] {
+  --brand:#2da82d;
+  --brand2:#228a22;
+  --brandRgb:45,168,45;
+  --bg0:#f0f4f0;
+  --bg1:#e8ede8;
+  --bg2:#dfe7df;
+  --card:rgba(255,255,255,.8);
+  --cardHov:rgba(255,255,255,1);
+  --cardBorder:rgba(0,0,0,.09);
+  --cardBorderHov:rgba(45,168,45,.4);
+  --white:#0E1A0E;
+  --text:#1a2a1a;
+  --muted:#3d5c3d;
+  --muted2:#5a7a5a;
+  --stroke:rgba(0,0,0,.09);
+  --strokeG:rgba(45,168,45,.2);
+  --navBg:rgba(240,244,240,.92);
+  --navBorder:rgba(0,0,0,.07);
+  --pillBg:rgba(45,168,45,.1);
+  --pillBorder:rgba(45,168,45,.3);
+  --heroGrad1:rgba(45,168,45,.1);
+  --heroGrad2:rgba(45,168,45,.06);
+  --heroGrad3:rgba(45,168,45,.03);
+  --sectionLineBg:rgba(45,168,45,.25);
+  --tableHeaderBg:rgba(0,0,0,.03);
+  --tableRowHov:rgba(45,168,45,.05);
+  --toggleBg:rgba(0,0,0,.06);
+  --toggleBorder:rgba(0,0,0,.12);
+  --selectBg:rgba(255,255,255,.7);
+  --selectBorder:rgba(0,0,0,.12);
+  --tagBg:rgba(0,0,0,.04);
+  --tagBorder:rgba(0,0,0,.08);
+  --csCardBg:rgba(45,168,45,.04);
+  --csCardBorder:rgba(45,168,45,.2);
+  --footerBg:#dfe7df;
+  --footerText:rgba(26,42,26,.45);
+  --insetTop:inset 0 1px 0 rgba(255,255,255,.6);
+  --shadow:0 12px 40px rgba(0,0,0,.1);
+  --shadowSm:0 4px 20px rgba(0,0,0,.08);
+  --marqueeText:#3d5c3d;
+  --fabBg:rgba(240,244,240,.95);
+  --fabBorder:rgba(0,0,0,.12);
+  --interviewCardBg:rgba(255,255,255,.6);
+  --interviewCardBorder:rgba(0,0,0,.08);
+}
+
+/* ═══════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'DM Sans',ui-sans-serif,sans-serif;
+  color:var(--text);
+  background:var(--bg0);
+  background-image:
+    radial-gradient(ellipse 900px 500px at 10% 0%,var(--heroGrad1),transparent 60%),
+    radial-gradient(ellipse 700px 400px at 90% 15%,var(--heroGrad2),transparent 60%),
+    radial-gradient(ellipse 600px 600px at 50% 100%,var(--heroGrad3),transparent 60%);
+  min-height:100vh;
+  transition:background .3s,color .3s;
+}
+
+h1,h2,h3,h4{font-family:'Sora',sans-serif;}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:200;
+  background:var(--navBg);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--navBorder);
+  padding:0 40px;
+  height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .3s,border-color .3s;
+}
+
+.navLogo{
+  font-family:'Sora',sans-serif;
+  font-size:17px;font-weight:900;
+  color:var(--white);
+  text-decoration:none;
+  letter-spacing:-.02em;
+  display:flex;align-items:center;gap:8px;
+}
+.navLogo .logoAccent{color:var(--brand);}
+
+.navLinks{
+  display:flex;align-items:center;gap:28px;list-style:none;
+}
+.navLinks a{
+  font-size:14px;font-weight:600;
+  color:var(--muted2);
+  text-decoration:none;
+  transition:color .2s;
+}
+.navLinks a:hover{color:var(--brand);}
+
+.navRight{display:flex;align-items:center;gap:12px;}
+
+/* Theme toggle */
+.themeToggle{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:var(--toggleBg);
+  border:1px solid var(--toggleBorder);
+  cursor:pointer;
+  transition:all .2s;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;
+  color:var(--muted2);
+  user-select:none;
+}
+.themeToggle:hover{border-color:var(--strokeG);color:var(--brand);}
+.themeToggle .tIcon{font-size:15px;transition:transform .3s;}
+[data-theme="light"] .themeToggle .tIcon{transform:rotate(180deg);}
+
+.navCta{
+  padding:9px 20px;
+  border-radius:999px;
+  background:var(--brand);
+  color:#030805;
+  font-size:13px;font-weight:800;
+  text-decoration:none;
+  transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(var(--brandRgb),.25);
+  white-space:nowrap;
+}
+.navCta:hover{background:var(--brand2);transform:translateY(-1px);}
+
+/* ═══════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════ */
+.marqueeband{
+  background:var(--bg2);
+  border-bottom:1px solid var(--stroke);
+  overflow:hidden;padding:10px 0;
+  white-space:nowrap;
+  transition:background .3s;
+}
+.marqueeinner{
+  display:inline-flex;gap:0;
+  animation:marquee 30s linear infinite;
+}
+.marqueeitem{
+  font-size:12px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--marqueeText);
+  padding:0 28px;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.marqueeitem .dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--brand);
+  box-shadow:0 0 6px var(--brand);
+  flex-shrink:0;
+}
+
+/* ═══════════════════════════════════════════
+   WRAP
+═══════════════════════════════════════════ */
+.wrap{max-width:1060px;margin:0 auto;padding:52px 24px 120px;}
+
+/* ═══════════════════════════════════════════
+   SECTION LABEL
+═══════════════════════════════════════════ */
+.sectionLabel{
+  font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--brand);
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.sectionLabel::after{
+  content:'';flex:1;height:1px;
+  background:var(--sectionLineBg);
+}
+
+.section{margin-top:36px;}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{
+  border-radius:28px;
+  border:1px solid var(--cardBorder);
+  background:var(--card);
+  box-shadow:var(--shadow),var(--insetTop);
+  padding:52px 48px 48px;
+  position:relative;overflow:hidden;
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:52px;
+  align-items:center;
+  width:100%;
+}
+.hero::before{
+  content:'';position:absolute;top:-80px;left:-80px;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(var(--brandRgb),.1),transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;bottom:-60px;right:360px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(var(--brandRgb),.06),transparent 70%);
+  pointer-events:none;
+}
+
+.heroEyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brand);
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  padding:6px 14px;border-radius:999px;
+  margin-bottom:20px;
+  width:fit-content;
+}
+
+.heroTitle{
+  font-size:52px;font-weight:900;
+  color:var(--white);
+  line-height:.97;letter-spacing:-.03em;
+}
+.heroTitle .hl{color:var(--brand);}
+.heroTitle .sm{font-size:36px;font-weight:600;opacity:.5;display:block;margin-bottom:6px;}
+
+.heroSub{
+  margin-top:20px;
+  font-size:16px;line-height:1.8;
+  color:var(--muted);max-width:520px;
+}
+.heroSub strong{color:var(--white);font-weight:600;}
+
+.heroCtas{
+  margin-top:30px;
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+  width:100%;
+}
+
+.ctaPrimary{
+  padding:13px 26px;border-radius:999px;
+  background:var(--brand);color:#030805;
+  font-size:14px;font-weight:800;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:9px;
+  transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 6px 28px rgba(var(--brandRgb),.3);
+}
+.ctaPrimary:hover{background:var(--brand2);transform:translateY(-2px);}
+
+.ctaSecondary{
+  padding:13px 26px;border-radius:999px;
+  background:transparent;
+  border:1.5px solid var(--cardBorder);
+  color:var(--muted);
+  font-size:14px;font-weight:700;
+  text-decoration:none;
+  transition:border-color .2s,color .2s;
+}
+.ctaSecondary:hover{border-color:var(--brand);color:var(--brand);}
+
+.heroStats{
+  margin-top:38px;
+  display:flex;gap:28px;
+  padding-top:28px;
+  border-top:1px solid var(--stroke);
+  flex-wrap:wrap;
+}
+.heroStat{}
+.heroStatNum{
+  font-size:30px;font-weight:900;
+  font-family:'Sora',sans-serif;
+  color:var(--white);letter-spacing:-.02em;line-height:1;
+}
+.heroStatNum span{color:var(--brand);}
+.heroStatLabel{font-size:12px;color:var(--muted2);margin-top:4px;font-weight:500;}
+
+/* Hero right card */
+.heroCard{
+  background:var(--bg2);
+  border-radius:24px;
+  border:1px solid var(--cardBorder);
+  padding:28px 24px 24px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadowSm);
+  z-index:1;
+}
+[data-theme="dark"] .heroCard{background:rgba(255,255,255,.04);}
+[data-theme="light"] .heroCard{background:rgba(255,255,255,.8);}
+
+.heroCardTag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brand);
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  padding:5px 12px;border-radius:999px;
+  margin-bottom:16px;
+}
+.heroCardTag .live{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--brand);
+  box-shadow:0 0 8px var(--brand);
+  animation:pulse 2s infinite;
+}
+
+.heroCardTitle{
+  font-size:18px;font-weight:900;
+  color:var(--white);letter-spacing:-.02em;
+  line-height:1.3;margin-bottom:16px;
+}
+
+.miniPackList{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.miniPackItem{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:12px;
+  background:var(--tagBg);border:1px solid var(--tagBorder);
+  transition:background .2s;
+}
+.miniPackItem:hover{background:var(--cardHov);}
+.miniPackName{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px;}
+.miniPackPrice{font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--brand);}
+
+.heroCardCta{
+  display:block;width:100%;
+  padding:13px;border-radius:999px;
+  background:var(--brand);color:#030805;
+  font-size:13px;font-weight:800;
+  text-decoration:none;text-align:center;
+  transition:background .2s,transform .15s;
+  box-shadow:0 4px 20px rgba(var(--brandRgb),.25);
+}
+.heroCardCta:hover{background:var(--brand2);transform:translateY(-1px);}
+
+/* ═══════════════════════════════════════════
+   PRODUCTS GRID
+═══════════════════════════════════════════ */
+.productsGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.productCard{
+  border-radius:24px;
+  border:1px solid var(--cardBorder);
+  background:var(--card);
+  box-shadow:var(--shadowSm),var(--insetTop);
+  padding:28px 24px 24px;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:border-color .25s,transform .25s,box-shadow .25s;
+  cursor:default;
+}
+.productCard:hover{
+  border-color:var(--cardBorderHov);
+  transform:translateY(-4px);
+  box-shadow:0 22px 60px rgba(0,0,0,.32);
+}
+
+.productCard.featuredCard{
+  border-color:var(--strokeG);
+  background:linear-gradient(145deg,rgba(var(--brandRgb),.07),var(--card));
+}
+
+.productIcon{font-size:34px;margin-bottom:14px;display:block;animation:float 4s ease-in-out infinite;}
+.productCard:nth-child(2) .productIcon{animation-delay:.6s;}
+.productCard:nth-child(3) .productIcon{animation-delay:1.2s;}
+.productCard:nth-child(4) .productIcon{animation-delay:1.8s;}
+.productCard:nth-child(5) .productIcon{animation-delay:2.4s;}
+
+.productTag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brand);
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  padding:4px 10px;border-radius:999px;
+  margin-bottom:12px;width:fit-content;
+}
+
+.productTitle{
+  font-size:20px;font-weight:900;
+  color:var(--white);letter-spacing:-.02em;
+  line-height:1.25;margin-bottom:10px;
+}
+
+.productDesc{
+  font-size:14px;line-height:1.7;
+  color:var(--muted);font-weight:400;
+  flex:1;margin-bottom:20px;
+}
+
+.productCta{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 18px;border-radius:999px;
+  background:var(--brand);color:#030805;
+  font-size:12px;font-weight:800;
+  text-decoration:none;width:fit-content;
+  transition:background .2s,transform .15s;
+  box-shadow:0 4px 16px rgba(var(--brandRgb),.2);
+}
+.productCta:hover{background:var(--brand2);transform:translateY(-1px);}
+.productCtaSecondary{
+  background:transparent;color:var(--brand);
+  border:1.5px solid var(--pillBorder);
+  box-shadow:none;
+}
+.productCtaSecondary:hover{background:var(--pillBg);}
+
+/* ═══════════════════════════════════════════
+   PRICING TABLE (two modes)
+═══════════════════════════════════════════ */
+.pricingWrap{
+  border-radius:28px;
+  border:1px solid var(--cardBorder);
+  background:var(--card);
+  box-shadow:var(--shadow),var(--insetTop);
+  overflow:hidden;
+}
+
+.pricingTabs{
+  display:flex;gap:6px;
+  padding:16px 24px;
+  border-bottom:1px solid var(--stroke);
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+}
+.pricingTabsLeft{display:flex;gap:6px;flex-wrap:wrap;}
+
+.pricingTab{
+  padding:8px 18px;border-radius:999px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;
+  color:var(--muted2);
+  background:var(--tagBg);border:1px solid var(--tagBorder);
+  cursor:pointer;transition:all .2s;user-select:none;
+}
+.pricingTab.active{
+  background:var(--brand);color:#030805;
+  border-color:transparent;
+}
+.pricingTab:not(.active):hover{border-color:var(--strokeG);color:var(--brand);}
+
+.pricingNote{
+  font-size:12px;font-weight:600;
+  color:var(--muted2);
+  background:var(--tagBg);
+  border:1px solid var(--tagBorder);
+  padding:6px 12px;border-radius:999px;
+}
+
+/* table */
+.packHeader{
+  display:grid;
+  grid-template-columns:1fr 150px 190px;
+  padding:12px 28px;
+  border-bottom:1px solid var(--stroke);
+  background:var(--tableHeaderBg);
+}
+.packHeader span{
+  font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted2);
+}
+.packHeader span:not(:first-child){text-align:center;}
+
+.packTable{display:none;}
+.packTable.active{display:block;}
+
+.packRow{
+  display:grid;
+  grid-template-columns:1fr 150px 190px;
+  padding:18px 28px;
+  border-bottom:1px solid var(--stroke);
+  align-items:center;
+  transition:background .2s;
+}
+.packRow:last-child{border-bottom:none;}
+.packRow:hover{background:var(--tableRowHov);}
+
+.packName{display:flex;align-items:center;gap:12px;}
+.packEmoji{font-size:22px;}
+.packLabel{font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--white);}
+.packSub{font-size:12px;color:var(--muted2);margin-top:2px;}
+
+.packFreq{text-align:center;font-size:14px;color:var(--muted);}
+
+.packPriceCol{text-align:center;}
+.packPrice{font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:var(--white);}
+.packNote{font-size:11px;color:var(--muted2);margin-top:3px;}
+.nativeBadge{
+  display:inline-block;margin-left:8px;
+  font-size:10px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--brand);
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  padding:2px 8px;border-radius:999px;vertical-align:middle;
+}
+.nativeNote{font-size:11px;color:var(--brand);margin-top:3px;font-weight:600;}
+
+/* ═══════════════════════════════════════════
+   INTERVIEW SECTION
+═══════════════════════════════════════════ */
+.interviewCard{
+  border-radius:28px;
+  border:1px solid var(--interviewCardBorder);
+  background:var(--interviewCardBg);
+  box-shadow:var(--shadow);
+  padding:44px 44px;
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:48px;
+  align-items:center;
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.interviewCard::before{
+  content:'';position:absolute;
+  top:-80px;right:-80px;
+  width:340px;height:340px;
+  background:radial-gradient(circle,rgba(var(--brandRgb),.1),transparent 70%);
+  pointer-events:none;
+}
+
+.interviewTag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brand);
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  padding:5px 12px;border-radius:999px;
+  margin-bottom:16px;width:fit-content;
+}
+
+.interviewTitle{
+  font-size:38px;font-weight:900;
+  color:var(--white);letter-spacing:-.03em;
+  line-height:1.05;margin-bottom:14px;
+}
+
+.interviewDesc{
+  font-size:15px;line-height:1.75;
+  color:var(--muted);font-weight:400;
+  margin-bottom:24px;max-width:480px;
+}
+
+.interviewPoints{
+  list-style:none;
+  display:flex;flex-direction:column;gap:8px;
+  margin-bottom:28px;
+}
+.interviewPoints li{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;font-weight:600;color:var(--muted);
+}
+.interviewPoints li::before{
+  content:'✓';
+  width:20px;height:20px;border-radius:50%;
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  color:var(--brand);font-size:11px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+.interviewVisual{
+  border-radius:20px;
+  border:1px solid var(--cardBorder);
+  background:var(--bg2);
+  padding:28px 24px;
+  text-align:center;
+}
+[data-theme="light"] .interviewVisual{background:rgba(255,255,255,.7);}
+.interviewEmoji{font-size:60px;display:block;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
+.interviewVisualTitle{
+  font-size:16px;font-weight:900;
+  font-family:'Sora',sans-serif;
+  color:var(--white);margin-bottom:6px;
+}
+.interviewVisualSub{font-size:13px;color:var(--muted2);line-height:1.6;}
+
+/* ═══════════════════════════════════════════
+   COMING SOON
+═══════════════════════════════════════════ */
+.csCard{
+  border-radius:28px;
+  border:1.5px dashed var(--csCardBorder);
+  background:var(--csCardBg);
+  padding:48px 44px;
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:48px;
+  align-items:center;
+  position:relative;overflow:hidden;
+}
+.csCard::before{
+  content:'';position:absolute;
+  top:-60px;left:-60px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(var(--brandRgb),.08),transparent 70%);
+  pointer-events:none;
+}
+
+.csBadge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#030805;
+  background:var(--brand);
+  padding:6px 14px;border-radius:999px;
+  margin-bottom:18px;width:fit-content;
+}
+
+.csTitle{
+  font-size:42px;font-weight:900;
+  color:var(--white);letter-spacing:-.03em;
+  line-height:1.05;margin-bottom:14px;
+}
+
+.csDesc{
+  font-size:15px;line-height:1.75;
+  color:var(--muted);font-weight:400;
+  margin-bottom:20px;
+}
+
+.csLevels{display:flex;gap:8px;flex-wrap:wrap;}
+.csLevel{
+  padding:6px 14px;border-radius:999px;
+  font-size:13px;font-weight:700;
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  color:var(--brand);
+}
+
+/* waitlist */
+.waitlistBox{
+  border-radius:20px;
+  border:1px solid var(--cardBorder);
+  background:var(--bg2);
+  padding:28px 24px;
+}
+[data-theme="light"] .waitlistBox{background:rgba(255,255,255,.75);}
+
+.waitlistTitle{
+  font-size:19px;font-weight:900;
+  font-family:'Sora',sans-serif;
+  color:var(--white);letter-spacing:-.02em;
+  margin-bottom:6px;
+}
+.waitlistSub{
+  font-size:13px;color:var(--muted2);
+  line-height:1.6;margin-bottom:20px;
+}
+.waitlistInput{
+  width:100%;padding:12px 15px;
+  border-radius:12px;
+  background:var(--selectBg);
+  border:1px solid var(--selectBorder);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;font-weight:500;
+  outline:none;margin-bottom:8px;
+  transition:border-color .2s;
+}
+.waitlistInput::placeholder{color:var(--muted2);}
+.waitlistInput:focus{border-color:var(--strokeG);}
+.waitlistBtn{
+  width:100%;padding:12px;
+  border-radius:999px;
+  background:var(--brand);color:#030805;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:800;
+  border:none;cursor:pointer;
+  transition:background .2s,transform .15s;
+  box-shadow:0 4px 20px rgba(var(--brandRgb),.25);
+}
+.waitlistBtn:hover{background:var(--brand2);transform:translateY(-1px);}
+.waitlistSuccess{display:none;text-align:center;padding:16px 0;}
+.waitlistSuccess .wCheck{font-size:32px;display:block;margin-bottom:10px;}
+.waitlistSuccess p{font-size:14px;font-weight:700;color:var(--brand);}
+
+/* ═══════════════════════════════════════════
+   WA FAB
+═══════════════════════════════════════════ */
+.waFab{
+  position:fixed;right:22px;bottom:28px;
+  padding:12px 18px 12px 14px;
+  border-radius:999px;
+  background:var(--fabBg);
+  border:1px solid var(--fabBorder);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:14px;
+  cursor:pointer;z-index:9999;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 0 1px rgba(var(--brandRgb),.08);
+  backdrop-filter:blur(16px);
+  text-decoration:none;
+  transition:border-color .2s,box-shadow .2s,transform .15s;
+}
+.waFab:hover{
+  border-color:var(--pillBorder);
+  transform:translateY(-2px);
+  box-shadow:0 22px 60px rgba(0,0,0,.45),0 0 0 1px rgba(var(--brandRgb),.2);
+}
+.waFab .wIcon{font-size:18px;}
+.waFab .wPill{
+  font-size:11px;padding:3px 9px;
+  border-radius:999px;
+  background:var(--pillBg);border:1px solid var(--pillBorder);
+  color:var(--brand);font-weight:800;letter-spacing:.03em;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{
+  background:var(--footerBg);
+  border-top:1px solid var(--stroke);
+  padding:36px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+  transition:background .3s;
+}
+.footerLogo{
+  font-family:'Sora',sans-serif;
+  font-size:16px;font-weight:900;
+  color:var(--white);
+  text-decoration:none;letter-spacing:-.02em;
+}
+.footerLogo span{color:var(--brand);}
+.footerLinks{
+  display:flex;gap:22px;list-style:none;flex-wrap:wrap;
+}
+.footerLinks a{
+  font-size:13px;font-weight:600;
+  color:var(--footerText);text-decoration:none;
+  transition:color .2s;
+}
+.footerLinks a:hover{color:var(--brand);}
+.footerCopy{font-size:12px;color:var(--footerText);}
+
+/* ═══════════════════════════════════════════
+   BASE OVERFLOW FIX — applies everywhere
+═══════════════════════════════════════════ */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+*, *::before, *::after {
+  max-width: 100%;
+}
+
+/* ═══════════════════════════════════════════
+   TABLET — ≤ 960px
+═══════════════════════════════════════════ */
+@media(max-width:960px){
+  .hero{
+    grid-template-columns:1fr;
+    gap:28px;
+    padding:32px 24px;
+  }
+  .heroTitle{font-size:40px;}
+  .heroRight{max-width:100%;width:100%;}
+  .productsGrid{grid-template-columns:1fr 1fr;}
+  .interviewCard{grid-template-columns:1fr;padding:32px 28px;}
+  .interviewVisual{display:none;}
+  .csCard{grid-template-columns:1fr;padding:36px 28px;}
+}
+
+/* ═══════════════════════════════════════════
+   MOBILE — ≤ 700px
+═══════════════════════════════════════════ */
+@media(max-width:700px){
+
+  /* NAV — logo left, just toggle icon + CTA right */
+  nav{
+    padding:0 16px;
+    height:56px;
+    gap:8px;
+  }
+  .navLinks{display:none;}
+  .navLogo{font-size:15px;}
+  .themeToggle span:not(.tIcon){display:none;} /* hide label, keep icon */
+  .themeToggle{padding:8px 10px;gap:0;}
+  .navCta{padding:8px 14px;font-size:12px;}
+
+  /* WRAP */
+  .wrap{padding:20px 16px 100px;}
+
+  /* HERO */
+  .hero{padding:24px 18px 28px;gap:24px;border-radius:20px;}
+  .heroTitle{font-size:30px;letter-spacing:-.025em;}
+  .heroTitle .sm{font-size:20px;}
+  .heroSub{font-size:14px;line-height:1.75;}
+  .heroCtas{gap:10px;}
+  .ctaPrimary,.ctaSecondary{padding:12px 20px;font-size:13px;width:100%;justify-content:center;text-align:center;}
+
+  /* STATS — 2x2 grid on mobile */
+  .heroStats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 12px;
+    padding-top:20px;
+    margin-top:24px;
+  }
+  .heroStatNum{font-size:26px;}
+  .heroStatLabel{font-size:11px;}
+
+  /* HERO CARD */
+  .heroCard{padding:22px 18px 18px;}
+  .heroCardTitle{font-size:16px;}
+  .miniPackItem{padding:9px 11px;}
+  .miniPackName{font-size:12px;}
+  .miniPackPrice{font-size:13px;}
+
+  /* SECTION */
+  .section{margin-top:28px;}
+  .sectionLabel{font-size:10px;}
+
+  /* PRODUCTS */
+  .productsGrid{grid-template-columns:1fr;gap:14px;}
+  .productCard{padding:24px 20px 20px;border-radius:20px;}
+  .productTitle{font-size:18px;}
+  .productDesc{font-size:13px;}
+
+  /* PRICING */
+  .pricingWrap{border-radius:20px;}
+  .pricingTabs{padding:12px 16px;gap:8px;}
+  .pricingTabsLeft{gap:6px;}
+  .pricingTab{padding:7px 14px;font-size:12px;}
+  .pricingNote{font-size:11px;}
+  .packHeader{display:none;}
+  .packRow{
+    grid-template-columns:1fr auto;
+    gap:4px;
+    padding:14px 16px;
+  }
+  .packName{grid-column:1/-1;margin-bottom:6px;}
+  .packEmoji{font-size:18px;}
+  .packLabel{font-size:14px;}
+  .packSub{font-size:11px;}
+  .packFreq{display:none;}
+  .packPriceCol{text-align:right;}
+  .packPrice{font-size:15px;}
+  .packNote,.nativeNote{font-size:10px;}
+
+  /* INTERVIEW / SEBAS */
+  .interviewCard{padding:24px 18px;border-radius:20px;gap:20px;}
+  .interviewTag{font-size:10px;}
+  .interviewTitle{font-size:26px;}
+  .interviewDesc{font-size:13px;}
+  .interviewPoints li{font-size:13px;}
+  .interviewVisual{display:none;}
+
+  /* COMING SOON / ASESORÍA */
+  .csCard{padding:26px 18px;gap:24px;border-radius:20px;}
+  .csBadge{font-size:10px;}
+  .csTitle{font-size:26px;}
+  .csDesc{font-size:13px;}
+  .csLevels{gap:6px;}
+  .csLevel{font-size:12px;padding:5px 11px;}
+  .waitlistBox{padding:22px 18px;border-radius:16px;}
+  .waitlistTitle{font-size:17px;}
+  .waitlistSub{font-size:12px;}
+  .waitlistInput{font-size:14px;padding:11px 13px;}
+  .waitlistBtn{font-size:13px;padding:12px;}
+
+  /* FOOTER */
+  footer{padding:22px 16px;gap:12px;}
+  .footerLinks{display:none;}
+  .footerLogo{font-size:14px;}
+  .footerCopy{font-size:11px;}
+
+  /* FAB — icon only on mobile */
+  .waFab{
+    right:16px;
+    bottom:20px;
+    padding:12px 16px;
+  }
+  .waFab span:not(.wIcon):not(.wPill){display:none;}
+  .waFab .wPill{display:none;}
+}
+
+/* ═══════════════════════════════════════════
+   SMALL MOBILE — ≤ 390px (iPhone SE etc)
+═══════════════════════════════════════════ */
+@media(max-width:390px){
+  .heroTitle{font-size:26px;}
+  .heroTitle .sm{font-size:17px;}
+  .heroStatNum{font-size:22px;}
+  .pricingTab{padding:6px 10px;font-size:11px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── WA FAB ─── -->
+<a class="waFab"
+   href="https://wa.me/573205571518?text=Hola!%20Quiero%20info%20sobre%20clases%20de%20ingl%C3%A9s%20%F0%9F%99%8C"
+   target="_blank" rel="noopener">
+  <span class="wIcon">💬</span>
+  <span>WhatsApp</span>
+  <span class="wPill">¡Escríbenos!</span>
+</a>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="/" class="navLogo">Inglés <span class="logoAccent">con</span> Sebas</a>
+  <ul class="navLinks">
+    <li><a href="#programas">Programas</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#sebas">Clases con Sebas</a></li>
+    <li><a href="#asesoria">Asesoría</a></li>
+    <li><a href="#beginners">Beginners Club</a></li>
+  </ul>
+  <div class="navRight">
+    <button class="themeToggle" id="themeToggle" aria-label="Cambiar tema">
+      <span class="tIcon">🌙</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+    <a href="https://wa.me/573205571518?text=Hola!%20Quiero%20empezar%20clases%20%F0%9F%99%8C"
+       target="_blank" class="navCta">Empezar →</a>
+  </div>
+</nav>
+
+<!-- ─── MARQUEE ─── -->
+<div class="marqueeband">
+  <div class="marqueeinner">
+    <span class="marqueeitem"><span class="dot"></span>Clases 100% en inglés</span>
+    <span class="marqueeitem"><span class="dot"></span>Profesores con y sin acento nativo</span>
+    <span class="marqueeitem"><span class="dot"></span>1 a 5 clases por semana</span>
+    <span class="marqueeitem"><span class="dot"></span>Metodología propia</span>
+    <span class="marqueeitem"><span class="dot"></span>Maratones de películas</span>
+    <span class="marqueeitem"><span class="dot"></span>Preparación de entrevistas</span>
+    <span class="marqueeitem"><span class="dot"></span>Feedback personalizado</span>
+    <span class="marqueeitem"><span class="dot"></span>Desde donde seas en el mundo</span>
+    <span class="marqueeitem"><span class="dot"></span>Clases 100% en inglés</span>
+    <span class="marqueeitem"><span class="dot"></span>Profesores con y sin acento nativo</span>
+    <span class="marqueeitem"><span class="dot"></span>1 a 5 clases por semana</span>
+    <span class="marqueeitem"><span class="dot"></span>Metodología propia</span>
+    <span class="marqueeitem"><span class="dot"></span>Maratones de películas</span>
+    <span class="marqueeitem"><span class="dot"></span>Preparación de entrevistas</span>
+    <span class="marqueeitem"><span class="dot"></span>Feedback personalizado</span>
+    <span class="marqueeitem"><span class="dot"></span>Desde donde seas en el mundo</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ─── HERO ─── -->
+  <div class="hero reveal" style="animation-delay:.05s">
+    <div class="heroLeft">
+      <div class="heroEyebrow">✨ Clases online · Zoom</div>
+      <h1 class="heroTitle">
+        <span class="sm">Aprende inglés.</span>
+        De verdad.<br><span class="hl">En serio.</span>
+      </h1>
+      <p class="heroSub">
+        Llevamos años ayudando a personas a aprender inglés de verdad — con clases privadas en vivo por Zoom, <strong>profesores colombianos y hablantes nativos</strong>, y una metodología que funciona porque parte de cómo hablas tú, no de un libro. Sin apps, sin mentiras de aprender en 3 meses, sin clases pre-grabadas. Todo en vivo.
+      </p>
+      <div class="heroCtas">
+        <a href="https://wa.me/573205571518?text=Hola!%20Quiero%20una%20clase%20de%20prueba%20%F0%9F%99%8C"
+           target="_blank" class="ctaPrimary">💬 Clase de prueba gratis</a>
+        <a href="#precios" class="ctaSecondary">Ver planes →</a>
+      </div>
+      <div class="heroStats">
+        <div class="heroStat">
+          <div class="heroStatNum">380<span>+</span></div>
+          <div class="heroStatLabel">Estudiantes activos</div>
+        </div>
+        <div class="heroStat">
+          <div class="heroStatNum">5<span>★</span></div>
+          <div class="heroStatLabel">Valoración promedio</div>
+        </div>
+        <div class="heroStat">
+          <div class="heroStatNum">8<span>+</span></div>
+          <div class="heroStatLabel">Años de experiencia</div>
+        </div>
+        <div class="heroStat">
+          <div class="heroStatNum">2.500<span>+</span></div>
+          <div class="heroStatLabel">Personas que hemos ayudado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="heroRight">
+      <div class="heroCard">
+        <div class="heroCardTag"><span class="live"></span> Planes activos</div>
+        <div class="heroCardTitle">Clases privadas<br>desde $214.900/mes</div>
+        <ul class="miniPackList">
+          <li class="miniPackItem">
+            <span class="miniPackName">🌱 Starter</span>
+            <span class="miniPackPrice">$214.900</span>
+          </li>
+          <li class="miniPackItem">
+            <span class="miniPackName">🔧 Essential</span>
+            <span class="miniPackPrice">$419.900</span>
+          </li>
+          <li class="miniPackItem">
+            <span class="miniPackName">🚀 Progress</span>
+            <span class="miniPackPrice">$607.900</span>
+          </li>
+          <li class="miniPackItem">
+            <span class="miniPackName">🔥 Intensive</span>
+            <span class="miniPackPrice">$807.900</span>
+          </li>
+          <li class="miniPackItem">
+            <span class="miniPackName">👑 Master</span>
+            <span class="miniPackPrice">$975.900</span>
+          </li>
+        </ul>
+        <a href="#precios" class="heroCardCta">Ver todos los planes →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PROGRAMS ─── -->
+  <div class="section reveal" id="programas">
+    <div class="sectionLabel">Nuestros programas</div>
+    <div class="productsGrid">
+
+      <div class="productCard featuredCard">
+        <span class="productIcon">🎯</span>
+        <div class="productTag">Premium</div>
+        <div class="productTitle">Clases Privadas<br>con Profe Colombiano</div>
+        <div class="productDesc">
+          Clases 1 a 1 por Zoom con profesores colombianos altamente capacitados. De 1 a 5 clases por semana. Metodología conversacional, feedback directo y avance medible.
+        </div>
+        <a href="#precios" class="productCta">Ver planes →</a>
+      </div>
+
+      <div class="productCard">
+        <span class="productIcon">🌍</span>
+        <div class="productTag">Experiencia total</div>
+        <div class="productTitle">Clases con<br>Hablante Nativo</div>
+        <div class="productDesc">
+          Clases privadas con un profesor cuya lengua materna es el inglés. Acento real, expresiones naturales, cultura de primera mano. Ideal para quienes ya tienen una base sólida — recomendamos al menos nivel A2 para aprovecharlas al máximo.
+        </div>
+        <a href="#precios" class="productCta">Ver planes nativos →</a>
+      </div>
+
+      <div class="productCard">
+        <span class="productIcon">🎬</span>
+        <div class="productTag">Intensivo</div>
+        <div class="productTitle">Maratones<br>de Películas</div>
+        <div class="productDesc">
+          Cursos intensivos donde aprendes inglés a través de una película que tú eliges. Tareas diarias, deadline real y aprendizaje profundo de vocabulario en contexto.
+        </div>
+        <a href="https://wa.me/573205571518?text=Hola!%20Me%20interesa%20un%20Marat%C3%B3n%20de%20Ingl%C3%A9s%20%F0%9F%8E%AC"
+           target="_blank" class="productCta productCtaSecondary">Consultar fechas →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── PRICING ─── -->
+  <div class="section reveal" id="precios">
+    <div class="sectionLabel">Planes y precios 2026</div>
+    <div class="pricingWrap">
+      <div class="pricingTabs">
+        <div class="pricingTabsLeft">
+          <button class="pricingTab active" data-table="col">🇨🇴 Profe colombiano</button>
+          <button class="pricingTab" data-table="nat">🌍 Hablante nativo</button>
+        </div>
+        <div class="pricingNote">Pago mensual · COP</div>
+      </div>
+
+      <!-- Colombiano -->
+      <div class="packTable active" id="table-col">
+        <div class="packHeader">
+          <span>Paquete</span>
+          <span>Frecuencia semanal</span>
+          <span>Precio mensual</span>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🌱</span><div><div class="packLabel">Starter</div><div class="packSub">Para arrancar con calma</div></div></div>
+          <div class="packFreq">1 clase / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$214.900</div><div class="packNote">≈ 4 sesiones/mes</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🔧</span><div><div class="packLabel">Essential</div><div class="packSub">Ritmo constante</div></div></div>
+          <div class="packFreq">2 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$419.900</div><div class="packNote">≈ 8 sesiones/mes</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🚀</span><div><div class="packLabel">Progress</div><div class="packSub">Para avanzar de verdad</div></div></div>
+          <div class="packFreq">3 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$607.900</div><div class="packNote">≈ 12 sesiones/mes</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🔥</span><div><div class="packLabel">Intensive</div><div class="packSub">Velocidad de crucero</div></div></div>
+          <div class="packFreq">4 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$807.900</div><div class="packNote">≈ 16 sesiones/mes</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">👑</span><div><div class="packLabel">Master</div><div class="packSub">Máxima inmersión</div></div></div>
+          <div class="packFreq">5 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$975.900</div><div class="packNote">≈ 20 sesiones/mes</div></div>
+        </div>
+      </div>
+
+      <!-- Nativo -->
+      <div class="packTable" id="table-nat">
+        <div class="packHeader">
+          <span>Paquete</span>
+          <span>Frecuencia semanal</span>
+          <span>Precio mensual</span>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🌱</span><div><div class="packLabel">Starter <span class="nativeBadge">Native</span></div><div class="packSub">Para arrancar con calma</div></div></div>
+          <div class="packFreq">1 clase / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$429.800</div><div class="nativeNote">2× tarifa regular</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🔧</span><div><div class="packLabel">Essential <span class="nativeBadge">Native</span></div><div class="packSub">Ritmo constante</div></div></div>
+          <div class="packFreq">2 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$839.800</div><div class="nativeNote">2× tarifa regular</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🚀</span><div><div class="packLabel">Progress <span class="nativeBadge">Native</span></div><div class="packSub">Para avanzar de verdad</div></div></div>
+          <div class="packFreq">3 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$1.215.800</div><div class="nativeNote">2× tarifa regular</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">🔥</span><div><div class="packLabel">Intensive <span class="nativeBadge">Native</span></div><div class="packSub">Velocidad de crucero</div></div></div>
+          <div class="packFreq">4 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$1.615.800</div><div class="nativeNote">2× tarifa regular</div></div>
+        </div>
+        <div class="packRow">
+          <div class="packName"><span class="packEmoji">👑</span><div><div class="packLabel">Master <span class="nativeBadge">Native</span></div><div class="packSub">Máxima inmersión</div></div></div>
+          <div class="packFreq">5 clases / semana</div>
+          <div class="packPriceCol"><div class="packPrice">$1.951.800</div><div class="nativeNote">2× tarifa regular</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── INTERVIEW PREP ─── -->
+  <div class="section reveal" id="entrevistas">
+    <div class="sectionLabel">Sesión especial</div>
+    <div class="interviewCard">
+      <div>
+        <div class="interviewTag">💼 Sesión individual</div>
+        <h2 class="interviewTitle">Prepárate para tu<br>entrevista en inglés.</h2>
+        <p class="interviewDesc">
+          Una sesión intensiva y personalizada enfocada 100% en tu proceso de selección. Simulamos la entrevista, corregimos tu inglés y te damos las herramientas para llegar con confianza.
+        </p>
+        <ul class="interviewPoints">
+          <li>Simulación de entrevista real en inglés</li>
+          <li>Corrección de pronunciación y vocabulario técnico</li>
+          <li>Estrategias para responder preguntas difíciles</li>
+          <li>Feedback detallado post-sesión</li>
+        </ul>
+        <a href="https://wa.me/573205571518?text=Hola!%20Quiero%20preparar%20mi%20entrevista%20en%20ingl%C3%A9s%20%F0%9F%92%BC"
+           target="_blank" class="ctaPrimary" style="text-decoration:none;">💬 Reservar mi sesión</a>
+      </div>
+      <div class="interviewVisual">
+        <span class="interviewEmoji">🎤</span>
+        <div class="interviewVisualTitle">Sesión de 60 min</div>
+        <div class="interviewVisualSub">1 a 1 con el profe<br>Por Zoom · Feedback escrito incluido</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CLASES CON SEBAS ─── -->
+  <div class="section reveal" id="sebas">
+    <div class="sectionLabel">Directo con el fundador</div>
+    <div class="interviewCard">
+      <div>
+        <div class="interviewTag">👨‍🏫 Sebastián Guzmán</div>
+        <h2 class="interviewTitle">Clases directamente<br>con Sebas.</h2>
+        <p class="interviewDesc">
+          Una experiencia diferente. Sebas no solo enseña inglés — entiende cada matiz del proceso de aprendizaje porque lo vivió. Fundador de Inglés con Sebas, con énfasis en etimología y metodología propia. Si quieres aprender con quien creó todo esto, esta es tu opción.
+        </p>
+        <ul class="interviewPoints">
+          <li>Sesión 1 a 1 de 50 minutos por Zoom</li>
+          <li>Enfoque 100% personalizado a tu nivel y metas</li>
+          <li>Metodología propia desarrollada en más de 8 años</li>
+          <li>Disponibilidad limitada — cupos muy reducidos</li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <a href="https://wa.me/573205571518?text=Hola!%20Quiero%20una%20clase%20directamente%20con%20Sebas%20%F0%9F%99%8C"
+             target="_blank" class="ctaPrimary" style="text-decoration:none;">💬 Quiero clase con Sebas</a>
+          <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--brand);">$70.000<span style="font-size:13px;font-weight:600;color:var(--muted2);margin-left:6px;">/ 50 min</span></div>
+        </div>
+      </div>
+      <div class="interviewVisual">
+        <span class="interviewEmoji">👨‍💻</span>
+        <div class="interviewVisualTitle">Solo con Sebas</div>
+        <div class="interviewVisualSub">50 minutos · Zoom<br>Cupos muy limitados<br>$70.000 por sesión</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── ASESORÍA CON SEBAS ─── -->
+  <div class="section reveal" id="asesoria">
+    <div class="sectionLabel">Antes de empezar</div>
+    <div class="csCard" style="border-style:solid;">
+      <div class="csGlow"></div>
+      <div>
+        <div class="csBadge">📅 Agenda gratis</div>
+        <h2 class="csTitle">Asesoría con<br>Sebas. Gratis.</h2>
+        <p class="csDesc">
+          Antes de arrancar cualquier programa, a Sebas le gusta reunirse contigo. No para venderte — para conocerte. Hablamos de tus horarios, tu nivel actual, tus frustraciones con el inglés, qué profe podría funcionarte mejor y cómo trabajamos. Sin compromiso. Sin presión.
+        </p>
+        <div class="csLevels" style="margin-bottom:0;">
+          <span class="csLevel">🕐 30 minutos</span>
+          <span class="csLevel">📹 Por Zoom</span>
+          <span class="csLevel">💸 Completamente gratis</span>
+          <span class="csLevel">🤝 Sin compromiso</span>
+        </div>
+      </div>
+      <div class="waitlistBox">
+        <div class="waitlistTitle">Agenda tu espacio</div>
+        <div class="waitlistSub">Escríbenos y coordinamos una hora que te quede bien. Sebas te escribe personalmente.</div>
+        <a href="https://wa.me/573205571518?text=Hola%20Sebas!%20Me%20gustar%C3%ADa%20agendar%20una%20asesor%C3%ADa%20contigo%20para%20conocer%20c%C3%B3mo%20trabajan%20%F0%9F%99%8C"
+           target="_blank"
+           style="display:block;width:100%;padding:13px;border-radius:999px;background:var(--brand);color:#030805;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;text-decoration:none;text-align:center;transition:background .2s;box-shadow:0 4px 20px rgba(var(--brandRgb),.25);"
+           onmouseover="this.style.background='var(--brand2)'"
+           onmouseout="this.style.background='var(--brand)'">
+          💬 Agendar asesoría con Sebas
+        </a>
+        <p style="margin-top:12px;font-size:12px;color:var(--muted2);text-align:center;line-height:1.5;">Coordinamos por WhatsApp y te enviamos el link de Zoom</p>
+      </div>
+    </div>
+  </div>
+  <div class="section reveal" id="beginners">
+    <div class="sectionLabel">Próximamente</div>
+    <div class="csCard">
+      <div class="csGlow"></div>
+      <div>
+        <div class="csBadge">🔜 Coming soon</div>
+        <h2 class="csTitle">Beginners Club.<br>Del cero al B1.</h2>
+        <p class="csDesc">
+          Un programa grupal pensado para quienes empiezan desde cero o tienen bases muy básicas. Aprenderás inglés de manera estructurada, progresiva y sin abrumarte — hasta alcanzar un nivel B1 real y funcional.
+        </p>
+        <div class="csLevels">
+          <span class="csLevel">🌱 A1 — Starter</span>
+          <span class="csLevel">📗 A2 — Elementary</span>
+          <span class="csLevel">📘 B1 — Intermediate</span>
+        </div>
+      </div>
+      <div class="waitlistBox">
+        <div class="waitlistTitle">¡Únete a la lista de espera!</div>
+        <div class="waitlistSub">Sé el primero en enterarte del lanzamiento y accede a precios de fundador.</div>
+        <div id="waitlistForm">
+          <input type="text" class="waitlistInput" id="wlName" placeholder="Tu nombre" autocomplete="off"/>
+          <input type="email" class="waitlistInput" id="wlEmail" placeholder="Tu correo electrónico" autocomplete="off"/>
+          <button class="waitlistBtn" id="wlBtn">Quiero que me avisen 🙌</button>
+        </div>
+        <div class="waitlistSuccess" id="waitlistSuccess">
+          <span class="wCheck">✅</span>
+          <p>¡Listo! Te avisamos en cuanto abramos.<br>Gracias por tu interés 💚</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <a href="/" class="footerLogo">Inglés <span>con</span> Sebas</a>
+  <ul class="footerLinks">
+    <li><a href="#programas">Programas</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#sebas">Clases con Sebas</a></li>
+    <li><a href="#asesoria">Asesoría gratis</a></li>
+    <li><a href="#beginners">Beginners Club</a></li>
+    <li><a href="https://wa.me/573205571518" target="_blank">WhatsApp</a></li>
+  </ul>
+  <div class="footerCopy">© 2026 Inglés con Sebas S.A.S. · Bogotá 🇨🇴</div>
+</footer>
+
+<script>
+/* ─── THEME TOGGLE ─── */
+const html = document.documentElement;
+const btn = document.getElementById('themeToggle');
+const icon = btn.querySelector('.tIcon');
+const label = document.getElementById('themeLabel');
+
+btn.addEventListener('click', () => {
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  icon.textContent = isDark ? '☀️' : '🌙';
+  label.textContent = isDark ? 'Modo oscuro' : 'Modo claro';
+});
+
+/* ─── PRICING TABS ─── */
+document.querySelectorAll('.pricingTab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.pricingTab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.packTable').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('table-' + tab.dataset.table).classList.add('active');
+  });
+});
+
+/* ─── SCROLL REVEAL ─── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─── WAITLIST FORM ─── */
+document.getElementById('wlBtn').addEventListener('click', () => {
+  const name = document.getElementById('wlName').value.trim();
+  const email = document.getElementById('wlEmail').value.trim();
+  if(!name || !email){ return; }
+  document.getElementById('waitlistForm').style.display = 'none';
+  document.getElementById('waitlistSuccess').style.display = 'block';
+  // Optional: send to WhatsApp
+  const msg = encodeURIComponent(`Hola! Me quiero anotar en la lista del Beginners Club 🙌\nNombre: ${name}\nCorreo: ${email}`);
+  window.open(`https://wa.me/573205571518?text=${msg}`, '_blank');
+});
+</script>
+
+</body>
+</html>				</div>
+				</div>
+					</div>
+		</div>
+					</div>
+		</section>
+				</div>
+		<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/storefront\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PP9DMHL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --><div 
+	id="pum-274" 
+	role="dialog" 
+	aria-modal="false"
+	class="pum pum-overlay pum-theme-269 pum-theme-lightbox popmake-overlay click_open" 
+	data-popmake="{&quot;id&quot;:274,&quot;slug&quot;:&quot;contact&quot;,&quot;theme_id&quot;:269,&quot;cookies&quot;:[],&quot;triggers&quot;:[{&quot;type&quot;:&quot;click_open&quot;,&quot;settings&quot;:{&quot;cookie_name&quot;:&quot;&quot;,&quot;extra_selectors&quot;:&quot;.op, #op&quot;}}],&quot;mobile_disabled&quot;:null,&quot;tablet_disabled&quot;:null,&quot;meta&quot;:{&quot;display&quot;:{&quot;stackable&quot;:false,&quot;overlay_disabled&quot;:false,&quot;scrollable_content&quot;:false,&quot;disable_reposition&quot;:false,&quot;size&quot;:&quot;small&quot;,&quot;responsive_min_width&quot;:&quot;0%&quot;,&quot;responsive_min_width_unit&quot;:false,&quot;responsive_max_width&quot;:&quot;100%&quot;,&quot;responsive_max_width_unit&quot;:false,&quot;custom_width&quot;:&quot;640px&quot;,&quot;custom_width_unit&quot;:false,&quot;custom_height&quot;:&quot;380px&quot;,&quot;custom_height_unit&quot;:false,&quot;custom_height_auto&quot;:false,&quot;location&quot;:&quot;center top&quot;,&quot;position_from_trigger&quot;:false,&quot;position_top&quot;:&quot;100&quot;,&quot;position_left&quot;:&quot;0&quot;,&quot;position_bottom&quot;:&quot;0&quot;,&quot;position_right&quot;:&quot;0&quot;,&quot;position_fixed&quot;:false,&quot;animation_type&quot;:&quot;fade&quot;,&quot;animation_speed&quot;:&quot;350&quot;,&quot;animation_origin&quot;:&quot;center top&quot;,&quot;overlay_zindex&quot;:false,&quot;zindex&quot;:&quot;1999999999&quot;},&quot;close&quot;:{&quot;text&quot;:&quot;&quot;,&quot;button_delay&quot;:&quot;0&quot;,&quot;overlay_click&quot;:false,&quot;esc_press&quot;:false,&quot;f4_press&quot;:false},&quot;click_open&quot;:[]}}">
+
+	<div id="popmake-274" class="pum-container popmake theme-269 pum-responsive pum-responsive-small responsive size-small">
+
+				
+				
+		
+				<div class="pum-content popmake-content" tabindex="0">
+			<h3><a href="https://wa.me/573205571518">Escribir al WhatsApp +57 320 557 15 18</a></h3>
+
+<div class="wpcf7 no-js" id="wpcf7-f5-o1" lang="ru-RU" dir="ltr" data-wpcf7-id="5">
+<div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
+<form action="/#wpcf7-f5-o1" method="post" class="wpcf7-form init" aria-label="Formulario de contacto" novalidate="novalidate" data-status="init">
+<fieldset class="hidden-fields-container"><input type="hidden" name="_wpcf7" value="5" /><input type="hidden" name="_wpcf7_version" value="6.1.4" /><input type="hidden" name="_wpcf7_locale" value="ru_RU" /><input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f5-o1" /><input type="hidden" name="_wpcf7_container_post" value="0" /><input type="hidden" name="_wpcf7_posted_data_hash" value="" />
+</fieldset>
+<p><span class="wpcf7-form-control-wrap" data-name="your-email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="E-mail" value="" type="email" name="your-email" /></span>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="your-name"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text" aria-invalid="false" value="Nombre" type="text" name="your-name" /></span>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="text-28"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Número de celular con prefijo del pais" value="" type="text" name="text-28" /></span>
+</p>
+<p><textarea name="message" cols="10" rows="2" class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required" id="contact-message" aria-required="true" aria-invalid="false" placeholder="¿Qué nivel de inglés tienes? ¿Qué tipo de inglés estás buscando?"></textarea>
+</p>
+<p><span class="wpcf7-form-control-wrap" data-name="agree"><span class="wpcf7-form-control wpcf7-acceptance invert"><span class="wpcf7-list-item"><label><input type="checkbox" name="agree" value="1" checked="checked" class="agree" aria-invalid="false" /><span class="wpcf7-list-item-label">Quita este chulito si NO eres un ROBOT!!! 🙂</span></label></span></span></span>
+</p>
+<p><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Enviar" />
+</p><input type='hidden' class='wpcf7-pum' value='{"closepopup":false,"closedelay":0,"openpopup":false,"openpopup_id":0}' /><div class="wpcf7-response-output" aria-hidden="true"></div>
+</form>
+</div>
+
+		</div>
+
+				
+							<button type="button" class="pum-close popmake-close" aria-label="Cerrar">
+			×			</button>
+		
+	</div>
+
+</div>
+			<script>
+				const lazyloadRunObserver = () => {
+					const lazyloadBackgrounds = document.querySelectorAll( `.e-con.e-parent:not(.e-lazyloaded)` );
+					const lazyloadBackgroundObserver = new IntersectionObserver( ( entries ) => {
+						entries.forEach( ( entry ) => {
+							if ( entry.isIntersecting ) {
+								let lazyloadBackground = entry.target;
+								if( lazyloadBackground ) {
+									lazyloadBackground.classList.add( 'e-lazyloaded' );
+								}
+								lazyloadBackgroundObserver.unobserve( entry.target );
+							}
+						});
+					}, { rootMargin: '200px 0px 200px 0px' } );
+					lazyloadBackgrounds.forEach( ( lazyloadBackground ) => {
+						lazyloadBackgroundObserver.observe( lazyloadBackground );
+					} );
+				};
+				const events = [
+					'DOMContentLoaded',
+					'elementor/lazyload/observe',
+				];
+				events.forEach( ( event ) => {
+					document.addEventListener( event, lazyloadRunObserver );
+				} );
+			</script>
+				<script>
+		(function () {
+			var c = document.body.className;
+			c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
+			document.body.className = c;
+		})();
+	</script>
+	<link rel='stylesheet' id='wc-blocks-style-css' href='https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks.css?ver=wc-10.3.8' media='all' />
+<script src="https://inglesconsebas.com/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
+<script src="https://inglesconsebas.com/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.1.4" id="swv-js"></script>
+<script id="contact-form-7-js-translations">
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "contact-form-7", {"translation-revision-date":"2025-12-01 15:45:40+0000","generator":"GlotPress\/4.0.3","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=2; plural=n != 1;","lang":"es"},"This contact form is placed in the wrong place.":["Este formulario de contacto est\u00e1 situado en el lugar incorrecto."],"Error:":["Error:"]}},"comment":{"reference":"includes\/js\/index.js"}} );
+</script>
+<script id="contact-form-7-js-before">
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/inglesconsebas.com\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    },
+    "cached": 1
+};
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/inglesconsebas.com\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    },
+    "cached": 1
+};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.1.4" id="contact-form-7-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/mystickymenu/js/morphext/morphext.min.js?ver=2.8.4" id="morphext-js-js" defer data-wp-strategy="defer"></script>
+<script id="welcomebar-frontjs-js-extra">
+var welcomebar_frontjs = {"ajaxurl":"https:\/\/inglesconsebas.com\/wp-admin\/admin-ajax.php","days":"Days","hours":"Hours","minutes":"Minutes","seconds":"Seconds","ajax_nonce":"7a31e681c7"};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/mystickymenu/js/welcomebar-front.min.js?ver=2.8.4" id="welcomebar-frontjs-js" defer data-wp-strategy="defer"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/mystickymenu/js/detectmobilebrowser.js?ver=2.8.4" id="detectmobilebrowser-js" defer data-wp-strategy="defer"></script>
+<script id="mystickymenu-js-extra">
+var option = {"mystickyClass":".menu","activationHeight":"0","disableWidth":"0","disableLargeWidth":"0","adminBar":"false","device_desktop":"1","device_mobile":"1","mystickyTransition":"fade","mysticky_disable_down":"false"};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/mystickymenu/js/mystickymenu.min.js?ver=2.8.4" id="mystickymenu-js" defer data-wp-strategy="defer"></script>
+<script src="https://inglesconsebas.com/wp-includes/js/underscore.min.js?ver=1.13.7" id="underscore-js"></script>
+<script id="wp-util-js-extra">
+var _wpUtilSettings = {"ajax":{"url":"\/wp-admin\/admin-ajax.php"}};
+</script>
+<script src="https://inglesconsebas.com/wp-includes/js/wp-util.min.js?ver=6.8.5" id="wp-util-js"></script>
+<script id="wp-api-request-js-extra">
+var wpApiSettings = {"root":"https:\/\/inglesconsebas.com\/wp-json\/","nonce":"5333771c6b","versionString":"wp\/v2\/"};
+</script>
+<script src="https://inglesconsebas.com/wp-includes/js/api-request.min.js?ver=6.8.5" id="wp-api-request-js"></script>
+<script src="https://inglesconsebas.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0" id="wp-polyfill-js"></script>
+<script src="https://inglesconsebas.com/wp-includes/js/dist/url.min.js?ver=c2964167dfe2477c14ea" id="wp-url-js"></script>
+<script id="wp-api-fetch-js-translations">
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "default", {"translation-revision-date":"2026-03-27 23:59:20+0000","generator":"GlotPress\/4.0.3","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=2; plural=n != 1;","lang":"es"},"An unknown error occurred.":["Ha ocurrido un error desconocido."],"The response is not a valid JSON response.":["Las respuesta no es una respuesta JSON v\u00e1lida."],"Media upload failed. If this is a photo or a large image, please scale it down and try again.":["La subida de medios ha fallado. Si esto es una foto o una imagen grande, por favor, reduce su tama\u00f1o e int\u00e9ntalo de nuevo."],"You are probably offline.":["Probablemente est\u00e1s desconectado."]}},"comment":{"reference":"wp-includes\/js\/dist\/api-fetch.js"}} );
+</script>
+<script src="https://inglesconsebas.com/wp-includes/js/dist/api-fetch.min.js?ver=3623a576c78df404ff20" id="wp-api-fetch-js"></script>
+<script id="wp-api-fetch-js-after">
+wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "https://inglesconsebas.com/wp-json/" ) );
+wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "5333771c6b" );
+wp.apiFetch.use( wp.apiFetch.nonceMiddleware );
+wp.apiFetch.use( wp.apiFetch.mediaUploadMiddleware );
+wp.apiFetch.nonceEndpoint = "https://inglesconsebas.com/wp-admin/admin-ajax.php?action=rest-nonce";
+</script>
+<script id="woo-variation-swatches-js-extra">
+var woo_variation_swatches_options = {"show_variation_label":"1","clear_on_reselect":"","variation_label_separator":":","is_mobile":"1","show_variation_stock":"","stock_label_threshold":"5","cart_redirect_after_add":"no","enable_ajax_add_to_cart":"yes","cart_url":"https:\/\/inglesconsebas.com\/cart\/","is_cart":""};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woo-variation-swatches/assets/js/frontend.min.js?ver=1772905359" id="woo-variation-swatches-js"></script>
+<script id="storefront-navigation-js-extra">
+var storefrontScreenReaderText = {"expand":"Expandir el men\u00fa hijo","collapse":"Contraer el men\u00fa hijo"};
+</script>
+<script src="https://inglesconsebas.com/wp-content/themes/storefront/assets/js/navigation.min.js?ver=2.8.0" id="storefront-navigation-js"></script>
+<script src="https://inglesconsebas.com/wp-content/themes/storefront/assets/js/skip-link-focus-fix.min.js?ver=20130115" id="storefront-skip-link-focus-fix-js"></script>
+<script src="https://inglesconsebas.com/wp-content/themes/storefront/assets/js/vendor/pep.min.js?ver=0.4.3" id="jquery-pep-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min.js?ver=10.3.8" id="sourcebuster-js-js"></script>
+<script id="wc-order-attribution-js-extra">
+var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"https:\/\/inglesconsebas.com\/wp-admin\/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.min.js?ver=10.3.8" id="wc-order-attribution-js"></script>
+<script src="https://inglesconsebas.com/wp-includes/js/jquery/ui/core.min.js?ver=1.13.3" id="jquery-ui-core-js"></script>
+<script id="popup-maker-site-js-extra">
+var pum_vars = {"version":"1.21.5","pm_dir_url":"https:\/\/inglesconsebas.com\/wp-content\/plugins\/popup-maker\/","ajaxurl":"https:\/\/inglesconsebas.com\/wp-admin\/admin-ajax.php","restapi":"https:\/\/inglesconsebas.com\/wp-json\/pum\/v1","rest_nonce":null,"default_theme":"268","debug_mode":"","disable_tracking":"","home_url":"\/","message_position":"top","core_sub_forms_enabled":"1","popups":[],"cookie_domain":"","analytics_enabled":"1","analytics_route":"analytics","analytics_api":"https:\/\/inglesconsebas.com\/wp-json\/pum\/v1"};
+var pum_sub_vars = {"ajaxurl":"https:\/\/inglesconsebas.com\/wp-admin\/admin-ajax.php","message_position":"top"};
+var pum_popups = {"pum-274":{"triggers":[{"type":"click_open","settings":{"cookie_name":"","extra_selectors":".op, #op"}}],"cookies":[],"disable_on_mobile":false,"disable_on_tablet":false,"atc_promotion":null,"explain":null,"type_section":null,"theme_id":"269","size":"small","responsive_min_width":"0%","responsive_max_width":"100%","custom_width":"640px","custom_height_auto":false,"custom_height":"380px","scrollable_content":false,"animation_type":"fade","animation_speed":"350","animation_origin":"center top","open_sound":"none","custom_sound":"","location":"center top","position_top":"100","position_bottom":"0","position_left":"0","position_right":"0","position_from_trigger":false,"position_fixed":false,"overlay_disabled":false,"stackable":false,"disable_reposition":false,"zindex":"1999999999","close_button_delay":"0","fi_promotion":null,"close_on_form_submission":false,"close_on_form_submission_delay":"0","close_on_overlay_click":false,"close_on_esc_press":false,"close_on_f4_press":false,"disable_form_reopen":false,"disable_accessibility":false,"theme_slug":"lightbox","id":274,"slug":"contact"}};
+</script>
+<script src="//inglesconsebas.com/wp-content/uploads/pum/pum-site-scripts.js?defer&amp;generated=1604245070&amp;ver=1.21.5" id="popup-maker-site-js"></script>
+<script src="https://inglesconsebas.com/wp-content/themes/storefront/assets/js/woocommerce/header-cart.min.js?ver=2.8.0" id="storefront-header-cart-js"></script>
+<script src="https://inglesconsebas.com/wp-content/themes/storefront/assets/js/footer.min.js?ver=2.8.0" id="storefront-handheld-footer-bar-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.34.0" id="elementor-webpack-runtime-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.34.0" id="elementor-frontend-modules-js"></script>
+<script id="elementor-frontend-js-before">
+var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Compartir en Facebook","shareOnTwitter":"Compartir en Twitter","pinIt":"Pinear","download":"Descargar","downloadImage":"Descargar imagen","fullscreen":"Pantalla completa","zoom":"Zoom","share":"Compartir","playVideo":"Reproducir v\u00eddeo","previous":"Anterior","next":"Siguiente","close":"Cerrar","a11yCarouselPrevSlideMessage":"Diapositiva anterior","a11yCarouselNextSlideMessage":"Diapositiva siguiente","a11yCarouselFirstSlideMessage":"Esta es la primera diapositiva","a11yCarouselLastSlideMessage":"Esta es la \u00faltima diapositiva","a11yCarouselPaginationBulletMessage":"Ir a la diapositiva"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"M\u00f3vil vertical","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"M\u00f3vil horizontal","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tableta vertical","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tableta horizontal","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Port\u00e1til","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Pantalla grande","value":2400,"default_value":2400,"direction":"min","is_enabled":false}},"hasCustomBreakpoints":false},"version":"3.34.0","is_static":false,"experimentalFeatures":{"additional_custom_breakpoints":true,"theme_builder_v2":true,"home_screen":true,"global_classes_should_enforce_capabilities":true,"e_variables":true,"cloud-library":true,"e_opt_in_v4_page":true,"e_interactions":true,"import-export-customization":true,"e_pro_atomic_form":true,"e_pro_variables":true,"e_pro_interactions":true},"urls":{"assets":"https:\/\/inglesconsebas.com\/wp-content\/plugins\/elementor\/assets\/","ajaxurl":"https:\/\/inglesconsebas.com\/wp-admin\/admin-ajax.php","uploadUrl":"https:\/\/inglesconsebas.com\/wp-content\/uploads"},"nonces":{"floatingButtonsClickTracking":"077d15aed3"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description","woocommerce_notices_elements":[]},"post":{"id":753,"title":"Ingl%C3%A9s%20con%20Sebas%20%E2%80%93%20Ingl%C3%A9s%20en%20l%C3%ADnea.%20Clases%20online.","excerpt":"","featuredImage":false}};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.34.0" id="elementor-frontend-js"></script>
+<script src="https://inglesconsebas.com/wp-content/themes/storefront/assets/js/woocommerce/extensions/brands.min.js?ver=2.8.0" id="storefront-woocommerce-brands-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=4.0.4" id="elementor-pro-webpack-runtime-js"></script>
+<script id="elementor-pro-frontend-js-before">
+var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/inglesconsebas.com\/wp-admin\/admin-ajax.php","nonce":"cb9fb746db","urls":{"assets":"https:\/\/inglesconsebas.com\/wp-content\/plugins\/elementor-pro\/assets\/","rest":"https:\/\/inglesconsebas.com\/wp-json\/"},"settings":{"lazy_load_background_images":true},"popup":{"hasPopUps":false},"shareButtonsNetworks":{"facebook":{"title":"Facebook","has_counter":true},"twitter":{"title":"Twitter"},"linkedin":{"title":"LinkedIn","has_counter":true},"pinterest":{"title":"Pinterest","has_counter":true},"reddit":{"title":"Reddit","has_counter":true},"vk":{"title":"VK","has_counter":true},"odnoklassniki":{"title":"OK","has_counter":true},"tumblr":{"title":"Tumblr"},"digg":{"title":"Digg"},"skype":{"title":"Skype"},"stumbleupon":{"title":"StumbleUpon","has_counter":true},"mix":{"title":"Mix"},"telegram":{"title":"Telegram"},"pocket":{"title":"Pocket","has_counter":true},"xing":{"title":"XING","has_counter":true},"whatsapp":{"title":"WhatsApp"},"email":{"title":"Email"},"print":{"title":"Print"},"x-twitter":{"title":"X"},"threads":{"title":"Threads"}},"woocommerce":{"menu_cart":{"cart_page_url":"https:\/\/inglesconsebas.com\/cart\/","checkout_page_url":"https:\/\/inglesconsebas.com\/checkout\/","fragments_nonce":"7400a21c8d"}},"facebook_sdk":{"lang":"es_ES","app_id":""},"lottie":{"defaultAnimationUrl":"https:\/\/inglesconsebas.com\/wp-content\/plugins\/elementor-pro\/modules\/lottie\/assets\/animations\/default.json"}};
+</script>
+<script src="https://inglesconsebas.com/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=4.0.4" id="elementor-pro-frontend-js"></script>
+<script src="https://inglesconsebas.com/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=4.0.4" id="pro-elements-handlers-js"></script>
+	</body>
+</html>
+
+
+<!-- Page cached by LiteSpeed Cache 7.6.2 on 2026-05-11 21:53:01 -->
