@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
+const REGISTER_STUDENT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/register-student`
+
 export default function SignUpPage() {
   const navigate = useNavigate()
 
@@ -23,80 +25,52 @@ export default function SignUpPage() {
     setError(null)
     setLoading(true)
 
-    // 1. Create auth user
-    const { data: authData, error: signUpError } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: { data: { name: name.trim() } },
-    })
+    // 1. Create user via edge function (bypasses signup restrictions)
+    let registerError: string | null = null
+    try {
+      const res = await fetch(REGISTER_STUDENT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ email: email.trim(), password, name: name.trim() }),
+      })
+      const json = await res.json()
+      if (!res.ok || json.error) {
+        registerError = json.error ?? 'Error al crear la cuenta. Inténtalo de nuevo.'
+      }
+    } catch {
+      registerError = 'No se pudo conectar al servidor. Inténtalo de nuevo.'
+    }
 
-    if (signUpError) {
+    if (registerError) {
       setLoading(false)
-      if (
-        signUpError.message.toLowerCase().includes('already registered') ||
-        signUpError.message.toLowerCase().includes('already been registered') ||
-        signUpError.message.toLowerCase().includes('user already exists')
-      ) {
+      const lower = registerError.toLowerCase()
+      if (lower.includes('ya existe') || lower.includes('already')) {
         setError('Ya tienes cuenta, inicia sesión')
-      } else if (signUpError.message.toLowerCase().includes('password')) {
+      } else if (lower.includes('password') || lower.includes('contraseña')) {
         setError('La contraseña debe tener al menos 6 caracteres')
       } else {
-        setError(signUpError.message)
+        setError(registerError)
       }
       triggerShake()
       return
     }
 
-    const authUser = authData.user
-    if (!authUser) {
+    // 2. Sign in automatically (email is confirmed by edge function)
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    })
+
+    if (signInError) {
       setLoading(false)
-      setError('Error al crear la cuenta. Inténtalo de nuevo.')
-      triggerShake()
+      setError('Cuenta creada. Inicia sesión para continuar.')
       return
     }
 
-    // Email confirmation required — no active session yet
-    if (!authData.session) {
-      setLoading(false)
-      setError('Revisa tu email para confirmar tu cuenta antes de ingresar.')
-      return
-    }
-
-    // 2. Insert into users table
-    const { error: userInsertError } = await supabase.from('users').insert({
-      id: authUser.id,
-      email: authUser.email,
-      role: 'student',
-      name: name.trim(),
-    })
-
-    if (userInsertError) {
-      console.error('[SignUp] users insert error:', userInsertError)
-    }
-
-    // 3. Find Demo study plan (best-effort — don't block signup if missing)
-    let demoPlanId: string | null = null
-    const { data: demoPlan } = await supabase
-      .from('study_plans')
-      .select('id')
-      .eq('name', 'Demo')
-      .maybeSingle()
-
-    if (demoPlan) demoPlanId = demoPlan.id
-
-    // 4. Insert into students table
-    const { error: studentInsertError } = await supabase.from('students').insert({
-      id: authUser.id,
-      teacher_id: null,
-      plan_id: demoPlanId,
-      active: true,
-    })
-
-    if (studentInsertError) {
-      console.error('[SignUp] students insert error:', studentInsertError)
-    }
-
-    // 5. Redirect with welcome flag
+    // 3. Redirect with welcome flag
     navigate('/student', { replace: true, state: { welcome: true } })
   }
 
