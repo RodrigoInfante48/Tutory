@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthGuard from '../components/AuthGuard'
 import ErrorBoundary from '../components/ErrorBoundary'
 import LoginPage from '../features/auth/LoginPage'
-import SignUpPage from '../features/auth/SignUpPage'
 import ForgotPasswordPage from '../features/auth/ForgotPasswordPage'
 import ResetPasswordPage from '../features/auth/ResetPasswordPage'
 import LandingPage from '../features/landing/LandingPage'
@@ -56,7 +55,6 @@ export default function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<ErrorBoundary section="Login"><LoginPage /></ErrorBoundary>} />
-      <Route path="/signup" element={<ErrorBoundary section="Registro"><SignUpPage /></ErrorBoundary>} />
       <Route path="/forgot-password" element={<ErrorBoundary section="Recuperar contraseña"><ForgotPasswordPage /></ErrorBoundary>} />
       <Route path="/reset-password" element={<ErrorBoundary section="Resetear contraseña"><ResetPasswordPage /></ErrorBoundary>} />
 
