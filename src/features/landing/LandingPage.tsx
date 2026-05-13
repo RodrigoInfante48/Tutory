@@ -212,10 +212,14 @@ function VideoPlaceholder() {
 
 // ─── Hero ───────────────────────────────────────────────────────────────────
 
-const HEADLINE = 'Speak like you mean it.'
+const HEADLINE = 'Aprende inglés con tu profe personal — sin buscar, sin improvisar'
 
 function Hero() {
   const words = HEADLINE.split(' ')
+
+  function scrollTo(id: string) {
+    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <section className="relative min-h-[100dvh] flex items-center overflow-hidden bg-[#0a0a0a]">
@@ -240,7 +244,7 @@ function Hero() {
           >
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border border-white/10 text-white/50 bg-white/[0.03]">
               <span className="text-[#86ef86]">✦</span>
-              Acceso privado · Solo estudiantes seleccionados
+              Docentes certificados · Plan personalizado desde el día 1
             </span>
           </motion.div>
 
@@ -270,8 +274,9 @@ function Hero() {
             transition={{ duration: 0.55, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="text-base md:text-lg text-white/50 max-w-lg leading-relaxed"
           >
-            No somos una app masiva. Tutory es el espacio privado donde
-            tu profe gestiona tu aprendizaje — personalizado, sin distracciones.
+            Tutory te conecta con un docente certificado que diseña tu plan de estudios,
+            hace seguimiento de tu progreso y se asegura de que llegues a tu meta.
+            Tú solo aprendes.
           </motion.p>
 
           {/* CTAs */}
@@ -282,21 +287,18 @@ function Hero() {
             transition={{ duration: 0.5, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-wrap items-center gap-3 pt-2"
           >
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => scrollTo('#clase-prueba')}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#86ef86] text-[#0a0a0a] text-sm font-semibold hover:bg-[#9ef89e] transition-all duration-200 hover:scale-[1.02]"
             >
-              <WhatsAppIcon />
-              Quiero empezar
-            </a>
-            <Link
-              to="/login"
+              Quiero mi profe ideal
+            </button>
+            <button
+              onClick={() => scrollTo('#aplicar-profe')}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/20 text-white/80 text-sm font-semibold hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-[1.02]"
             >
-              Ya tengo cuenta
-            </Link>
+              Soy profesor — únete a Tutory
+            </button>
           </motion.div>
         </div>
 
@@ -819,20 +821,20 @@ function MockupProgress() {
 const HOW_STEPS = [
   {
     number: '01',
-    title: 'Agrega tus estudiantes',
-    description: 'Crea el perfil de cada estudiante, asígnales su plan de estudios y ten toda su info en un solo lugar desde el primer día.',
+    title: 'Cuéntanos tu meta',
+    description: 'Llena el formulario de 2 minutos. Nos dices tu nivel, tu objetivo y cuánto tiempo tienes disponible.',
     Mockup: MockupStudentCard,
   },
   {
     number: '02',
-    title: 'Gestiona clases y tareas',
-    description: 'Programa sesiones, asigna tareas con fecha límite y recibe las entregas directamente en la plataforma. Sin WhatsApp.',
+    title: 'Te asignamos el profe ideal',
+    description: 'Revisamos tu perfil y te conectamos con el docente más alineado a tu objetivo. Sin búsqueda, sin prueba y error.',
     Mockup: MockupTaskList,
   },
   {
     number: '03',
-    title: 'Sigue el progreso en tiempo real',
-    description: 'Visualiza el avance de cada estudiante, sus scores en quizzes y el porcentaje del plan completado en un vistazo.',
+    title: 'Empieza tu primera clase de prueba',
+    description: 'Tu profe diseña tu plan personalizado y arrancas en 48 horas. Desde el día 1 tienes todo estructurado.',
     Mockup: MockupProgress,
   },
 ]
@@ -865,7 +867,7 @@ function SectionComoFunciona() {
             transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="font-heading text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight"
           >
-            Tres pasos para tener<br />todo bajo control
+            Tres pasos para tener<br />tu profe listo
           </motion.h2>
         </div>
 
@@ -1056,12 +1058,12 @@ function SectionFuncionalidades() {
 // ─── Section: Para quién es ──────────────────────────────────────────────────
 
 const TEACHER_BENEFITS = [
-  'Un solo lugar para todos tus estudiantes',
-  'Crea y asigna tareas en segundos',
-  'Quizzes automáticos con resultados al instante',
-  'Historial completo de cada clase',
-  'Materiales organizados por estudiante',
-  'Chat directo sin salir de la plataforma',
+  'Recibes estudiantes calificados directamente en tu panel',
+  'Los pagos llegan automáticos — tú solo das clase',
+  'Sin hacer marketing, sin perseguir pagos',
+  'Un solo lugar para gestionar todo tu proceso',
+  'Quizzes, tareas y seguimiento integrados',
+  'Chat directo con tus estudiantes sin salir de Tutory',
 ]
 
 const STUDENT_BENEFITS = [
@@ -1096,6 +1098,7 @@ function SectionParaQuien() {
       id="para-quien"
       className="relative py-32 bg-[#0a0a0a]"
     >
+      <div id="aplicar-profe" className="absolute" style={{ top: '-80px' }} />
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-20">
@@ -1135,7 +1138,7 @@ function SectionParaQuien() {
               </div>
               <div>
                 <h3 className="font-heading text-xl font-bold text-white">Para profesores</h3>
-                <p className="text-sm text-white/40">Control total del proceso</p>
+                <p className="text-sm text-white/40">Estudiantes listos — sin marketing, sin cobros</p>
               </div>
             </div>
             <ul className="flex flex-col gap-4">
@@ -1332,7 +1335,7 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
 }
 
 const METRICS = [
-  { target: 200,  suffix: '+', label: 'profesores activos' },
+  { target: 50,   suffix: '+', label: 'docentes certificados' },
   { target: 1400, suffix: '+', label: 'estudiantes gestionados' },
   { target: 98,   suffix: '%', label: 'satisfacción docente' },
 ]
