@@ -46,7 +46,7 @@ export default function LoginPage() {
     setError(null)
     setLoading(true)
 
-    const { error: signInError } = await signIn(email.trim(), pinValue)
+    const { error: signInError } = await signIn(email.trim(), pinValue + '00')
 
     if (signInError) {
       setLoading(false)

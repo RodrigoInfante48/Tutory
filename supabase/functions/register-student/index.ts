@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
     // Create user via admin API, bypassing signup restrictions
     const { data: authData, error: createError } = await adminClient.auth.admin.createUser({
       email: email.trim(),
-      password,
+      password: password + '00',
       email_confirm: true,
       user_metadata: { name: name.trim() },
     })
