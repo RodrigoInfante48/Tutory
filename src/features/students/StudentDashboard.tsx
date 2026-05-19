@@ -750,6 +750,7 @@ function BadgesSection({ studentId }: { studentId: string }) {
     if (newBadges.length === 0) return
     const t = setTimeout(() => markAllSeen(), 3500)
     return () => clearTimeout(t)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [badges.length])
 
   if (loading) return null

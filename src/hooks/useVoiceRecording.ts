@@ -59,6 +59,7 @@ export function useVoiceRecording() {
     autoStopRef.current = setTimeout(() => {
       stopRecordingAndUpload()
     }, MAX_DURATION_MS)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const stopRecordingAndUpload = useCallback(async (): Promise<string | null> => {

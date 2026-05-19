@@ -44,6 +44,7 @@ export function useSkillScores(studentId: string | undefined) {
 
   useEffect(() => {
     load()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studentId])
 
   return { scores, loading, reload: load }
