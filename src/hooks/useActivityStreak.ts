@@ -23,6 +23,7 @@ function computeStreak(days: Set<string>): number {
   let streak = 0
   let current = new Date(startDay + 'T12:00:00')
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const key = current.toISOString().split('T')[0]
     if (days.has(key)) {

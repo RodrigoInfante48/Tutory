@@ -87,6 +87,7 @@ export function useStudentBadges(studentId: string | undefined) {
     setLoading(false)
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { load() }, [studentId])
 
   async function markAllSeen() {
