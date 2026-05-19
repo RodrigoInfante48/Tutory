@@ -256,6 +256,7 @@ export function useTypingIndicator(partnerId: string) {
 export function useUnreadCount() {
   const { appUser } = useAuth()
   const [count, setCount] = useState(0)
+  const loadRef = useRef<() => Promise<void>>(() => Promise.resolve())
 
   const load = useCallback(async () => {
     if (!appUser) return
@@ -267,19 +268,27 @@ export function useUnreadCount() {
     setCount(n ?? 0)
   }, [appUser])
 
+  // Keep ref in sync so the channel callback always calls the latest version
+  useEffect(() => { loadRef.current = load }, [load])
+
   useEffect(() => {
-    load()
+    loadRef.current()
     if (!appUser) return
+    const channelName = `unread-${appUser.id}`
+    // Remove any stale channel with the same name before subscribing
+    supabase.getChannels().forEach((ch) => {
+      if (ch.topic === `realtime:${channelName}`) supabase.removeChannel(ch)
+    })
     const channel = supabase
-      .channel(`unread-${appUser.id}`)
+      .channel(channelName)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'messages', filter: `receiver_id=eq.${appUser.id}` },
-        () => { load() }
+        () => { loadRef.current() }
       )
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [appUser, load])
+  }, [appUser]) // load excluido — loadRef.current siempre está actualizado
 
   return count
 }
