@@ -173,8 +173,104 @@ function TeachersTable({ teachers, loading }: { teachers: AdminTeacher[]; loadin
   )
 }
 
+type ResetPinStatus = 'idle' | 'loading' | 'success' | 'error'
+
+function ResetPinModal({ student, onClose }: { student: AdminStudent; onClose: () => void }) {
+  const [pin, setPin] = useState('')
+  const [status, setStatus] = useState<ResetPinStatus>('idle')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
+  const pinValid = /^\d{4}$/.test(pin)
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!pinValid || status === 'loading') return
+    setStatus('loading')
+    setErrorMsg(null)
+
+    const { data: sessionData } = await supabase.auth.getSession()
+    const token = sessionData.session?.access_token
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reset-pin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ userId: student.id, pin }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setErrorMsg(json.error ?? 'Error al restablecer el PIN')
+        setStatus('error')
+        return
+      }
+      setStatus('success')
+    } catch {
+      setErrorMsg('Error de conexión')
+      setStatus('error')
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Restablecer PIN</h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          Asigna un nuevo PIN de 4 dígitos para <strong>{student.name}</strong>.
+        </p>
+
+        {status === 'success' ? (
+          <div className="text-center py-4">
+            <p className="text-green-600 dark:text-green-400 font-semibold mb-4">PIN actualizado correctamente.</p>
+            <button onClick={onClose} className="px-6 py-2 rounded-lg bg-primary text-primary-dark font-semibold text-sm">
+              Cerrar
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Nuevo PIN
+              </label>
+              <PinInput value={pin} onChange={setPin} />
+              {pin.length > 0 && pin.length < 4 && (
+                <p className="mt-2 text-xs text-gray-400">{4 - pin.length} dígito{4 - pin.length !== 1 ? 's' : ''} más</p>
+              )}
+            </div>
+
+            {errorMsg && <p className="text-sm text-red-500">{errorMsg}</p>}
+
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={!pinValid || status === 'loading'}
+                className="flex-1 py-2.5 rounded-xl bg-primary text-primary-dark text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {status === 'loading' ? (
+                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : 'Actualizar'}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function StudentsTable({ students, loading }: { students: AdminStudent[]; loading: boolean }) {
   const [showInactive, setShowInactive] = useState(false)
+  const [resetTarget, setResetTarget] = useState<AdminStudent | null>(null)
   const filtered = showInactive ? students : students.filter(s => s.active)
 
   if (loading) {
@@ -189,6 +285,10 @@ function StudentsTable({ students, loading }: { students: AdminStudent[]; loadin
 
   return (
     <>
+      {resetTarget && (
+        <ResetPinModal student={resetTarget} onClose={() => setResetTarget(null)} />
+      )}
+
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm text-gray-500 dark:text-gray-400">
           {filtered.length} estudiante{filtered.length !== 1 ? 's' : ''}
@@ -217,6 +317,7 @@ function StudentsTable({ students, loading }: { students: AdminStudent[]; loadin
                 <th className="text-left pb-3 pr-4 font-medium text-gray-500 dark:text-gray-400 hidden sm:table-cell">Docente</th>
                 <th className="text-left pb-3 pr-4 font-medium text-gray-500 dark:text-gray-400 hidden md:table-cell">Plan</th>
                 <th className="text-right pb-3 font-medium text-gray-500 dark:text-gray-400">Estado</th>
+                <th className="pb-3 w-8" />
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -245,6 +346,21 @@ function StudentsTable({ students, loading }: { students: AdminStudent[]; loadin
                     }`}>
                       {s.active ? 'Activo' : 'Inactivo'}
                     </span>
+                  </td>
+                  <td className="py-3 pl-2">
+                    <button
+                      onClick={() => setResetTarget(s)}
+                      title="Restablecer PIN"
+                      className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="6" width="20" height="12" rx="2" />
+                        <circle cx="6" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                        <circle cx="10" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                        <circle cx="14" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                        <circle cx="18" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                      </svg>
+                    </button>
                   </td>
                 </tr>
               ))}
