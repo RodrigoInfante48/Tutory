@@ -20,6 +20,8 @@ interface AuthState {
 
 interface AuthContextValue extends AuthState {
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
+  /** Sign in using a 4-digit PIN — appends '00' to meet Supabase's 6-char minimum. */
+  signInWithPin: (email: string, pin: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
   /** True when a session exists but no matching row was found in the users table. */
   profileMissing: boolean
@@ -106,6 +108,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: null }
   }
 
+  const signInWithPin = (email: string, pin: string) => signIn(email, pin + '00')
+
   const signOut = async () => {
     await supabase.auth.signOut()
   }
@@ -113,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const profileMissing = !loading && session !== null && appUser === null
 
   return (
-    <AuthContext.Provider value={{ session, appUser, loading, profileMissing, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, appUser, loading, profileMissing, signIn, signInWithPin, signOut }}>
       {children}
     </AuthContext.Provider>
   )

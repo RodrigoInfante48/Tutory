@@ -11,7 +11,7 @@ const ROLE_HOME: Record<UserRole, string> = {
 const PAD_KEYS = ['1','2','3','4','5','6','7','8','9','⌫','0','→'] as const
 
 export default function LoginPage() {
-  const { signIn, appUser, profileMissing } = useAuth()
+  const { signInWithPin, appUser, profileMissing } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const passwordResetSuccess = (location.state as { passwordReset?: boolean } | null)?.passwordReset === true
@@ -46,7 +46,7 @@ export default function LoginPage() {
     setError(null)
     setLoading(true)
 
-    const { error: signInError } = await signIn(email.trim(), pinValue + '00')
+    const { error: signInError } = await signInWithPin(email.trim(), pinValue)
 
     if (signInError) {
       setLoading(false)

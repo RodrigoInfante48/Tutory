@@ -18,6 +18,7 @@ function makeAuthContext(overrides: Partial<ReturnType<typeof useAuth>> = {}) {
     loading: false,
     profileMissing: false,
     signIn: mockSignIn,
+    signInWithPin: vi.fn(),
     signOut: vi.fn(),
     ...overrides,
   }
