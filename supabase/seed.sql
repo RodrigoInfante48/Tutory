@@ -1,82 +1,18 @@
 -- ============================================================
--- Tutory seed data — for local development only
--- Run: supabase db seed  (or paste in the local SQL editor)
--- NOTE: For Supabase Cloud, create users via the Auth dashboard
---       or the Admin API, then run the rest of the inserts.
+-- Tutory seed data — application tables only
+-- Run: supabase db seed  (or paste in the SQL editor)
+--
+-- IMPORTANT: Auth users (auth.users) are NOT seeded here.
+-- Direct INSERT into auth.users bypasses GoTrue and creates
+-- "ghost" users the auth service cannot recognize.
+--
+-- To create seed users, run the companion script instead:
+--   deno run --allow-net --allow-env supabase/seed-users.ts
+--
+-- That script uses the Supabase Admin API (auth.admin.createUser)
+-- which sets up auth.users AND auth.identities correctly.
+-- The stable UUIDs it creates match the FKs in this file.
 -- ============================================================
-
--- UUIDs are stable so foreign keys stay consistent across reseeds.
-
--- ============================================================
--- Auth users (local Supabase only)
--- ============================================================
-
-insert into auth.users (
-  id, email, encrypted_password, email_confirmed_at,
-  raw_user_meta_data, created_at, updated_at,
-  aud, role
-) values
-  -- admin@tutory.com / tutory1234
-  (
-    '00000000-0000-0000-0000-000000000001',
-    'admin@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"admin","name":"Admin Tutory"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  ),
-  -- valentina@tutory.com / tutory1234
-  (
-    '00000000-0000-0000-0000-000000000002',
-    'valentina@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"teacher","name":"Valentina García"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  ),
-  -- carlos@tutory.com / tutory1234
-  (
-    '00000000-0000-0000-0000-000000000003',
-    'carlos@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"teacher","name":"Carlos Mendoza"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  ),
-  -- Students
-  (
-    '00000000-0000-0000-0000-000000000004',
-    'ana@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"student","name":"Ana Rodríguez"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  ),
-  (
-    '00000000-0000-0000-0000-000000000005',
-    'pedro@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"student","name":"Pedro Martínez"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  ),
-  (
-    '00000000-0000-0000-0000-000000000006',
-    'maria@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"student","name":"María López"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  ),
-  (
-    '00000000-0000-0000-0000-000000000007',
-    'juan@tutory.com',
-    crypt('tutory1234', gen_salt('bf')),
-    now(),
-    '{"role":"student","name":"Juan Pérez"}'::jsonb,
-    now(), now(), 'authenticated', 'authenticated'
-  )
-on conflict (id) do nothing;
 
 -- ============================================================
 -- public.users (trigger should fire above, but we upsert to be safe)

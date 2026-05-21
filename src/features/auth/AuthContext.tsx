@@ -25,34 +25,41 @@ interface AuthContextValue extends AuthState {
   signOut: () => Promise<void>
   /** True when a session exists but no matching row was found in the users table. */
   profileMissing: boolean
+  /** Non-null when the profile fetch failed due to a timeout or Supabase error. */
+  fetchError: string | null
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-async function fetchAppUser(userId: string): Promise<AppUser | null> {
+type FetchResult =
+  | { data: AppUser; timedOut: false }
+  | { data: null; timedOut: boolean }
+
+async function fetchAppUser(userId: string): Promise<FetchResult> {
   try {
-    const { data, error } = await Promise.race([
+    const result = await Promise.race([
       supabase
         .from('users')
         .select('id, email, role, name, avatar_url')
         .eq('id', userId)
-        .single(),
-      new Promise<{ data: null; error: Error }>((resolve) =>
-        setTimeout(() => resolve({ data: null, error: new Error('timeout after 20s') }), 20000)
+        .single()
+        .then((r) => ({ ...r, timedOut: false as const })),
+      new Promise<{ data: null; error: Error; timedOut: true }>((resolve) =>
+        setTimeout(() => resolve({ data: null, error: new Error('timeout'), timedOut: true }), 8000)
       ),
     ])
-    if (error) {
-      console.error('[fetchAppUser] Supabase error:', JSON.stringify(error))
-      return null
+    if (result.timedOut) {
+      console.error('[fetchAppUser] Timed out after 8s for userId:', userId)
+      return { data: null, timedOut: true }
     }
-    if (!data) {
-      console.error('[fetchAppUser] No row found for userId:', userId)
-      return null
+    if (result.error || !result.data) {
+      console.error('[fetchAppUser] Supabase error or missing row:', result.error)
+      return { data: null, timedOut: false }
     }
-    return data as AppUser
+    return { data: result.data as AppUser, timedOut: false }
   } catch (err) {
     console.error('[fetchAppUser] Exception:', err)
-    return null
+    return { data: null, timedOut: false }
   }
 }
 
@@ -60,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [appUser, setAppUser] = useState<AppUser | null>(null)
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   // Effect 1: subscribe to auth state — ONLY update session state here.
   // Never call supabase.from() or getSession() inside this callback:
@@ -73,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession)
       if (!newSession) {
         setAppUser(null)
+        setFetchError(null)
         setLoading(false)
       } else {
         setLoading(true)
@@ -92,11 +101,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!session) return
     let mounted = true
 
-    fetchAppUser(session.user.id).then((user) => {
-      if (mounted) {
-        setAppUser(user)
-        setLoading(false)
-      }
+    fetchAppUser(session.user.id).then(({ data, timedOut }) => {
+      if (!mounted) return
+      setAppUser(data)
+      setFetchError(
+        timedOut
+          ? 'No se pudo conectar con el servidor. Verifica tu conexión e intenta de nuevo.'
+          : null
+      )
+      setLoading(false)
     })
 
     return () => { mounted = false }
@@ -114,10 +127,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
-  const profileMissing = !loading && session !== null && appUser === null
+  const profileMissing = !loading && session !== null && appUser === null && fetchError === null
 
   return (
-    <AuthContext.Provider value={{ session, appUser, loading, profileMissing, signIn, signInWithPin, signOut }}>
+    <AuthContext.Provider value={{ session, appUser, loading, profileMissing, fetchError, signIn, signInWithPin, signOut }}>
       {children}
     </AuthContext.Provider>
   )
