@@ -6,7 +6,7 @@ import { type StudentSummary } from '../../hooks/useTeacherStudents'
 import { useStudentProfile } from '../../hooks/useStudentProfile'
 import { useAllPlans, assignPlanToStudent } from '../../hooks/useAssignPlan'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
-import { useTeacherTasksForStudent, createTask, saveFeedback } from '../../hooks/useTeacherTasks'
+import { useTeacherTasksForStudent, createTask } from '../../hooks/useTeacherTasks'
 import { useStudentClassSessions, updateSessionStatus, updateSessionRecording, createSession, type SessionStatus, type SessionType } from '../../hooks/useClassSessions'
 import { useStudentGlossary, addGlossaryEntry, deleteGlossaryEntry } from '../../hooks/useStudentGlossary'
 import { useAuth } from '../auth/AuthContext'
@@ -544,7 +544,7 @@ function RecursosTab({ studentId }: { studentId: string }) {
 }
 
 function TareasTab({ studentId, teacherId }: { studentId: string; teacherId: string }) {
-  const { tasks, loading, reload } = useTeacherTasksForStudent(studentId)
+  const { tasks, loading, reload, optimisticSaveFeedback } = useTeacherTasksForStudent(studentId)
   const [showForm, setShowForm] = useState(false)
   const [formTitle, setFormTitle] = useState('')
   const [formDesc, setFormDesc] = useState('')
@@ -592,10 +592,9 @@ function TareasTab({ studentId, teacherId }: { studentId: string; teacherId: str
     setSavingFeedback(true)
     setFeedbackError(null)
     try {
-      await saveFeedback({ submissionId, taskId: feedbackTaskId, feedback: feedbackText })
+      await optimisticSaveFeedback(submissionId, feedbackTaskId, feedbackText)
       setFeedbackTaskId(null)
       setFeedbackText('')
-      await reload()
     } catch (err) {
       setFeedbackError(err instanceof Error ? err.message : 'Error al guardar feedback')
     } finally {

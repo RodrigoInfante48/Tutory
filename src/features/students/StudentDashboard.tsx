@@ -11,7 +11,7 @@ import { useAuth } from '../auth/AuthContext'
 import { useStudyPlan } from '../../hooks/useStudyPlan'
 import StudyPlanView, { StudyPlanSkeleton } from '../study-plans/StudyPlanView'
 import { supabase } from '../../lib/supabase'
-import { useStudentTasks, submitTask, markFeedbackRead, type StudentTask } from '../../hooks/useStudentTasks'
+import { useStudentTasks, markFeedbackRead, type StudentTask } from '../../hooks/useStudentTasks'
 import { useStudentQuiz } from '../../hooks/useStudentQuiz'
 import QuizPlayer from '../quizzes/QuizPlayer'
 import QuizHistory from '../quizzes/QuizHistory'
@@ -177,7 +177,15 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
-function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId: string; onUpdate: () => void }) {
+function TaskItem({
+  task,
+  onSubmit,
+  onUpdate,
+}: {
+  task: StudentTask
+  onSubmit: (taskId: string, body: string) => Promise<void>
+  onUpdate: () => void
+}) {
   const [expanded, setExpanded] = useState(false)
   const [body, setBody] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -190,10 +198,9 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
     setSubmitting(true)
     setSubmitError(null)
     try {
-      await submitTask({ taskId: task.id, studentId, body })
+      await onSubmit(task.id, body) // optimistic update + API + sync; body preserved on throw
       setBody('')
       setExpanded(false)
-      onUpdate()
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Error al entregar tarea')
     } finally {
@@ -297,7 +304,7 @@ function TaskItem({ task, studentId, onUpdate }: { task: StudentTask; studentId:
 }
 
 function TasksSection({ studentId }: { studentId: string }) {
-  const { tasks, loading, error, reload } = useStudentTasks(studentId)
+  const { tasks, loading, error, reload, optimisticSubmit } = useStudentTasks(studentId)
 
   const newFeedbackCount = tasks.filter(
     t => t.submission?.feedback && !t.submission.feedback_read_at
@@ -345,7 +352,7 @@ function TasksSection({ studentId }: { studentId: string }) {
           {activeTasks.length > 0 && (
             <ul className="space-y-2">
               {activeTasks.map(task => (
-                <TaskItem key={task.id} task={task} studentId={studentId} onUpdate={reload} />
+                <TaskItem key={task.id} task={task} onSubmit={optimisticSubmit} onUpdate={reload} />
               ))}
             </ul>
           )}
@@ -358,7 +365,7 @@ function TasksSection({ studentId }: { studentId: string }) {
               </summary>
               <ul className="mt-2 space-y-2">
                 {reviewedTasks.map(task => (
-                  <TaskItem key={task.id} task={task} studentId={studentId} onUpdate={reload} />
+                  <TaskItem key={task.id} task={task} onSubmit={optimisticSubmit} onUpdate={reload} />
                 ))}
               </ul>
             </details>

@@ -10,6 +10,7 @@ import StudentDashboard from '../features/students/StudentDashboard'
 import StudentVault from '../features/students/StudentVault'
 import TopicReader from '../features/study-plans/TopicReader'
 import AdminDashboard from '../features/admin/AdminDashboard'
+import TeacherTasksPage from '../features/tasks/TeacherTasksPage'
 import ClassesPage from '../features/classes/ClassesPage'
 import ResourcesPage from '../features/resources/ResourcesPage'
 import MessagesPage from '../features/messages/MessagesPage'
@@ -97,6 +98,16 @@ export default function AppRouter() {
           <ErrorBoundary section="Lector de tema">
             <AuthGuard allowedRole="student">
               <TopicReader />
+            </AuthGuard>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path="/teacher/tasks"
+        element={
+          <ErrorBoundary section="Tareas">
+            <AuthGuard allowedRole="teacher">
+              <TeacherTasksPage />
             </AuthGuard>
           </ErrorBoundary>
         }

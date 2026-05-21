@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 export interface TaskWithSubmission {
@@ -65,9 +65,35 @@ export function useTeacherTasksForStudent(studentId: string | null) {
     }
   }, [studentId])
 
+  const tasksRef = useRef<TaskWithSubmission[]>([])
+  useEffect(() => { tasksRef.current = tasks }, [tasks])
+
+  const optimisticSaveFeedback = useCallback(async (
+    submissionId: string,
+    taskId: string,
+    feedback: string,
+  ) => {
+    const previous = tasksRef.current
+    setTasks(prev => prev.map(t =>
+      t.id === taskId
+        ? {
+            ...t,
+            status: 'reviewed' as const,
+            submission: t.submission ? { ...t.submission, feedback } : null,
+          }
+        : t
+    ))
+    try {
+      await saveFeedback({ submissionId, taskId, feedback })
+    } catch (err) {
+      setTasks(previous)
+      throw err
+    }
+  }, [])
+
   useEffect(() => { load() }, [load])
 
-  return { tasks, loading, error, reload: load }
+  return { tasks, loading, error, reload: load, optimisticSaveFeedback }
 }
 
 export async function createTask(params: {

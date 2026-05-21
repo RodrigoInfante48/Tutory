@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 export interface StudentTask {
@@ -65,9 +65,40 @@ export function useStudentTasks(studentId: string | undefined) {
     }
   }, [studentId])
 
+  // Keep a ref so optimisticSubmit always reads the latest tasks without
+  // needing tasks in its dependency array (avoids recreating on every render).
+  const tasksRef = useRef<StudentTask[]>([])
+  useEffect(() => { tasksRef.current = tasks }, [tasks])
+
+  const optimisticSubmit = useCallback(async (taskId: string, body: string) => {
+    const previous = tasksRef.current
+    setTasks(prev => prev.map(t =>
+      t.id === taskId
+        ? {
+            ...t,
+            status: 'submitted' as const,
+            submission: {
+              id: `opt-${Date.now()}`,
+              body,
+              feedback: null,
+              submitted_at: new Date().toISOString(),
+              feedback_read_at: null,
+            },
+          }
+        : t
+    ))
+    try {
+      await submitTask({ taskId, studentId: studentId!, body })
+      await load()
+    } catch (err) {
+      setTasks(previous)
+      throw err
+    }
+  }, [studentId, load])
+
   useEffect(() => { load() }, [load])
 
-  return { tasks, loading, error, reload: load }
+  return { tasks, loading, error, reload: load, optimisticSubmit }
 }
 
 export async function submitTask(params: {
