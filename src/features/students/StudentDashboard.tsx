@@ -389,9 +389,15 @@ interface QuizSectionProps {
 function QuizSection({ studentId, todayQuiz, alreadyTaken, myScore, history, loading, reload }: QuizSectionProps) {
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null)
   const [showHistory, setShowHistory] = useState(false)
+  const [showPlayer, setShowPlayer] = useState(false)
+
+  const hasSavedProgress = todayQuiz
+    ? !!localStorage.getItem(`quiz_${todayQuiz.id}_${studentId}`)
+    : false
 
   function handleQuizDone(score: number, correct: number, total: number) {
     setResult({ score, correct, total })
+    setShowPlayer(false)
     reload()
   }
 
@@ -407,12 +413,19 @@ function QuizSection({ studentId, todayQuiz, alreadyTaken, myScore, history, loa
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">
-          Quiz del día
-        </h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-heading font-bold text-gray-900 dark:text-white">
+            Quiz del día
+          </h2>
+          {todayQuiz && !alreadyTaken && !result && (
+            <span className="text-[10px] font-bold bg-primary text-gray-900 rounded-full px-1.5 py-0.5 animate-pulse">
+              Nuevo
+            </span>
+          )}
+        </div>
         {history.length > 0 && (
           <button
-            onClick={() => setShowHistory(h => !h)}
+            onClick={() => { setShowHistory(h => !h); setShowPlayer(false) }}
             className="text-xs text-primary hover:underline font-medium"
           >
             {showHistory ? 'Ocultar historial' : 'Ver historial'}
@@ -423,15 +436,15 @@ function QuizSection({ studentId, todayQuiz, alreadyTaken, myScore, history, loa
       {showHistory ? (
         <QuizHistory history={history} />
       ) : result ? (
-        /* Score card after submission */
+        /* Immediate result after submission */
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 text-center space-y-2">
-          <p className="text-3xl font-heading font-bold text-gray-900 dark:text-white">
+          <p className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
             {Math.round(result.score)}%
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             {result.correct} de {result.total} correctas
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs font-medium mt-1 text-primary">
             {result.score >= 80
               ? '¡Excelente trabajo!'
               : result.score >= 60
@@ -439,15 +452,36 @@ function QuizSection({ studentId, todayQuiz, alreadyTaken, myScore, history, loa
               : 'Sigue adelante, puedes mejorar.'}
           </p>
         </div>
-      ) : todayQuiz && !alreadyTaken ? (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      ) : showPlayer && todayQuiz ? (
+        /* Active quiz player */
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 p-5">
           <QuizPlayer
             quiz={todayQuiz}
             studentId={studentId}
             onDone={handleQuizDone}
           />
         </div>
+      ) : todayQuiz && !alreadyTaken ? (
+        /* Prominent CTA — quiz available but not started yet (or paused) */
+        <div className="rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 p-6 flex flex-col items-center gap-4 text-center">
+          <span className="text-4xl">🧠</span>
+          <div>
+            <p className="font-heading font-bold text-gray-900 dark:text-white text-lg leading-tight">
+              {todayQuiz.title}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              {todayQuiz.questions.length} pregunta{todayQuiz.questions.length !== 1 ? 's' : ''} · Quiz de hoy
+            </p>
+          </div>
+          <button
+            onClick={() => setShowPlayer(true)}
+            className="bg-primary text-gray-900 font-bold px-8 py-3 rounded-xl hover:bg-primary/90 active:scale-95 transition-all text-sm shadow-md shadow-primary/20"
+          >
+            {hasSavedProgress ? 'Continuar quiz' : 'Hacer quiz'}
+          </button>
+        </div>
       ) : todayQuiz && alreadyTaken ? (
+        /* Already completed today */
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 text-center space-y-1">
           <p className="text-3xl font-heading font-bold text-gray-900 dark:text-white">
             {Math.round(myScore ?? 0)}%
@@ -457,6 +491,7 @@ function QuizSection({ studentId, todayQuiz, alreadyTaken, myScore, history, loa
           </p>
         </div>
       ) : (
+        /* No quiz today */
         <div className="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 p-6 text-center">
           <p className="text-sm text-gray-400 dark:text-gray-500">
             No hay quiz programado para hoy.
