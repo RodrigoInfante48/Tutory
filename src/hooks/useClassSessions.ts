@@ -43,7 +43,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
         .from('class_sessions')
         .select(`
           id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from, session_recording_url,
-          users:student_id ( id, name, avatar_url )
+          students:student_id ( id, users ( id, name, avatar_url ) )
         `)
         .eq('teacher_id', teacherId)
         .gte('scheduled_date', start)
@@ -61,7 +61,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
           notes: string | null
           rescheduled_from: string | null
           session_recording_url: string | null
-          users: { id: string; name: string; avatar_url: string | null } | null
+          students: { id: string; users: { id: string; name: string; avatar_url: string | null } | null } | null
         }
         return ({
           id: r.id,
@@ -73,7 +73,7 @@ export function useClassSessions({ teacherId, year, month }: UseClassSessionsOpt
           notes: r.notes,
           rescheduled_from: r.rescheduled_from,
           session_recording_url: r.session_recording_url,
-          student: r.users,
+          student: r.students?.users ? { id: r.students.id, name: r.students.users.name, avatar_url: r.students.users.avatar_url } : null,
         })
       })
       setSessions(mapped)
@@ -135,7 +135,7 @@ export async function createSession(params: {
     })
     .select(`
       id, student_id, teacher_id, scheduled_date, status, session_type, notes, rescheduled_from, session_recording_url,
-      users:student_id ( id, name, avatar_url )
+      students:student_id ( id, users ( id, name, avatar_url ) )
     `)
     .single()
   if (error) throw error
@@ -149,7 +149,7 @@ export async function createSession(params: {
     notes: string | null
     rescheduled_from: string | null
     session_recording_url: string | null
-    users: { id: string; name: string; avatar_url: string | null } | null
+    students: { id: string; users: { id: string; name: string; avatar_url: string | null } | null } | null
   }
   return {
     id: row.id,
@@ -161,7 +161,7 @@ export async function createSession(params: {
     notes: row.notes,
     rescheduled_from: row.rescheduled_from,
     session_recording_url: row.session_recording_url,
-    student: row.users,
+    student: row.students?.users ? { id: row.students.id, name: row.students.users.name, avatar_url: row.students.users.avatar_url } : null,
   }
 }
 
