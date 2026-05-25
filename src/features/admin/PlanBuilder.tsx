@@ -2,6 +2,7 @@ import { useState, type KeyboardEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import AppLayout from '../../app/AppLayout'
 import { usePlanBuilder } from '../../hooks/useAdminPlanBuilder'
+import TopicEditor from './TopicEditor'
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -90,6 +91,8 @@ export default function PlanBuilder() {
     updateTopic,
     deleteTopic,
     reorderTopic,
+    updateTopicContent,
+    saveQuestions,
   } = usePlanBuilder(planId!)
 
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null)
@@ -528,33 +531,12 @@ export default function PlanBuilder() {
             {/* ── Right: topic panel (2/3) ── */}
             <div className="flex-1 min-w-0 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 min-h-[500px] flex flex-col">
               {selectedTopic ? (
-                <div className="flex flex-col h-full p-6">
-                  {/* Topic breadcrumb */}
-                  <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-4">
-                    <span>{selectedUnit?.title}</span>
-                    <span className="text-gray-300 dark:text-gray-700">→</span>
-                    <span className="text-gray-600 dark:text-gray-300 font-medium">
-                      {selectedTopic.title}
-                    </span>
-                  </div>
-
-                  <h2 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-1">
-                    {selectedTopic.title}
-                  </h2>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">
-                    Topic #{selectedTopic.order} · {selectedUnit?.title}
-                  </p>
-
-                  <div className="flex-1 flex flex-col items-center justify-center text-center py-12 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-xl">
-                    <div className="text-4xl mb-3">📝</div>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                      Editor de contenido
-                    </p>
-                    <p className="text-xs text-gray-300 dark:text-gray-600 max-w-xs">
-                      El editor de HTML y preguntas se construirá en la próxima fase.
-                    </p>
-                  </div>
-                </div>
+                <TopicEditor
+                  topic={selectedTopic}
+                  unitTitle={selectedUnit?.title ?? ''}
+                  updateTopicContent={updateTopicContent}
+                  saveQuestions={saveQuestions}
+                />
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
                   <div className="w-14 h-14 rounded-2xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-2xl mb-4">
