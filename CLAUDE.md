@@ -254,6 +254,31 @@ tutory/
 
 ---
 
+## SQL Templates de administración
+
+Scripts listos para el SQL Editor de Supabase. Se usan pegando el script, editando las variables al inicio del bloque `DO $$`, y ejecutando.
+
+| Archivo | Propósito |
+|---------|-----------|
+| `supabase/create_user_template.sql` | Crear un usuario nuevo (student / teacher / admin) con PIN inicial |
+| `supabase/assign_student_template.sql` | Asignar un estudiante a un profesor (y opcionalmente cambiar su plan) |
+
+### Relación estudiante ↔ profesor
+
+La tabla clave es `public.students`. Cada fila tiene:
+- `id` → UUID del usuario (mismo que `public.users.id`)
+- `teacher_id` → UUID del profesor asignado (`public.teachers.id`)
+- `plan_id` → UUID del plan de estudios asignado
+- `active` → boolean
+
+Para asignar/reasignar un estudiante a un profesor se usa `assign_student_template.sql`. Solo hay que poner el email del estudiante y el email del profesor. El script valida que ambos existan con el rol correcto, muestra la asignación anterior y confirma la nueva.
+
+### PIN / contraseña
+
+La app usa un teclado de 4 dígitos. Internamente el PIN se convierte a contraseña añadiendo `'00'` al final antes de enviarlo a Supabase Auth (`signInWithPin` en `AuthContext.tsx`). Ejemplo: PIN `1234` → contraseña real `123400`. Al resetear contraseñas por SQL usar siempre el valor con el sufijo `00`.
+
+---
+
 ## Convenciones del código
 
 - TypeScript strict mode activado
