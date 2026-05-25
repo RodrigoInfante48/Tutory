@@ -8,6 +8,13 @@ export interface PlanBuilderTopic {
   order: number
 }
 
+export interface QuestionInput {
+  id?: string
+  question: string
+  options: string[]
+  correct_index: number
+}
+
 export interface PlanBuilderUnit {
   id: string
   title: string
@@ -161,6 +168,63 @@ export function usePlanBuilder(planId: string) {
     )
   }
 
+  async function updateTopicContent(id: string, title: string, contentHtml: string) {
+    const { error: err } = await supabase
+      .from('topics')
+      .update({ title: title.trim(), content_html: contentHtml })
+      .eq('id', id)
+    if (err) throw err
+    setUnits((prev) =>
+      prev.map((u) => ({
+        ...u,
+        topics: u.topics.map((t) => (t.id === id ? { ...t, title: title.trim() } : t)),
+      })),
+    )
+  }
+
+  async function saveQuestions(topicId: string, questions: QuestionInput[]) {
+    const { data: existing, error: fetchErr } = await supabase
+      .from('topic_questions')
+      .select('id')
+      .eq('topic_id', topicId)
+    if (fetchErr) throw fetchErr
+
+    const existingIds = (existing ?? []).map((q: { id: string }) => q.id)
+    const incomingIds = questions.filter((q) => q.id).map((q) => q.id!)
+    const toDelete = existingIds.filter((id) => !incomingIds.includes(id))
+
+    if (toDelete.length > 0) {
+      const { error: delErr } = await supabase
+        .from('topic_questions')
+        .delete()
+        .in('id', toDelete)
+      if (delErr) throw delErr
+    }
+
+    const toInsert = questions.filter((q) => !q.id)
+    const toUpdate = questions.filter((q) => q.id)
+
+    if (toInsert.length > 0) {
+      const { error: insErr } = await supabase.from('topic_questions').insert(
+        toInsert.map((q) => ({
+          topic_id: topicId,
+          question: q.question,
+          options: q.options,
+          correct_index: q.correct_index,
+        })),
+      )
+      if (insErr) throw insErr
+    }
+
+    for (const q of toUpdate) {
+      const { error: updErr } = await supabase
+        .from('topic_questions')
+        .update({ question: q.question, options: q.options, correct_index: q.correct_index })
+        .eq('id', q.id!)
+      if (updErr) throw updErr
+    }
+  }
+
   async function reorderTopic(id: string, direction: 'up' | 'down') {
     const unit = units.find((u) => u.topics.some((t) => t.id === id))
     if (!unit) return
@@ -207,5 +271,7 @@ export function usePlanBuilder(planId: string) {
     updateTopic,
     deleteTopic,
     reorderTopic,
+    updateTopicContent,
+    saveQuestions,
   }
 }
