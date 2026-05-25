@@ -239,15 +239,18 @@ function PlanTab({
   const { plan: fullPlan } = useStudyPlan(planId, studentId)
   const [assigning, setAssigning] = useState(false)
   const [assignError, setAssignError] = useState<string | null>(null)
+  const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [showSelector, setShowSelector] = useState(false)
 
   async function handleAssign(newPlanId: string | null) {
     setAssigning(true)
     setAssignError(null)
+    setSuccessMsg(null)
     try {
       await assignPlanToStudent(studentId, newPlanId)
       onPlanChange(newPlanId)
       setShowSelector(false)
+      setSuccessMsg(newPlanId ? 'Plan asignado correctamente' : 'Plan quitado correctamente')
     } catch (err) {
       setAssignError(err instanceof Error ? err.message : 'Error al asignar plan')
     } finally {
@@ -274,7 +277,7 @@ function PlanTab({
           )}
         </div>
         <button
-          onClick={() => setShowSelector(s => !s)}
+          onClick={() => { setShowSelector(s => !s); setSuccessMsg(null) }}
           className="flex-shrink-0 text-xs font-medium text-primary hover:text-primary/80 transition-colors border border-primary/30 rounded-lg px-3 py-1.5"
         >
           {planId ? 'Cambiar plan' : 'Asignar plan'}
@@ -324,6 +327,9 @@ function PlanTab({
 
       {assignError && (
         <p className="text-xs text-red-500">{assignError}</p>
+      )}
+      {successMsg && (
+        <p className="text-xs text-green-600 dark:text-green-400">{successMsg}</p>
       )}
 
       {/* Units + topics */}
