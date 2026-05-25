@@ -16,6 +16,7 @@ export function useAllPlans() {
     supabase
       .from('study_plans')
       .select('id, name, description')
+      .eq('published', true)
       .order('name', { ascending: true })
       .then(({ data }) => {
         setPlans((data ?? []) as PlanOption[])
