@@ -16,7 +16,10 @@ export function useNavItems(): NavItem[] {
   const studentTaskBadge = useStudentTaskBadge()
 
   if (appUser?.role === 'admin') {
-    return [{ label: 'Panel Admin', href: '/admin', emoji: '🛠️' }]
+    return [
+      { label: 'Panel Admin', href: '/admin', emoji: '🛠️' },
+      { label: 'Planes', href: '/admin/plans', emoji: '📖' },
+    ]
   }
 
   if (appUser?.role === 'student') {
