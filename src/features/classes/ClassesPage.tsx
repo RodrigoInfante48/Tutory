@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useClassSessions } from '../../hooks/useClassSessions'
 import { useTeacherStudents } from '../../hooks/useTeacherStudents'
@@ -7,6 +8,7 @@ import CalendarView from './CalendarView'
 
 export default function ClassesPage() {
   const { appUser } = useAuth()
+  const navigate = useNavigate()
   const teacherId = appUser?.id ?? null
 
   const today = new Date()
@@ -30,6 +32,15 @@ export default function ClassesPage() {
       {/* Page header */}
       <div className="flex items-start justify-between gap-4">
         <div>
+          <button
+            onClick={() => navigate('/teacher')}
+            className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-2 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver al menú
+          </button>
           <h1 className="text-2xl font-heading font-bold text-gray-900 dark:text-white">
             Calendario de clases
           </h1>
