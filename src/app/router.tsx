@@ -10,6 +10,8 @@ import StudentDashboard from '../features/students/StudentDashboard'
 import StudentVault from '../features/students/StudentVault'
 import TopicReader from '../features/study-plans/TopicReader'
 import AdminDashboard from '../features/admin/AdminDashboard'
+import AdminPlansPage from '../features/admin/AdminPlansPage'
+import AdminPlanDetailPage from '../features/admin/AdminPlanDetailPage'
 import TeacherTasksPage from '../features/tasks/TeacherTasksPage'
 import ClassesPage from '../features/classes/ClassesPage'
 import ResourcesPage from '../features/resources/ResourcesPage'
@@ -169,6 +171,26 @@ export default function AppRouter() {
           <ErrorBoundary section="Panel de administración">
             <AuthGuard allowedRole="admin">
               <AdminDashboard />
+            </AuthGuard>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path="/admin/plans"
+        element={
+          <ErrorBoundary section="Planes de estudio">
+            <AuthGuard allowedRole="admin">
+              <AdminPlansPage />
+            </AuthGuard>
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path="/admin/plans/:planId"
+        element={
+          <ErrorBoundary section="Plan de estudio">
+            <AuthGuard allowedRole="admin">
+              <AdminPlanDetailPage />
             </AuthGuard>
           </ErrorBoundary>
         }
