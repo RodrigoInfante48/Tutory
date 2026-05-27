@@ -4,8 +4,6 @@ import {
 } from 'recharts'
 import { type StudentSummary } from '../../hooks/useTeacherStudents'
 import { useStudentProfile } from '../../hooks/useStudentProfile'
-import { useAllPlans, assignPlanToStudent } from '../../hooks/useAssignPlan'
-import { useStudyPlan } from '../../hooks/useStudyPlan'
 import { useTeacherTasksForStudent, createTask } from '../../hooks/useTeacherTasks'
 import { useStudentClassSessions, updateSessionStatus, updateSessionRecording, createSession, type SessionStatus, type SessionType } from '../../hooks/useClassSessions'
 import { useStudentGlossary, addGlossaryEntry, deleteGlossaryEntry } from '../../hooks/useStudentGlossary'
@@ -22,11 +20,9 @@ interface StudentProfileProps {
   onClose: () => void
 }
 
-type TabId = 'plan' | 'recursos' | 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes' | 'progreso' | 'logros'
+type TabId = 'tareas' | 'quizzes' | 'clases' | 'glosario' | 'mensajes' | 'progreso' | 'logros'
 
 const TABS: { id: TabId; label: string }[] = [
-  { id: 'plan', label: 'Plan' },
-  { id: 'recursos', label: 'Recursos' },
   { id: 'tareas', label: 'Tareas' },
   { id: 'quizzes', label: 'Quizzes' },
   { id: 'clases', label: 'Clases' },
@@ -108,8 +104,9 @@ function EmptyState({ message }: { message: string }) {
 
 export default function StudentProfile({ student, onClose }: StudentProfileProps) {
   const { appUser } = useAuth()
-  const [activeTab, setActiveTab] = useState<TabId>('plan')
-  const [planId, setPlanId] = useState<string | null>(student.plan?.id ?? null)
+  const [activeTab, setActiveTab] = useState<TabId>('tareas')
+  const [planId] = useState<string | null>(student.plan?.id ?? null)
+  const [isExpanded, setIsExpanded] = useState(false)
   const { data, loading } = useStudentProfile(student.id, planId)
   const { tasks: teacherTasks } = useTeacherTasksForStudent(student.id)
 
@@ -124,7 +121,7 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
       />
 
       {/* Panel */}
-      <div className="w-full max-w-lg bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden">
+      <div className={`${isExpanded ? 'w-full' : 'w-full max-w-lg'} bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden transition-all duration-300`}>
         {/* Header */}
         <div className="flex items-center gap-4 p-6 border-b border-gray-200 dark:border-gray-800">
           <Avatar name={student.name} url={student.avatar_url} />
@@ -139,6 +136,21 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
               </span>
             )}
           </div>
+          <button
+            onClick={() => setIsExpanded(e => !e)}
+            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label={isExpanded ? 'Reducir' : 'Expandir'}
+          >
+            {isExpanded ? (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9L4 4m0 0h5M4 4v5M15 15l5 5m0 0h-5m5 0v-5" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m7-5h4m0 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m7 5h4m0 0v-4m0 4l-5-5" />
+              </svg>
+            )}
+          </button>
           <button
             onClick={onClose}
             className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -177,17 +189,6 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
             </div>
           ) : (
             <>
-              {activeTab === 'plan' && (
-                <PlanTab
-                  studentId={student.id}
-                  planId={planId}
-                  units={data.planUnits}
-                  onPlanChange={setPlanId}
-                />
-              )}
-              {activeTab === 'recursos' && (
-                <RecursosTab studentId={student.id} />
-              )}
               {activeTab === 'tareas' && (
                 <TareasTab
                   studentId={student.id}
@@ -224,169 +225,6 @@ export default function StudentProfile({ student, onClose }: StudentProfileProps
   )
 }
 
-function PlanTab({
-  studentId,
-  planId,
-  units,
-  onPlanChange,
-}: {
-  studentId: string
-  planId: string | null
-  units: { id: string; title: string; order: number }[]
-  onPlanChange: (id: string | null) => void
-}) {
-  const { plans, loading: plansLoading } = useAllPlans()
-  const { plan: fullPlan } = useStudyPlan(planId, studentId)
-  const [assigning, setAssigning] = useState(false)
-  const [assignError, setAssignError] = useState<string | null>(null)
-  const [successMsg, setSuccessMsg] = useState<string | null>(null)
-  const [showSelector, setShowSelector] = useState(false)
-
-  async function handleAssign(newPlanId: string | null) {
-    setAssigning(true)
-    setAssignError(null)
-    setSuccessMsg(null)
-    try {
-      await assignPlanToStudent(studentId, newPlanId)
-      onPlanChange(newPlanId)
-      setShowSelector(false)
-      setSuccessMsg(newPlanId ? 'Plan asignado correctamente' : 'Plan quitado correctamente')
-    } catch (err) {
-      setAssignError(err instanceof Error ? err.message : 'Error al asignar plan')
-    } finally {
-      setAssigning(false)
-    }
-  }
-
-  const currentPlan = plans.find(p => p.id === planId)
-
-  return (
-    <div className="space-y-4">
-      {/* Plan selector */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="min-w-0">
-          {planId ? (
-            <div>
-              <p className="text-xs text-gray-400 mb-0.5">Plan asignado</p>
-              <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                {currentPlan?.name ?? '…'}
-              </p>
-            </div>
-          ) : (
-            <p className="text-sm text-gray-400">Sin plan asignado</p>
-          )}
-        </div>
-        <button
-          onClick={() => { setShowSelector(s => !s); setSuccessMsg(null) }}
-          className="flex-shrink-0 text-xs font-medium text-primary hover:text-primary/80 transition-colors border border-primary/30 rounded-lg px-3 py-1.5"
-        >
-          {planId ? 'Cambiar plan' : 'Asignar plan'}
-        </button>
-      </div>
-
-      {/* Plan dropdown */}
-      {showSelector && (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          {plansLoading ? (
-            <p className="text-xs text-gray-400 p-3">Cargando planes…</p>
-          ) : (
-            <ul className="divide-y divide-gray-100 dark:divide-gray-800">
-              {planId && (
-                <li>
-                  <button
-                    onClick={() => handleAssign(null)}
-                    disabled={assigning}
-                    className="w-full text-left px-3 py-2.5 text-xs text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
-                  >
-                    Quitar plan
-                  </button>
-                </li>
-              )}
-              {plans.map(p => (
-                <li key={p.id}>
-                  <button
-                    onClick={() => handleAssign(p.id)}
-                    disabled={assigning || p.id === planId}
-                    className={`w-full text-left px-3 py-2.5 transition-colors ${
-                      p.id === planId
-                        ? 'bg-primary/5 text-primary text-xs font-semibold'
-                        : 'text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                    } disabled:cursor-default`}
-                  >
-                    <span className="font-medium">{p.name}</span>
-                    {p.description && (
-                      <span className="block text-gray-400 truncate mt-0.5">{p.description}</span>
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-
-      {assignError && (
-        <p className="text-xs text-red-500">{assignError}</p>
-      )}
-      {successMsg && (
-        <p className="text-xs text-green-600 dark:text-green-400">{successMsg}</p>
-      )}
-
-      {/* Units + topics */}
-      {!planId ? (
-        <EmptyState message="Asigna un plan para ver su contenido." />
-      ) : units.length === 0 ? (
-        <EmptyState message="El plan no tiene unidades aún." />
-      ) : (
-        <ol className="space-y-3">
-          {units.map((unit, i) => {
-            const fullUnit = fullPlan?.units.find(u => u.id === unit.id)
-            const topics = fullUnit?.topics ?? []
-            const completedCount = topics.filter(t => t.progress?.completed).length
-
-            return (
-              <li key={unit.id} className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800">
-                  <span className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center flex-shrink-0">
-                    {i + 1}
-                  </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white flex-1 truncate">
-                    {unit.title}
-                  </span>
-                  {topics.length > 0 && (
-                    <span className="text-xs text-gray-400 flex-shrink-0">
-                      {completedCount}/{topics.length}
-                    </span>
-                  )}
-                </div>
-                {topics.length > 0 && (
-                  <ul className="divide-y divide-gray-100 dark:divide-gray-800">
-                    {topics.map(t => (
-                      <li key={t.id} className="flex items-center gap-2 px-3 py-2">
-                        <span className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                          t.progress?.completed
-                            ? 'bg-primary'
-                            : 'border border-gray-300 dark:border-gray-600'
-                        }`} />
-                        <span className={`text-xs flex-1 truncate ${
-                          t.progress?.completed
-                            ? 'text-gray-400 line-through'
-                            : 'text-gray-600 dark:text-gray-400'
-                        }`}>
-                          {t.title}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            )
-          })}
-        </ol>
-      )}
-    </div>
-  )
-}
 
 const RESOURCE_TYPE_OPTIONS: { value: ResourceType; label: string; emoji: string }[] = [
   { value: 'link', label: 'Enlace', emoji: '🔗' },
@@ -661,6 +499,22 @@ function TareasTab({ studentId, teacherId }: { studentId: string; teacherId: str
           {createError && <p className="text-xs text-red-500">{createError}</p>}
         </div>
       )}
+
+      {/* Recursos section */}
+      <div className="pt-2 pb-2">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+          <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Recursos</span>
+          <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+        </div>
+        <RecursosTab studentId={studentId} />
+      </div>
+
+      <div className="flex items-center gap-2 mb-3">
+        <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+        <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Tareas</span>
+        <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+      </div>
 
       {/* Tasks list */}
       {loading ? (
