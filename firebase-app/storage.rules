@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Adjuntos de tareas (audio/imágenes): el dueño del path puede subir,
+    // el teacher asignado puede leer. Se define en detalle en la sesión de
+    // Tareas de FIREBASE_MIGRATION_PROMPTS.md.
+    match /task-attachments/{uid}/{allPaths=**} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

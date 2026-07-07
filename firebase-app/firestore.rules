@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function role() {
+      return request.auth.token.role;
+    }
+    function isAdmin() {
+      return isSignedIn() && role() == 'admin';
+    }
+    function isTeacher() {
+      return isSignedIn() && role() == 'teacher';
+    }
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // users/{uid}: perfil propio (solo lectura para el dueño), admin ve/edita todo.
+    // La creación real ocurre server-side en la función `claimInvite` (Admin SDK,
+    // bypassa estas reglas), así que aquí no se permite `create` desde el cliente.
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin() || (isTeacher() && resource.data.teacherId == request.auth.uid);
+      allow update: if isAdmin();
+      allow create, delete: if false;
+    }
+
+    // invites/{email}: solo el backend (Admin SDK) las lee/escribe.
+    match /invites/{email} {
+      allow read, write: if false;
+    }
+
+    // students/{uid}: el propio estudiante, su teacher asignado, o el admin.
+    match /students/{uid} {
+      allow read: if isOwner(uid) || isAdmin() || (isTeacher() && resource.data.teacherId == request.auth.uid);
+      allow write: if isAdmin() || (isTeacher() && resource.data.teacherId == request.auth.uid);
+    }
+
+    // teachers/{uid}: el propio teacher o el admin.
+    match /teachers/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Contenido/actividad (tasks, quizzes, resources, messages, class_sessions, ...):
+    // placeholder deny-by-default — cada sesión de la migración (ver
+    // FIREBASE_MIGRATION_PROMPTS.md) debe agregar las reglas específicas de su
+    // colección a medida que el modelo de datos se define en Firestore.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

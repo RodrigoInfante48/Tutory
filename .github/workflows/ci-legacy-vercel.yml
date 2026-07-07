@@ -1,10 +1,16 @@
-name: CI
+name: CI (legacy-vercel)
 
 on:
   push:
     branches: [main]
+    paths: ['legacy-vercel/**']
   pull_request:
     branches: [main]
+    paths: ['legacy-vercel/**']
+
+defaults:
+  run:
+    working-directory: legacy-vercel
 
 jobs:
   lint-and-build:
@@ -20,6 +26,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: legacy-vercel/package-lock.json
 
       - name: Install dependencies
         run: npm ci
