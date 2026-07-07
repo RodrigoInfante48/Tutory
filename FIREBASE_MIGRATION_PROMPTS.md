@@ -44,6 +44,26 @@ Ya está en `firebase-app/`: Vite + React + TS + Tailwind con los mismos design 
 Google como proveedor en Authentication, completar `.env` y `.firebaserc`. Ver la lista
 completa en `firebase-app/README.md`.
 
+**Deploy a GitHub Pages — método elegido: rama `gh-pages`.** GitHub Pages soporta dos
+formas de servir el sitio: (a) "Source: GitHub Actions" (el workflow sube un artifact y
+Pages lo publica directo), o (b) "Source: Deploy from a branch" (el workflow pushea el
+build ya armado a una rama, típicamente `gh-pages`, y Pages sirve esa rama tal cual).
+Se eligió **(b)** porque es el flujo con el que mejor resultado ha tenido este proyecto
+en el pasado. El workflow `.github/workflows/deploy-firebase-app.yml` usa
+`peaceiris/actions-gh-pages@v4` para publicar `firebase-app/dist` en la rama `gh-pages`
+en cada push a `main` (o manualmente vía Actions → Run workflow). En GitHub → Settings →
+Pages, el Source debe quedar en "Deploy from a branch" → `gh-pages` → `/ (root)` — **no**
+"GitHub Actions". Si en algún momento vuelve a aparecer el README renderizado en vez de
+la app, es señal de que el Source volvió a "Deploy from a branch" apuntando a `main` (o
+a otra rama sin build) en vez de a `gh-pages`.
+
+**Prompt de referencia (por si hay que rehacer esto en otra sesión):** "El deploy de
+`firebase-app` a GitHub Pages debe publicar el build (`dist/`) en una rama `gh-pages`
+usando `peaceiris/actions-gh-pages` en el workflow de GitHub Actions, no el método nativo
+`actions/deploy-pages` + 'Source: GitHub Actions'. Configura (o corrige) el workflow para
+que pushee a `gh-pages`, y deja instrucciones para que en Settings → Pages el Source
+apunte a esa rama en la raíz."
+
 ---
 
 ## Sesión 2 — Auth con Google y sistema de invitaciones

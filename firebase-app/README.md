@@ -82,6 +82,9 @@ firebase-app/
 5. En **Google Cloud Console → OAuth consent screen**, configurar el consent screen
    (nombre de la app, logo, dominios autorizados) — obligatorio para que el picker de
    Google no muestre advertencias.
-6. Habilitar GitHub Pages en el repo: Settings → Pages → Source → "GitHub Actions".
+6. Habilitar GitHub Pages en el repo: Settings → Pages → Source → **"Deploy from a
+   branch"** → branch `gh-pages` → folder `/ (root)`. La rama `gh-pages` la crea sola
+   el workflow (`peaceiris/actions-gh-pages`) la primera vez que corre — no la crees a
+   mano.
 7. Agregar los secrets `VITE_FIREBASE_*` en GitHub → Settings → Secrets and variables → Actions.
 8. `firebase deploy --only firestore:rules,storage:rules,functions` (requiere `firebase login` local o un service account en CI).
