@@ -2,6 +2,14 @@
 
 Este archivo es la memoria de arquitectura del proyecto. Léelo al inicio de cada sesión.
 
+> **Migración en curso (jul 2026):** el código descrito en este documento (Supabase +
+> Vercel) vive ahora en `legacy-vercel/` y sigue siendo la app en producción. Se está
+> construyendo una reescritura en `firebase-app/` (Firebase + GitHub Pages, login con
+> Google) — ver [`FIREBASE_MIGRATION_PROMPTS.md`](FIREBASE_MIGRATION_PROMPTS.md) en la
+> raíz para la secuencia de sesiones de esa migración. El contexto de negocio, roles y
+> modelo de datos de abajo sigue vigente; el stack y las rutas de archivos son las de
+> `legacy-vercel/`.
+
 ---
 
 ## Contexto del negocio
